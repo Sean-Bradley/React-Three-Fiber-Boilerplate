@@ -14,7 +14,6 @@ export default function Box(props) {
       {...props}
       ref={ref}
       onClick={() => console.log('clicked ' + ref.current.name)}
-      onDoubleClick={() => console.log('double clicked ' + ref.current.name)}
       onPointerOver={() => console.log('pointer over ' + ref.current.name)}
       onPointerOut={() => console.log('pointer out ' + ref.current.name)}>
       <boxGeometry />
