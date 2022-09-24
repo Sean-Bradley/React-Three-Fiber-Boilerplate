@@ -19,10 +19,12 @@ export default function Box(props) {
       ref={ref}
       onClick={() => setRotate(!rotate)}
       onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-      onUpdate={() => console.log('Box ' + ref.current.name + ' props have changed')}>
+      onPointerOut={() => setHover(false)}>
       <boxGeometry />
-      <meshBasicMaterial color={hovered ? 0xff0000 : 0x00ff00} wireframe={true} />
+      <meshBasicMaterial
+        color={hovered ? 0xff0000 : 0x00ff00}
+        wireframe={true}
+      />
     </mesh>
   )
 }
