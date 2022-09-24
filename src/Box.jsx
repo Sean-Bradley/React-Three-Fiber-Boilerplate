@@ -3,8 +3,8 @@ import { useFrame } from '@react-three/fiber'
 
 export default function Box(props) {
   const ref = useRef()
-  const [rotate, setRotate] = useState(false)
   const [hovered, setHover] = useState(false)
+  const [rotate, setRotate] = useState(false)
 
   useFrame((_, delta) => {
     if (rotate) {
@@ -17,6 +17,7 @@ export default function Box(props) {
     <mesh
       {...props}
       ref={ref}
+      scale={hovered ? [1.1, 1.1, 1.1] : [1, 1, 1]}
       onClick={() => setRotate(!rotate)}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}>
