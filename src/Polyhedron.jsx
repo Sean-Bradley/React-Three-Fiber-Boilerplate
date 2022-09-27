@@ -1,17 +1,13 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
 
-export default function Box(props) {
+export default function Polyhedron(props) {
   const ref = useRef()
   const [count, setCount] = useState(0)
-  const geometry = useMemo(
-    () => [new THREE.BoxGeometry(), new THREE.SphereGeometry(0.785398)],
-    []
-  )
 
   useEffect(() => {
-    console.log(ref.current.geometry.uuid)
+    console.log(ref.current.userData)
+    ref.current.geometry = ref.current.userData.polyhedron[count]
   })
 
   useFrame((_, delta) => {
@@ -23,8 +19,10 @@ export default function Box(props) {
     <mesh
       {...props}
       ref={ref}
-      onClick={() => setCount((count + 1) % 2)}
-      geometry={geometry[count]}>
+      onClick={() => {
+        setCount((count + 1) % 3)
+      }}
+    >
       <meshBasicMaterial color={'lime'} wireframe={true} />
     </mesh>
   )
