@@ -5,10 +5,10 @@ import * as THREE from 'three'
 export default function Box(props) {
   const ref = useRef()
   const [count, setCount] = useState(0)
-  const geometry = [
-    useMemo(() => new THREE.BoxGeometry(), []),
-    useMemo(() => new THREE.SphereGeometry(0.785398), [])
-  ]
+  const geometry = useMemo(
+    () => [new THREE.BoxGeometry(), new THREE.SphereGeometry(0.785398)],
+    []
+  )
 
   useEffect(() => {
     console.log(ref.current.geometry.uuid)
