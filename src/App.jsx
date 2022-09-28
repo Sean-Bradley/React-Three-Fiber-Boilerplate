@@ -40,7 +40,7 @@ export default function App() {
         userData-polyhedron={polyhedron}
       />
       <OrbitControls />
-      <axesHelper />
+      <axesHelper args={[5]}/>
       <Stats />
     </Canvas>
   )
