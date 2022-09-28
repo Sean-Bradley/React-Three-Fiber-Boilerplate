@@ -1,16 +1,12 @@
-import { Canvas, extend } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import Polyhedron from './Polyhedron'
 import {
-  AxesHelper,
   BoxGeometry,
   SphereGeometry,
-  DodecahedronGeometry,
-  GridHelper
+  DodecahedronGeometry
 } from 'three'
 import { useMemo } from 'react'
 import { Stats, OrbitControls } from '@react-three/drei'
-
-extend({ AxesHelper, GridHelper })
 
 export default function App() {
   const polyhedron = useMemo(
