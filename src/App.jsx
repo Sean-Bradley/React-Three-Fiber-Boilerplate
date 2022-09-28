@@ -28,7 +28,10 @@ export default function App() {
         position={[-0.75, 0.75, 0]}
         userData-polyhedron={polyhedron}
       />
-      <Polyhedron position={[0.75, 0.75, 0]} userData-polyhedron={polyhedron} />
+      <Polyhedron
+        position={[0.75, 0.75, 0]}
+        userData-polyhedron={polyhedron}
+      />
       <OrbitControls />
       <Stats />
     </Canvas>
