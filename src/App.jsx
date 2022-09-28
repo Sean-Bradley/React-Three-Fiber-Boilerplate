@@ -18,21 +18,17 @@ export default function App() {
     <Canvas camera={{ position: [0, 0, 3] }}>
       <Polyhedron
         position={[-0.75, -0.75, 0]}
-        geometry={polyhedron[0]}
         userData-polyhedron={polyhedron}></Polyhedron>
       <Polyhedron
         position={[0.75, -0.75, 0]}
-        geometry={polyhedron[0]}
         userData-polyhedron={polyhedron}
       />
       <Polyhedron
         position={[-0.75, 0.75, 0]}
-        geometry={polyhedron[0]}
         userData-polyhedron={polyhedron}
       />
       <Polyhedron
         position={[0.75, 0.75, 0]}
-        geometry={polyhedron[0]}
         userData-polyhedron={polyhedron}
       />
       <Stats />
