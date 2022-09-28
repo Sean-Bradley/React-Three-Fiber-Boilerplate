@@ -4,12 +4,13 @@ import {
   AxesHelper,
   BoxGeometry,
   SphereGeometry,
-  DodecahedronGeometry
+  DodecahedronGeometry,
+  GridHelper
 } from 'three'
 import { useMemo } from 'react'
 import { Stats, OrbitControls } from '@react-three/drei'
 
-extend({ AxesHelper })
+extend({ AxesHelper, GridHelper })
 
 export default function App() {
   const polyhedron = useMemo(
@@ -40,7 +41,8 @@ export default function App() {
         userData-polyhedron={polyhedron}
       />
       <OrbitControls />
-      <axesHelper args={[5]}/>
+      <axesHelper args={[5]} />
+      <gridHelper />
       <Stats />
     </Canvas>
   )
