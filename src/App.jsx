@@ -2,13 +2,14 @@ import { Canvas } from '@react-three/fiber'
 import Polyhedron from './Polyhedron'
 import * as THREE from 'three'
 import { useMemo } from 'react'
+import { Stats } from '@react-three/drei'
 
 export default function App() {
   const polyhedron = useMemo(
     () => [
       new THREE.BoxGeometry(),
       new THREE.SphereGeometry(0.785398),
-      new THREE.DodecahedronGeometry(0.785398),
+      new THREE.DodecahedronGeometry(0.785398)
     ],
     []
   )
@@ -18,8 +19,7 @@ export default function App() {
       <Polyhedron
         position={[-0.75, -0.75, 0]}
         geometry={polyhedron[0]}
-        userData-polyhedron={polyhedron}
-      />
+        userData-polyhedron={polyhedron}></Polyhedron>
       <Polyhedron
         position={[0.75, -0.75, 0]}
         geometry={polyhedron[0]}
@@ -35,6 +35,7 @@ export default function App() {
         geometry={polyhedron[0]}
         userData-polyhedron={polyhedron}
       />
+      <Stats />
     </Canvas>
   )
 }
