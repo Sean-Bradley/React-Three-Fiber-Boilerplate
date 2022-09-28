@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 
 export default function Polyhedron(props) {
   const ref = useRef()
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState(2)
 
   useEffect(() => {
     console.log(ref.current.userData)
