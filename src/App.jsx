@@ -8,7 +8,7 @@ export default function App() {
     () => [
       new THREE.BoxGeometry(),
       new THREE.SphereGeometry(0.785398),
-      new THREE.DodecahedronGeometry(0.785398),
+      new THREE.DodecahedronGeometry(0.785398)
     ],
     []
   )
