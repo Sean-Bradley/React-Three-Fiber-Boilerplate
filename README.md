@@ -25,7 +25,7 @@ and, you will get a quite interactive demo of green wireframe cubes/spheres/dode
 
 There are other branches.
 
-To see what braach you are currently using, type,
+To see what branch you are currently using, type,
 
 ```bash
 git branch
