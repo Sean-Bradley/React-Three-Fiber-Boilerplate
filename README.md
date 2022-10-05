@@ -11,7 +11,7 @@ npm start
 
 Your default browser should open `http://localhost:3000/` automatically for you.
 
-See differert branches for different important concepts related to understanding React, React-Three-Fiber and Three.js
+See different branches for different important concepts related to understanding React, React-Three-Fiber and Three.js
 
 E.g.,
 
@@ -31,7 +31,7 @@ To see what branch you are currently using, type,
 git branch
 ```
 
-If you change branch, remember to run 
+If you change branch, remember to first run 
 
 ```bash
 npm install
