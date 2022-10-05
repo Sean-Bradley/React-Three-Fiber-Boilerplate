@@ -6,13 +6,13 @@ export default function Polyhedron(props) {
   const [count, setCount] = useState(2)
 
   useEffect(() => {
-    console.log(ref.current.userData)
+    //console.log(ref.current.uuid)
     ref.current.geometry = ref.current.userData.polyhedron[count]
   })
 
-  useFrame((_, delta) => {
-    ref.current.rotation.x += delta
-    ref.current.rotation.y += 0.5 * delta
+  useFrame(() => {
+    //ref.current.rotation.x = rotX
+    // ref.current.rotation.y += 0.5 * delta
   })
 
   return (
@@ -21,8 +21,7 @@ export default function Polyhedron(props) {
       ref={ref}
       onClick={() => {
         setCount((count + 1) % 3)
-      }}
-    >
+      }}>
       <meshBasicMaterial color={'lime'} wireframe={true} />
     </mesh>
   )
