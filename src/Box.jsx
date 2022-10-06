@@ -18,7 +18,7 @@ export default function Box(props) {
       {...props}
       ref={ref}
       scale={hovered ? [1.1, 1.1, 1.1] : [1, 1, 1]}
-      onClick={() => setRotate(!rotate)}
+      onPointerDown={() => setRotate(!rotate)}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}>
       <boxGeometry />
