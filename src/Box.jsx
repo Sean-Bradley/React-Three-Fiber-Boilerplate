@@ -23,7 +23,7 @@ export default function Box(props) {
     <mesh
       {...props}
       ref={ref}
-      onClick={() => setCount((count + 1) % 2)}
+      onPointerDown={() => setCount((count + 1) % 2)}
       geometry={geometry[count]}>
       <meshBasicMaterial color={'lime'} wireframe={true} />
     </mesh>
