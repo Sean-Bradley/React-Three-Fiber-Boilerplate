@@ -13,7 +13,7 @@ export default function Box(props) {
     <mesh
       {...props}
       ref={ref}
-      onClick={() => console.log('clicked ' + ref.current.name)}
+      onPointerDown={() => console.log('pointer down ' + ref.current.name)}
       onPointerOver={() => console.log('pointer over ' + ref.current.name)}
       onPointerOut={() => console.log('pointer out ' + ref.current.name)}>
       <boxGeometry />
