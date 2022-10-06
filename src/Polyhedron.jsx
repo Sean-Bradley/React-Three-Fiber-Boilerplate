@@ -19,7 +19,7 @@ export default function Polyhedron(props) {
     <mesh
       {...props}
       ref={ref}
-      onClick={() => {
+      onPointerDown={() => {
         setCount((count + 1) % 3)
       }}
     >
