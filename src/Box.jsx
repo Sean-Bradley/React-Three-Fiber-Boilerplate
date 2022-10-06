@@ -14,6 +14,7 @@ export default function Box(props) {
       {...props}
       ref={ref}
       onPointerDown={() => console.log('pointer down ' + ref.current.name)}
+      onPointerUp={() => console.log('pointer up ' + ref.current.name)}
       onPointerOver={() => console.log('pointer over ' + ref.current.name)}
       onPointerOut={() => console.log('pointer out ' + ref.current.name)}>
       <boxGeometry />
