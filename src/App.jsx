@@ -15,16 +15,16 @@ export default function App() {
     []
   )
 
-  const pA = useControls('Polygon A', {
+  const options = {
     x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
     y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 }
-  })
-  const pB = useControls('Polygon B', {
-    x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 }
-  })
+    z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
+    visible: true,
+    color: { value: 'red' }
+  }
+
+  const pA = useControls('Polygon A', options)
+  const pB = useControls('Polygon B', options)
 
   return (
     <>
@@ -32,14 +32,18 @@ export default function App() {
         <Polyhedron
           position={[-1, 1, 0]}
           rotation={[pA.x, pA.y, pA.z]}
+          visible={pA.visible}
+          color={pA.color}
           userData-polyhedron={polyhedron}
         />
         <Polyhedron
           position={[1, 1, 0]}
           rotation={[pB.x, pB.y, pB.z]}
+          visible={pB.visible}
+          color={pB.color}
           userData-polyhedron={polyhedron}
         />
-        <OrbitControls />
+        <OrbitControls target-y={1} />
         <axesHelper args={[5]} />
         <gridHelper />
         <Stats />
