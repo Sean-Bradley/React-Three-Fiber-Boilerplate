@@ -127,7 +127,7 @@ export default function App() {
         <gridHelper />
         <Stats />
       </Canvas>
-      <Leva position-y={1000} />
+      <Leva />
     </>
   )
 }
