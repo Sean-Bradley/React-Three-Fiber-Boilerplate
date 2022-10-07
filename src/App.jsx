@@ -4,27 +4,13 @@ import * as THREE from 'three'
 import { Stats, OrbitControls } from '@react-three/drei'
 import { Leva, useControls } from 'leva'
 import { useRef } from 'react'
+import Floor from './Floor'
 
 export default function App() {
   const ambientRef = useRef()
   const directionalRef = useRef()
   const pointRef = useRef()
   const spotRef = useRef()
-
-  useControls('Ambient Light', {
-    visible: {
-      value: false,
-      onChange: (v) => {
-        if (ambientRef.current) ambientRef.current.visible = v
-      }
-    },
-    color: {
-      value: 'white',
-      onChange: (v) => {
-        if (ambientRef.current) ambientRef.current.color = new THREE.Color(v)
-      }
-    }
-  })
 
   useControls('Directional Light', {
     visible: {
@@ -34,17 +20,11 @@ export default function App() {
       }
     },
     position: {
-      x: 1,
-      y: 1,
-      z: 1,
+      x: 3.3,
+      y: 1.0,
+      z: 4.4,
       onChange: (v) => {
         if (directionalRef.current) directionalRef.current.position.copy(v)
-      }
-    },
-    color: {
-      value: 'white',
-      onChange: (v) => {
-        if (directionalRef.current) directionalRef.current.color = new THREE.Color(v)
       }
     }
   })
@@ -63,12 +43,6 @@ export default function App() {
       onChange: (v) => {
         if (pointRef.current) pointRef.current.position.copy(v)
       }
-    },
-    color: {
-      value: 'white',
-      onChange: (v) => {
-        if (pointRef.current) pointRef.current.color = new THREE.Color(v)
-      }
     }
   })
 
@@ -86,26 +60,20 @@ export default function App() {
       onChange: (v) => {
         if (spotRef.current) spotRef.current.position.copy(v)
       }
-    },
-    color: {
-      value: 'white',
-      onChange: (v) => {
-        if (spotRef.current) spotRef.current.color = new THREE.Color(v)
-      }
     }
   })
 
   return (
     <>
-      <Canvas camera={{ position: [4, 4, 1.5] }}>
+      <Canvas camera={{ position: [4, 4, 1.5] }} shadows>
         <ambientLight ref={ambientRef} visible={false} />
-        <directionalLight ref={directionalRef} />
-        <pointLight ref={pointRef} visible={false} position={[2, 0, 0]} />
-        <spotLight ref={spotRef} visible={false} position={[3, 2.5, 1.0]} />
+        <directionalLight ref={directionalRef} position={[3.3, 1.0, 4.4]} castShadow={true} />
+        <pointLight ref={pointRef} visible={false} position={[2, 0, 0]} castShadow={true} />
+        <spotLight ref={spotRef} visible={false} position={[3, 2.5, 1.0]} castShadow={true} />
         <Polyhedron
           name="meshBasicMaterial"
           position={[-3, 1, 0]}
-          material={new THREE.MeshBasicMaterial({ color: 'yellow', flatShading: true })}
+          material={new THREE.MeshBasicMaterial({ color: 'yellow' })}
         />
         <Polyhedron
           name="meshNormalMaterial"
@@ -120,11 +88,16 @@ export default function App() {
         <Polyhedron
           name="meshStandardMaterial"
           position={[3, 1, 0]}
-          material={new THREE.MeshStandardMaterial({ color: 0xff0033, flatShading: true })}
+          material={
+            new THREE.MeshStandardMaterial({
+              color: 0xff0033,
+              flatShading: true
+            })
+          }
         />
+        <Floor />
         <OrbitControls target={[2, 2, 0]} />
         <axesHelper args={[5]} />
-        <gridHelper />
         <Stats />
       </Canvas>
       <Leva />
