@@ -1,54 +1,25 @@
-import Polyhedron from './Polyhedron'
-import * as THREE from 'three'
 import { Stats, OrbitControls } from '@react-three/drei'
-import { useControls } from 'leva'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import Floor from './Floor'
 import { useLoader } from '@react-three/fiber'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 export default function App() {
   const directionalRef = useRef()
-  const texture = useLoader(THREE.TextureLoader, './img/grid.png')
+  const gltf = useLoader(GLTFLoader, './models/monkey.glb')
 
-  useControls('Directional Light', {
-    position: {
-      x: 3.3,
-      y: 1.0,
-      z: 4.4,
-      onChange: (v) => {
-        directionalRef.current.position.copy(v)
+  useEffect(() => {
+    gltf.scene.children.forEach((c) => {
+      if (c.isMesh) {
+        c.castShadow = true
       }
-    }
+    })
   })
 
   return (
     <>
-      <directionalLight ref={directionalRef} castShadow={true} />
-      <Polyhedron
-        name="meshBasicMaterial"
-        position={[-3, 1, 0]}
-        material={new THREE.MeshBasicMaterial({ map: texture })}
-      />
-      <Polyhedron
-        name="meshNormalMaterial"
-        position={[-1, 1, 0]}
-        material={new THREE.MeshNormalMaterial({ flatShading: true })}
-      />
-      <Polyhedron
-        name="meshPhongMaterial"
-        position={[1, 1, 0]}
-        material={new THREE.MeshPhongMaterial({ flatShading: true, map: texture })}
-      />
-      <Polyhedron
-        name="meshStandardMaterial"
-        position={[3, 1, 0]}
-        material={
-          new THREE.MeshStandardMaterial({
-            flatShading: true,
-            map: texture
-          })
-        }
-      />
+      <directionalLight ref={directionalRef} position={[3.3, 1.0, 4.4]} castShadow={true} />
+      <primitive object={gltf.scene} position={[0, 1, 0]} onChange={console.log(gltf.scene)} />
       <Floor />
       <OrbitControls target={[0, 1, 0]} />
       <axesHelper args={[5]} />
