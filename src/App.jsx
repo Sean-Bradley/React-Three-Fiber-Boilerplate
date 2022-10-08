@@ -11,6 +11,24 @@ export default function App() {
   const pointRef = useRef()
   const spotRef = useRef()
 
+  useControls('Ambient Light', {
+    visible: {
+      value: false,
+      onChange: (v) => {
+        ambientRef.current.visible = v
+      }
+    },
+    intensity: {
+      value: 1.0,
+      min: 0,
+      max: 1.0,
+      step: 0.1,
+      onChange: (v) => {
+        ambientRef.current.intensity = v
+      }
+    }
+  })
+
   useControls('Directional Light', {
     visible: {
       value: true,
@@ -24,6 +42,12 @@ export default function App() {
       z: 4.4,
       onChange: (v) => {
         directionalRef.current.position.copy(v)
+      }
+    },
+    castShadow: {
+      value: true,
+      onChange: (v) => {
+        directionalRef.current.castShadow = v
       }
     }
   })
@@ -42,6 +66,12 @@ export default function App() {
       onChange: (v) => {
         pointRef.current.position.copy(v)
       }
+    },
+    castShadow: {
+      value: true,
+      onChange: (v) => {
+        pointRef.current.castShadow = v
+      }
     }
   })
 
@@ -59,15 +89,21 @@ export default function App() {
       onChange: (v) => {
         spotRef.current.position.copy(v)
       }
+    },
+    castShadow: {
+      value: true,
+      onChange: (v) => {
+        spotRef.current.castShadow = v
+      }
     }
   })
 
   return (
     <>
-      <ambientLight ref={ambientRef} visible={false} />
-      <directionalLight ref={directionalRef} castShadow={true} />
-      <pointLight ref={pointRef} visible={false} castShadow={true} />
-      <spotLight ref={spotRef} visible={false} position={[3, 2.5, 1.0]} castShadow={true} />
+      <ambientLight ref={ambientRef} />
+      <directionalLight ref={directionalRef} />
+      <pointLight ref={pointRef} />
+      <spotLight ref={spotRef} />
       <Polyhedron
         name="meshBasicMaterial"
         position={[-3, 1, 0]}
