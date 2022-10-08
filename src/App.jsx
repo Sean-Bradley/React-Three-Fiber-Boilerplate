@@ -37,14 +37,14 @@ export default function App() {
       <Polyhedron
         name="meshPhongMaterial"
         position={[1, 1, 0]}
-        material={new THREE.MeshPhongMaterial({ flatShading: false, map: texture })}
+        material={new THREE.MeshPhongMaterial({ flatShading: true, map: texture })}
       />
       <Polyhedron
         name="meshStandardMaterial"
         position={[3, 1, 0]}
         material={
           new THREE.MeshStandardMaterial({
-            flatShading: false,
+            flatShading: true,
             map: texture
           })
         }
