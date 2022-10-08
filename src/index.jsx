@@ -5,7 +5,6 @@ import { Leva } from 'leva'
 import './styles.css'
 import App from './App'
 
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Canvas camera={{ position: [4, 4, 1.5] }} shadows>
