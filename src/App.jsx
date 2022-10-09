@@ -1,14 +1,14 @@
 import Polyhedron from './Polyhedron'
 import * as THREE from 'three'
 import { Stats, OrbitControls } from '@react-three/drei'
-import { useControls } from 'leva'
+import { Canvas } from '@react-three/fiber'
+import { Leva, useControls } from 'leva'
 import { useRef } from 'react'
 import Floor from './Floor'
 import { useLoader } from '@react-three/fiber'
 
-export default function App() {
+function Lights() {
   const directionalRef = useRef()
-  const texture = useLoader(THREE.TextureLoader, './img/grid.png')
 
   useControls('Directional Light', {
     position: {
@@ -23,36 +23,49 @@ export default function App() {
 
   return (
     <>
-      <directionalLight ref={directionalRef} castShadow={true} />
-      <Polyhedron
-        name="meshBasicMaterial"
-        position={[-3, 1, 0]}
-        material={new THREE.MeshBasicMaterial({ map: texture })}
-      />
-      <Polyhedron
-        name="meshNormalMaterial"
-        position={[-1, 1, 0]}
-        material={new THREE.MeshNormalMaterial({ flatShading: true })}
-      />
-      <Polyhedron
-        name="meshPhongMaterial"
-        position={[1, 1, 0]}
-        material={new THREE.MeshPhongMaterial({ flatShading: true, map: texture })}
-      />
-      <Polyhedron
-        name="meshStandardMaterial"
-        position={[3, 1, 0]}
-        material={
-          new THREE.MeshStandardMaterial({
-            flatShading: true,
-            map: texture
-          })
-        }
-      />
-      <Floor />
-      <OrbitControls target={[0, 1, 0]} />
-      <axesHelper args={[5]} />
-      <Stats />
+      <directionalLight ref={directionalRef} />
+    </>
+  )
+}
+
+export default function App() {
+  const texture = useLoader(THREE.TextureLoader, './img/grid.png')
+
+  return (
+    <>
+      <Canvas camera={{ position: [4, 4, 1.5] }} shadows>
+        <Lights />
+        <Polyhedron
+          name="meshBasicMaterial"
+          position={[-3, 1, 0]}
+          material={new THREE.MeshBasicMaterial({ map: texture })}
+        />
+        <Polyhedron
+          name="meshNormalMaterial"
+          position={[-1, 1, 0]}
+          material={new THREE.MeshNormalMaterial({ flatShading: true })}
+        />
+        <Polyhedron
+          name="meshPhongMaterial"
+          position={[1, 1, 0]}
+          material={new THREE.MeshPhongMaterial({ flatShading: true, map: texture })}
+        />
+        <Polyhedron
+          name="meshStandardMaterial"
+          position={[3, 1, 0]}
+          material={
+            new THREE.MeshStandardMaterial({
+              flatShading: true,
+              map: texture
+            })
+          }
+        />
+        <Floor />
+        <OrbitControls target={[0, 1, 0]} />
+        <axesHelper args={[5]} />
+        <Stats />
+      </Canvas>
+      <Leva />
     </>
   )
 }
