@@ -58,8 +58,8 @@ export default function App() {
         <Environment files="./img/venice_sunset_1k.hdr" />
         <Model />
         <OrbitControls target={[0, 1, 0]} autoRotate />
+        <Stats />
       </Canvas>
-      <Stats />
       <Leva />
     </StrictMode>
   )
