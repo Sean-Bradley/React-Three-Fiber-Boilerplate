@@ -6,7 +6,7 @@ import { Canvas } from '@react-three/fiber'
 import { StrictMode } from 'react'
 import { Leva, useControls } from 'leva'
 
-function Scene() {
+function Model() {
   const { scene, materials } = useLoader(GLTFLoader, './models/scene.glb')
 
   useMemo(() => {
@@ -39,7 +39,6 @@ function Scene() {
 
   return (
     <>
-      <Environment files="./img/venice_sunset_1k.hdr" />
       <primitive
         object={scene}
         children-0-children-0-castShadow={true}
@@ -54,7 +53,6 @@ function Scene() {
         children-7-visible={pA.visible}
         children-7-material-color={pA.color}
       />
-      <OrbitControls target={[0, 1, 0]} autoRotate />
     </>
   )
 }
@@ -63,12 +61,14 @@ export default function App() {
   return (
     <StrictMode>
       <Canvas
-        camera={{ position: [0, 1.5, 3] }}
+        camera={{ position: [0, .5, 3] }}
         shadows
         onCreated={(state) => {
           state.gl.physicallyCorrectLights = true
         }}>
-        <Scene />        
+        <Environment files="./img/venice_sunset_1k.hdr" />
+        <Model />
+        <OrbitControls target={[0, 1, 0]} autoRotate />
       </Canvas>
       <Stats />
       <Leva />
