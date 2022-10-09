@@ -1,22 +1,16 @@
 import { Stats, OrbitControls, Environment } from '@react-three/drei'
 import { useLoader } from '@react-three/fiber'
-import { useMemo, useEffect } from 'react'
+import { useMemo } from 'react'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Canvas } from '@react-three/fiber'
-import { StrictMode } from 'react'
 import { Leva, useControls } from 'leva'
 
 function Model() {
   const { scene, materials } = useLoader(GLTFLoader, './models/scene.glb')
 
   useMemo(() => {
-    console.log('useMemo')
     materials.Material.envMapIntensity = 0.5
   }, [materials])
-
-  useEffect(() => {
-    console.log('useEffect')
-  })
 
   const options = useControls('Suzanne', {
     x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
@@ -48,7 +42,7 @@ function Model() {
 
 export default function App() {
   return (
-    <StrictMode>
+    <>
       <Canvas
         camera={{ position: [0, 0.5, 3] }}
         shadows
@@ -58,9 +52,9 @@ export default function App() {
         <Environment files="./img/venice_sunset_1k.hdr" />
         <Model />
         <OrbitControls target={[0, 1, 0]} autoRotate />
-        <Stats />
       </Canvas>
+      <Stats />
       <Leva />
-    </StrictMode>
+    </>
   )
 }
