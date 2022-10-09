@@ -6,7 +6,7 @@ import App from './App'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Canvas camera={{ position: [-0.5, 1, 2] }} shadows>
+    <Canvas camera={{ position: [0, 4, 8] }} shadows>
       <App />
     </Canvas>
   </StrictMode>
