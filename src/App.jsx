@@ -12,30 +12,19 @@ function Model() {
   useMemo(() => {
     console.log('useMemo')
     materials.Material.envMapIntensity = 0.5
-    // scene.traverse((o) => {
-    //   if (o.isMesh) {
-    //     if (o.name === 'Cube') o.receiveShadow = true
-    //     else o.castShadow = true
-    //   }
-    //   if (o.isLight) {
-    //     o.castShadow = true
-    //   }
-    // })
   }, [materials])
 
   useEffect(() => {
     console.log('useEffect')
   })
 
-  const options = {
+  const options = useControls('Suzanne', {
     x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
     y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
     z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
     visible: true,
     color: { value: 'red' }
-  }
-
-  const pA = useControls('Polygon A', options)
+  })
 
   return (
     <>
@@ -49,9 +38,9 @@ function Model() {
         children-5-castShadow={true}
         children-6-castShadow={true}
         children-7-castShadow={true}
-        children-7-rotation={[pA.x, pA.y, pA.z]}
-        children-7-visible={pA.visible}
-        children-7-material-color={pA.color}
+        children-7-rotation={[options.x, options.y, options.z]}
+        children-7-visible={options.visible}
+        children-7-material-color={options.color}
       />
     </>
   )
@@ -61,7 +50,7 @@ export default function App() {
   return (
     <StrictMode>
       <Canvas
-        camera={{ position: [0, .5, 3] }}
+        camera={{ position: [0, 0.5, 3] }}
         shadows
         onCreated={(state) => {
           state.gl.physicallyCorrectLights = true
