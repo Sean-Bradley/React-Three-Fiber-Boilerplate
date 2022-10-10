@@ -4,20 +4,20 @@ import { Leva, useControls } from 'leva'
 import { Environment } from '@react-three/drei'
 
 const MODELS = {
-  Hammer: './models/hammer.glb',
-  Drill: './models/drill.glb',
-  'Tape Measure': './models/tapeMeasure.glb'
+  hammer: './models/hammer.glb',
+  drill: './models/drill.glb',
+  tapeMeasure: './models/tapeMeasure.glb'
 }
 
-function Model({ url }) {
-  const { scene } = useGLTF(url)
-  return <primitive object={scene} dispose={null} />
+function Model(props) {
+  const { scene } = useGLTF(props.url)
+  return <primitive object={scene} />
 }
 
 export default function App() {
-  const { model } = useControls({
+  const dropDown = useControls({
     model: {
-      value: 'Hammer',
+      value: 'hammer',
       options: Object.keys(MODELS)
     }
   })
@@ -26,12 +26,12 @@ export default function App() {
     <>
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.05 }}>
         <Environment files="./img/workshop_1k.hdr" background />
-        <Model url={MODELS[model]} />
-        <OrbitControls />
+        <Model url={MODELS[dropDown.model]} />
+        <OrbitControls autoRotate />
         <Stats />
       </Canvas>
       <Leva />
-      <span id="info">The {model.toLowerCase()} is selected.</span>
+      <span id="info">The {dropDown.model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
     </>
   )
 }
