@@ -5,3 +5,13 @@ body,
   margin: 0;
   background: #000000;
 }
+
+#info {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  font-size: 32px;
+  color: white;
+  filter: drop-shadow(2px 2px 2px black);
+  pointer-events: none;
+}

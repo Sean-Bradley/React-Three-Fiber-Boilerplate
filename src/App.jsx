@@ -1,60 +1,42 @@
-import { Stats, OrbitControls, Environment } from '@react-three/drei'
-import { useLoader } from '@react-three/fiber'
-import { useMemo } from 'react'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { Stats, OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Leva, useControls } from 'leva'
+import { Environment } from '@react-three/drei'
+import { useEffect, useRef } from 'react'
 
-function Model() {
-  const { scene, materials } = useLoader(GLTFLoader, './models/scene.glb')
+const MODELS = {
+  Hammer: './models/hammer.glb',
+  Drill: './models/drill.glb',
+  'Tape Measure': './models/tapeMeasure.glb'
+}
 
-  useMemo(() => {
-    materials.Material.envMapIntensity = 0.5
-  }, [materials])
+function Model({ url }) {
+  // const ref = useRef()
+  // useEffect(() => {
+  //   if (ref.current) console.log(ref.current.uuid)
+  // })
+  const { scene } = useGLTF(url)
+  return <primitive object={scene} />
+}
 
-  const options = useControls('Suzanne', {
-    x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    visible: true,
-    color: { value: 'red' }
+export default function App() {
+  const { model } = useControls({
+    model: {
+      value: 'Hammer',
+      options: Object.keys(MODELS)
+    }
   })
 
   return (
     <>
-      <primitive
-        object={scene}
-        children-0-children-0-castShadow={true}
-        children-1-receiveShadow={true}
-        children-2-castShadow={true}
-        children-3-castShadow={true}
-        children-4-castShadow={true}
-        children-5-castShadow={true}
-        children-6-castShadow={true}
-        children-7-castShadow={true}
-        children-7-rotation={[options.x, options.y, options.z]}
-        children-7-visible={options.visible}
-        children-7-material-color={options.color}
-      />
-    </>
-  )
-}
-
-export default function App() {
-  return (
-    <>
-      <Canvas
-        camera={{ position: [0, 0.5, 3] }}
-        shadows
-        onCreated={(state) => {
-          state.gl.physicallyCorrectLights = true
-        }}>
-        <Environment files="./img/venice_sunset_1k.hdr" />
-        <Model />
-        <OrbitControls target={[0, 1, 0]} autoRotate />
+      <Canvas camera={{ position: [0, 0, -0.2], near: 0.05 }}>
+        <Environment preset="warehouse" background />
+        <Model url={MODELS[model]} dispose={null} />
+        <OrbitControls />
+        <Stats />
       </Canvas>
-      <Stats />
       <Leva />
+      <span id="info">The {model.toLowerCase()} is selected.</span>
     </>
   )
 }
