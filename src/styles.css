@@ -8,10 +8,12 @@ body,
 
 #info {
   position: absolute;
-  top: 50px;
-  left: 10px;
+  top: 60px;
+  left: 10px;  
+  background: #181c20;
+  color: #8c92a4;
+  padding: 10px 20px;
+  border-radius: 5px;
   font-size: 32px;
-  color: white;
-  filter: drop-shadow(2px 2px 2px black);
   pointer-events: none;
 }

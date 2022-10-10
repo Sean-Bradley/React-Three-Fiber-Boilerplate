@@ -25,7 +25,7 @@ export default function App() {
   return (
     <>
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.05 }}>
-        <Environment preset="warehouse" background />
+        <Environment files="./img/workshop_1k.hdr" background />
         <Model url={MODELS[model]} dispose={null} />
         <OrbitControls />
         <Stats />
