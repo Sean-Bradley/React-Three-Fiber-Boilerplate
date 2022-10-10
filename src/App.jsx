@@ -1,7 +1,6 @@
-import { Stats, OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
+import { useGLTF, OrbitControls, Environment } from '@react-three/drei'
 import { Leva, useControls } from 'leva'
-import { Environment } from '@react-three/drei'
 
 const MODELS = {
   hammer: './models/hammer.glb',
@@ -26,9 +25,10 @@ export default function App() {
     <>
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.05 }}>
         <Environment files="./img/workshop_1k.hdr" background />
-        <Model url={MODELS[dropDown.model]} />
+        <group>
+          <Model url={MODELS[dropDown.model]} />
+        </group>
         <OrbitControls autoRotate />
-        <Stats />
       </Canvas>
       <Leva />
       <span id="info">The {dropDown.model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
