@@ -11,7 +11,7 @@ const MODELS = {
 
 function Model({ url }) {
   const { scene } = useGLTF(url)
-  return <primitive object={scene} />
+  return <primitive object={scene} dispose={null} />
 }
 
 export default function App() {
@@ -26,7 +26,7 @@ export default function App() {
     <>
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.05 }}>
         <Environment files="./img/workshop_1k.hdr" background />
-        <Model url={MODELS[model]} dispose={null} />
+        <Model url={MODELS[model]} />
         <OrbitControls />
         <Stats />
       </Canvas>
