@@ -25,9 +25,9 @@ export default function App() {
     <>
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.05 }}>
         <Environment files="./img/workshop_1k.hdr" background />
-        <group>
+       
           <Model url={MODELS[dropDown.model]} />
-        </group>
+      
         <OrbitControls autoRotate />
       </Canvas>
       <Leva />
