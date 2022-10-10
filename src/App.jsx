@@ -2,7 +2,6 @@ import { Stats, OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Leva, useControls } from 'leva'
 import { Environment } from '@react-three/drei'
-import { useEffect, useRef } from 'react'
 
 const MODELS = {
   Hammer: './models/hammer.glb',
@@ -11,10 +10,6 @@ const MODELS = {
 }
 
 function Model({ url }) {
-  // const ref = useRef()
-  // useEffect(() => {
-  //   if (ref.current) console.log(ref.current.uuid)
-  // })
   const { scene } = useGLTF(url)
   return <primitive object={scene} />
 }
