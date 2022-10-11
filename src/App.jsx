@@ -1,63 +1,112 @@
-import { Canvas } from '@react-three/fiber'
-import { useGLTF, OrbitControls, Environment, Stats, Html } from '@react-three/drei'
+import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { useRef } from 'react'
 import { Leva, useControls } from 'leva'
+import { MeshBasicMaterial } from 'three'
 
-const MODELS = {
-  hammer: './models/hammer.glb',
-  drill: './models/drill.glb',
-  tapeMeasure: './models/tapeMeasure.glb'
-}
+function Lights() {
+  const ref = useRef()
 
-const cache = {}
-
-function Model(props) {
-  const { scene } = useGLTF(props.url)
-
-  if (!cache[props.url]) {
-    console.log('Caching ' + props.url)
-    const annotations = []
-
-    scene.traverse((o) => {
-      if (o.userData.prop) {
-        annotations.push(
-          <Html key={o.uuid} position={[o.position.x, o.position.y, o.position.z]} distanceFactor={0.25}>
-            <div className="annotation">{o.userData.prop}</div>
-          </Html>
-        )
+  useControls('Directional Light', {
+    position: {
+      x: 65.0,
+      y: 21.0,
+      z: 86.0,
+      onChange: (v) => {
+        ref.current.position.copy(v)
+        console.log(ref.current)
       }
-    })
-
-    cache[props.url] = (
-      <primitive object={scene}>
-        {annotations.map((a) => {
-          return a
-        })}
-      </primitive>
-    )
-  }
-  return cache[props.url]
-}
-
-export default function App() {
-  const dropDown = useControls({
-    model: {
-      value: 'hammer',
-      options: Object.keys(MODELS)
+    },
+    left: {
+      value: -30,
+      min: -30,
+      max: 30,
+      step: 0.1,
+      onChange: (v) => {
+        ref.current.shadow.camera.left = v
+        ref.current.shadow.camera.updateProjectionMatrix()
+      }
+    },
+    right: {
+      value: 30,
+      min: -30,
+      max: 30,
+      step: 0.1,
+      onChange: (v) => {
+        ref.current.shadow.camera.right = v
+        ref.current.shadow.camera.updateProjectionMatrix()
+      }
+    },
+    top: {
+      value: 30,
+      min: -30,
+      max: 30,
+      step: 0.1,
+      onChange: (v) => {
+        ref.current.shadow.camera.top = v
+        ref.current.shadow.camera.updateProjectionMatrix()
+      }
+    },
+    bottom: {
+      value: -30,
+      min: -30,
+      max: 30,
+      step: 0.1,
+      onChange: (v) => {
+        ref.current.shadow.camera.bottom = v
+        ref.current.shadow.camera.updateProjectionMatrix()
+      }
     }
   })
 
+  // useFrame((state) => {
+  //   const t = state.clock.getElapsedTime() / 5
+  //   ref.current.position.x = Math.cos(t) * 20
+  //   ref.current.position.z = Math.sin(t) * 20
+  // })
+
   return (
     <>
-      <Canvas camera={{ position: [0, 0, -0.2], near: 0.025 }}>
-        <Environment files="./img/workshop_1k.hdr" background />
-        <group>
-          <Model url={MODELS[dropDown.model]} />
-        </group>
-        <OrbitControls autoRotate />
+      <ambientLight intensity={0.1} />
+      <directionalLight
+        ref={ref}
+        castShadow={true}
+        shadow-bias={-0.003}
+        shadow-mapSize={[2048, 2048]}>
+        <mesh>
+          <sphereBufferGeometry />
+          <meshBasicMaterial />
+        </mesh>
+      </directionalLight>
+    </>
+  )
+}
+
+function Scene() {
+  const gltf = useGLTF('./models/collision-world.glb')
+
+  return (
+    <>
+      <primitive
+        object={gltf.scene}
+        position={[0, 0, 0]}
+        children-0-castShadow={true}
+        children-0-receiveShadow={true}
+      />
+    </>
+  )
+}
+export default function App() {
+  return (
+    <>
+      <Canvas camera={{ position: [10, 10, 10] }} shadows>
+        <Lights />
+        <Environment preset="dawn" background />
+        <Scene />
+        <OrbitControls target={[0, 1, 0]} />
         <Stats />
       </Canvas>
       <Leva />
-      <span id="info">The {dropDown.model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
     </>
   )
 }
