@@ -10,9 +10,9 @@ function Lights() {
       <directionalLight
         intensity={1}
         castShadow={true}
-        // shadow-bias={-0.0001}
+        shadow-bias={-0.0002}
         shadow-mapSize={[2048, 2048]}
-        position={[65.0, 21.0, 86.0]}
+        position={[85.0, 80.0, 70.0]}
         shadow-camera-left={-30}
         shadow-camera-right={30}
         shadow-camera-top={30}
@@ -60,8 +60,7 @@ function Arena({ controls, lerpEnabled, setLerping, annotations }) {
         position={[0, 0, 0]}
         children-0-castShadow={true}
         children-0-receiveShadow={true}
-        children-0-material-envMapIntensity={0.5}
-        onUpdate={() => console.log(scene)}
+        children-0-material-envMapIntensity={0.4}
       />
     </>
   )
@@ -119,7 +118,10 @@ export default function App() {
         onPointerDown={() => setLerping(false)}
         shadows>
         <Lights />
-        <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" background />
+        <Environment
+          files="./img/drakensberg_solitary_mountain_1k.hdr"
+          background
+        />
         <OrbitControls ref={ref} target={[0, 1, 0]} />
         <Arena
           controls={ref}
