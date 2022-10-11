@@ -23,7 +23,7 @@ export default function App() {
 
   return (
     <>
-      <Canvas camera={{ position: [0, 0, -0.2], near: 0.05 }}>
+      <Canvas camera={{ position: [0, 0, -0.2], near: 0.025 }}>
         <Environment files="./img/workshop_1k.hdr" background />
         <group>
           <Model url={MODELS[dropDown.model]} />
