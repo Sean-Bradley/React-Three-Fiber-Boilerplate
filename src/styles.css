@@ -8,12 +8,14 @@ body,
 
 #info {
   position: absolute;
-  top: 60px;
-  left: 10px;  
+  top: 10px;
+  right: 295px;
+  text-align: right;
   background: #181c20;
   color: #8c92a4;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 32px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 17px;
   pointer-events: none;
+  font-family: var(--leva-fonts-mono);
 }
