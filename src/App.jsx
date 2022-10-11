@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { useGLTF, OrbitControls, Environment, Html } from '@react-three/drei'
+import { useGLTF, OrbitControls, Environment, Stats, Html } from '@react-three/drei'
 import { Leva, useControls } from 'leva'
 
 const MODELS = {
@@ -49,6 +49,7 @@ export default function App() {
           <Model url={MODELS[dropDown.model]} />
         </group>
         <OrbitControls autoRotate />
+        <Stats />
       </Canvas>
       <Leva />
       <span id="info">The {dropDown.model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
