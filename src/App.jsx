@@ -1,24 +1,51 @@
-import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
+import {
+  Stats,
+  OrbitControls,
+  useGLTF,
+  Environment,
+  useHelper
+} from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
 import { useRef } from 'react'
 import { Leva, useControls } from 'leva'
-import { MeshBasicMaterial } from 'three'
+import { CameraHelper } from 'three'
 
 function Lights() {
   const ref = useRef()
+  const helperRef = useRef()
+  useHelper(helperRef, CameraHelper)
 
   useControls('Directional Light', {
     position: {
-      x: 65.0,
-      y: 21.0,
-      z: 86.0,
+      x: 21.0,
+      y: 11.0,
+      z: 6.0,
       onChange: (v) => {
         ref.current.position.copy(v)
-        console.log(ref.current)
+      }
+    },
+    near: {
+      value: 1,
+      min: 1,
+      max: 50,
+      step: 0.1,
+      onChange: (v) => {
+        ref.current.shadow.camera.near = v
+        ref.current.shadow.camera.updateProjectionMatrix()
+      }
+    },
+    far: {
+      value: 50,
+      min: 1,
+      max: 50,
+      step: 0.1,
+      onChange: (v) => {
+        ref.current.shadow.camera.far = v
+        ref.current.shadow.camera.updateProjectionMatrix()
       }
     },
     left: {
-      value: -30,
+      value: -15,
       min: -30,
       max: 30,
       step: 0.1,
@@ -28,7 +55,7 @@ function Lights() {
       }
     },
     right: {
-      value: 30,
+      value: 15,
       min: -30,
       max: 30,
       step: 0.1,
@@ -38,7 +65,7 @@ function Lights() {
       }
     },
     top: {
-      value: 30,
+      value: 10,
       min: -30,
       max: 30,
       step: 0.1,
@@ -48,7 +75,7 @@ function Lights() {
       }
     },
     bottom: {
-      value: -30,
+      value: -10,
       min: -30,
       max: 30,
       step: 0.1,
@@ -59,12 +86,6 @@ function Lights() {
     }
   })
 
-  // useFrame((state) => {
-  //   const t = state.clock.getElapsedTime() / 5
-  //   ref.current.position.x = Math.cos(t) * 20
-  //   ref.current.position.z = Math.sin(t) * 20
-  // })
-
   return (
     <>
       <ambientLight intensity={0.1} />
@@ -72,11 +93,8 @@ function Lights() {
         ref={ref}
         castShadow={true}
         shadow-bias={-0.003}
-        shadow-mapSize={[2048, 2048]}>
-        <mesh>
-          <sphereBufferGeometry />
-          <meshBasicMaterial />
-        </mesh>
+        shadow-mapSize={[512, 512]}>
+        <orthographicCamera ref={helperRef} attach="shadow-camera" />
       </directionalLight>
     </>
   )
@@ -99,11 +117,11 @@ function Scene() {
 export default function App() {
   return (
     <>
-      <Canvas camera={{ position: [10, 10, 10] }} shadows>
+      <Canvas camera={{ position: [-10, 10, -15] }} shadows>
         <Lights />
-        <Environment preset="dawn" background />
+        <Environment preset="night" background />
         <Scene />
-        <OrbitControls target={[0, 1, 0]} />
+        <OrbitControls target={[0, 4, 0]} />
         <Stats />
       </Canvas>
       <Leva />
