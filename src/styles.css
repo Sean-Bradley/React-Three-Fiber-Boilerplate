@@ -17,3 +17,23 @@ body,
   font-size: 32px;
   pointer-events: none;
 }
+
+.annotation {
+  transform: translate3d(calc(50%), calc(-50%), 0);
+  text-align: left;
+  background: #181c20;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  user-select: none;
+}
+
+.annotation::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: -30px;
+  height: 2px;
+  width: 30px;
+  background: #181c20;
+}
