@@ -1,5 +1,5 @@
 import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useRef, useState } from 'react'
 import { Leva, useControls, button } from 'leva'
 import { Vector3 } from 'three'
@@ -53,15 +53,24 @@ function Arena({ controls, lerpEnabled, setLerping, annotations }) {
     }
   })
 
+  function GetRaycasterPosition() {
+    const state = useThree()
+    console.log(state)
+  }
+
   return (
     <>
       <primitive
         object={scene}
-        position={[0, 0, 0]}
-        children-0-castShadow={true}
-        children-0-receiveShadow={true}
+        children-0-castShadow
+        children-0-receiveShadow
         children-0-material-envMapIntensity={0.4}
+        onDoubleClick={() => console.log(scene)}
+        onUpdate={() => scene.children[0].geometry.computeBoundingBox()}
       />
+      <mesh onDoubleClick={() => console.log(scene)}>
+        <sphereGeometry args={[5]} />
+      </mesh>
     </>
   )
 }
@@ -91,9 +100,9 @@ export default function App() {
         z: 2
       },
       lookAt: {
-        x: -3,
-        y: 0.15,
-        z: 10
+        x: 8.1,
+        y: -1.5,
+        z: 2
       }
     },
     viewC: {
@@ -104,9 +113,9 @@ export default function App() {
         z: 11
       },
       lookAt: {
-        x: 5,
-        y: -5,
-        z: 10
+        x: 8,
+        y: 4.9,
+        z: 11
       }
     }
   }
