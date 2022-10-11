@@ -8,29 +8,34 @@ const MODELS = {
   tapeMeasure: './models/tapeMeasure.glb'
 }
 
+const cache = {}
+
 function Model(props) {
   const { scene } = useGLTF(props.url)
-  const annotations = []
 
-  scene.traverse((o) => {
-    if (o.userData.prop) {
-      annotations.push(
-        <Html key={o.uuid} position={[o.position.x, o.position.y, o.position.z]} distanceFactor={0.25}>
-          <div className="annotation">{o.userData.prop}</div>
-        </Html>
-      )
-    }
-  })
+  if (!cache[props.url]) {
+    console.log('Caching ' + props.url)
+    const annotations = []
 
-  return (
-    <>
+    scene.traverse((o) => {
+      if (o.userData.prop) {
+        annotations.push(
+          <Html key={o.uuid} position={[o.position.x, o.position.y, o.position.z]} distanceFactor={0.25}>
+            <div className="annotation">{o.userData.prop}</div>
+          </Html>
+        )
+      }
+    })
+
+    cache[props.url] = (
       <primitive object={scene}>
         {annotations.map((a) => {
           return a
         })}
       </primitive>
-    </>
-  )
+    )
+  }
+  return cache[props.url]
 }
 
 export default function App() {
