@@ -23,7 +23,7 @@ function Lights() {
 }
 
 function Arena({ controls, lerpEnabled, setLerping, annotations }) {
-  const { scene } = useGLTF('./models/collision-world-2.glb')
+  const { scene } = useGLTF('./models/collision-world.glb')
   const [to, setTo] = useState(new Vector3(10, 10, 10))
   const [target, setTarget] = useState(new Vector3(0, 1, 0))
 
@@ -47,47 +47,24 @@ function Arena({ controls, lerpEnabled, setLerping, annotations }) {
 
   useFrame(({ camera }, delta) => {
     if (lerpEnabled) {
-      //} && camera.position.distanceTo(to) > 0.1) {
       camera.position.lerp(to, 3 * delta)
       controls.current.target.lerp(target, 3 * delta)
     }
   })
 
-  function GetRaycasterPosition() {
-    const state = useThree()
-    console.log(state)
-  }
-
   return (
     <>
       <primitive
-        object={scene}
-        children-0-castShadow
-        children-0-receiveShadow
-        children-0-material-envMapIntensity={0.4}
-        //onDoubleClick={() => console.log(scene)}
-        onPointerOver={() => {
-          console.log(`over`)
-        }}
-        onPointerOut={() => {
-          console.log(`out`)
-        }}
-        onPointerDown={() => {
-          console.log(`down`)
-        }}
-        onPointerMissed={() => {
-          console.log(`miss`)
-        }}
-        onUpdate={() => {
-          console.log('cmp bb')
-          scene.traverse((c) => {
-            if (c.isMesh) c.geometry.computeBoundingBox()
-          })
+        object={scene.children[0]}
+        castShadow
+        receiveShadow
+        material-envMapIntensity={0.4}
+        onDoubleClick={(e) => {
+          console.log(e)
+          setLerping(true)
+          setTarget(new Vector3().copy(e.intersections[0].point))
         }}
       />
-      <mesh onDoubleClick={() => console.log(scene)}>
-        <sphereGeometry args={[5]} />
-      </mesh>
     </>
   )
 }
