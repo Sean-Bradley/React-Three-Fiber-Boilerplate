@@ -22,31 +22,31 @@ function Lights() {
   )
 }
 
-function Arena({ controls, lerpEnabled, setLerping, annotations }) {
+function Arena({ controls, lerping, setLerping, annotations }) {
   const { scene } = useGLTF('./models/collision-world.glb')
   const [to, setTo] = useState(new Vector3(10, 10, 10))
   const [target, setTarget] = useState(new Vector3(0, 1, 0))
 
   useControls('Camera', {
     'View A': button(() => {
+      setTo(annotations.viewA.position)
+      setTarget(annotations.viewA.lookAt)
       setLerping(true)
-      setTo(new Vector3().copy(annotations.viewA.position))
-      setTarget(new Vector3().copy(annotations.viewA.lookAt))
     }),
     'View B': button(() => {
+      setTo(annotations.viewB.position)
+      setTarget(annotations.viewB.lookAt)
       setLerping(true)
-      setTo(new Vector3().copy(annotations.viewB.position))
-      setTarget(new Vector3().copy(annotations.viewB.lookAt))
     }),
     'View C': button(() => {
+      setTo(annotations.viewC.position)
+      setTarget(annotations.viewC.lookAt)
       setLerping(true)
-      setTo(new Vector3().copy(annotations.viewC.position))
-      setTarget(new Vector3().copy(annotations.viewC.lookAt))
     })
   })
 
   useFrame(({ camera }, delta) => {
-    if (lerpEnabled) {
+    if (lerping) {
       camera.position.lerp(to, 3 * delta)
       controls.current.target.lerp(target, 3 * delta)
     }
@@ -61,8 +61,9 @@ function Arena({ controls, lerpEnabled, setLerping, annotations }) {
         material-envMapIntensity={0.4}
         onDoubleClick={(e) => {
           console.log(e)
+          setTo(e.camera.position)
+          setTarget(e.intersections[0].point)
           setLerping(true)
-          setTarget(new Vector3().copy(e.intersections[0].point))
         }}
       />
     </>
@@ -128,7 +129,7 @@ export default function App() {
         <OrbitControls ref={ref} target={[0, 1, 0]} />
         <Arena
           controls={ref}
-          lerpEnabled={lerping}
+          lerping={lerping}
           setLerping={setLerping}
           annotations={annotations}
         />
