@@ -23,7 +23,7 @@ function Lights() {
 }
 
 function Arena({ controls, lerpEnabled, setLerping, annotations }) {
-  const { scene } = useGLTF('./models/collision-world.glb')
+  const { scene } = useGLTF('./models/collision-world-2.glb')
   const [to, setTo] = useState(new Vector3(10, 10, 10))
   const [target, setTarget] = useState(new Vector3(0, 1, 0))
 
@@ -65,8 +65,25 @@ function Arena({ controls, lerpEnabled, setLerping, annotations }) {
         children-0-castShadow
         children-0-receiveShadow
         children-0-material-envMapIntensity={0.4}
-        onDoubleClick={() => console.log(scene)}
-        onUpdate={() => scene.children[0].geometry.computeBoundingBox()}
+        //onDoubleClick={() => console.log(scene)}
+        onPointerOver={() => {
+          console.log(`over`)
+        }}
+        onPointerOut={() => {
+          console.log(`out`)
+        }}
+        onPointerDown={() => {
+          console.log(`down`)
+        }}
+        onPointerMissed={() => {
+          console.log(`miss`)
+        }}
+        onUpdate={() => {
+          console.log('cmp bb')
+          scene.traverse((c) => {
+            if (c.isMesh) c.geometry.computeBoundingBox()
+          })
+        }}
       />
       <mesh onDoubleClick={() => console.log(scene)}>
         <sphereGeometry args={[5]} />
