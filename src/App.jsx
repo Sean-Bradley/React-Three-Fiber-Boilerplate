@@ -40,7 +40,7 @@ function Arena({ controls, lerping, setLerping, annotations }) {
         material-envMapIntensity={0.4}
         onDoubleClick={(e) => {
           setLerping(false)
-          //setTo(e.camera.position.clone())
+          setTo(e.camera.position.clone())
           setTarget(e.intersections[0].point.clone())
           setLerping(true)
         }}
