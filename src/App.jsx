@@ -10,16 +10,30 @@ function Arena({ controls, lerping, setLerping }) {
   const [to, setTo] = useState(new Vector3(10, 10, 10))
   const [target, setTarget] = useState(new Vector3(0, 1, 0))
 
+  // const buttons = useMemo(() => {
+  //   console.log("creating buttons")
+  //   const _buttons = {}
+  //   annotations.forEach(a => {
+  //     _buttons[a.title] = button(() => {
+  //       setTo(a.position)
+  //       setTarget(a.lookAt)
+  //       setLerping(true)
+  //     })
+  //   })
+  //   return _buttons
+  // }, [setLerping])
+
   const buttons = useMemo(() => {
     console.log("creating buttons")
-    const _buttons = {}
-    annotations.forEach(a => {
-      _buttons[a.title] = button(() => {
-        setTo(a.position)
-        setTarget(a.lookAt)
-        setLerping(true)
+    const _buttons = annotations.reduce((acc, a, i) =>
+      Object.assign(acc, {
+        [`button ${i}`]: button(() => {
+          setTo(a.position)
+          setTarget(a.lookAt)
+          setLerping(true)
+        })
       })
-    })
+      , {})
     return _buttons
   }, [setLerping])
 
