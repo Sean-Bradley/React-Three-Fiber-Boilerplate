@@ -20,7 +20,7 @@ function Arena({ controls, lerping, setLerping }) {
         setLerping(true)
       })
     });
-  }, [annotations])
+  }, [])
 
   useControls('Camera', buttons)
 
