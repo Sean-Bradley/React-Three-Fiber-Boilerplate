@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber'
-import { useGLTF, OrbitControls, Environment, ContactShadows } from '@react-three/drei'
-import { Leva, useControls } from 'leva'
-import { Model } from './Shoe-draco'
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei'
+import { Leva } from 'leva'
+import { Model } from './Shoe'
 
 export default function App() {
   return (
