@@ -36,6 +36,9 @@ export function Model(props) {
 
   useControls('Shoe', colorPickers)
 
+  // JSX of glTF created using the command
+  // npx gltfjsx .\public\models\shoe-draco.glb -r ./public
+
   return (
     <group ref={ref} {...props} dispose={null}>
       <mesh geometry={nodes.shoe.geometry} material={materials.laces} />
