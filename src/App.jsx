@@ -3,10 +3,10 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { useRef, useState, useMemo } from 'react'
 import { Leva, useControls, button } from 'leva'
 import { Vector3 } from 'three'
-import annotations from './annotations.json';
+import annotations from './annotations.json'
 
 function Arena({ controls, lerping, setLerping }) {
-  const { scene } = useGLTF('./models/collision-world.glb')
+  const { nodes, materials } = useGLTF('./models/collision-world.glb')
   const [to, setTo] = useState(new Vector3(10, 10, 10))
   const [target, setTarget] = useState(new Vector3(0, 1, 0))
 
@@ -24,16 +24,18 @@ function Arena({ controls, lerping, setLerping }) {
   // }, [setLerping])
 
   const buttons = useMemo(() => {
-    console.log("creating buttons")
-    const _buttons = annotations.reduce((acc, a, i) =>
-      Object.assign(acc, {
-        [`button ${i}`]: button(() => {
-          setTo(a.position)
-          setTarget(a.lookAt)
-          setLerping(true)
-        })
-      })
-      , {})
+    console.log('creating buttons')
+    const _buttons = annotations.reduce(
+      (acc, a, i) =>
+        Object.assign(acc, {
+          [`button ${i}`]: button(() => {
+            setTo(a.position)
+            setTarget(a.lookAt)
+            setLerping(true)
+          })
+        }),
+      {}
+    )
     return _buttons
   }, [setLerping])
 
@@ -47,9 +49,12 @@ function Arena({ controls, lerping, setLerping }) {
   })
 
   return (
-    <>
-      <primitive
-        object={scene.children[0]}
+    <group dispose={null}>
+      <mesh
+        geometry={nodes.Cube004.geometry}
+        material={materials['Material.001']}
+        position={[7.68, -5.59, 26.38]}
+        scale={0.5}
         castShadow
         receiveShadow
         material-envMapIntensity={0.4}
@@ -59,7 +64,7 @@ function Arena({ controls, lerping, setLerping }) {
           setLerping(true)
         }}
       />
-    </>
+    </group>
   )
 }
 
@@ -69,10 +74,7 @@ export default function App() {
 
   return (
     <>
-      <Canvas
-        camera={{ position: [10, 10, 10] }}
-        onPointerDown={() => setLerping(false)}
-        shadows>
+      <Canvas camera={{ position: [10, 10, 10] }} onPointerDown={() => setLerping(false)} shadows>
         <directionalLight
           intensity={1}
           castShadow={true}
@@ -84,16 +86,9 @@ export default function App() {
           shadow-camera-top={30}
           shadow-camera-bottom={-30}
         />
-        <Environment
-          files="./img/drakensberg_solitary_mountain_1k.hdr"
-          background
-        />
+        <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" background />
         <OrbitControls ref={ref} target={[0, 1, 0]} />
-        <Arena
-          controls={ref}
-          lerping={lerping}
-          setLerping={setLerping}
-        />
+        <Arena controls={ref} lerping={lerping} setLerping={setLerping} />
         <Stats />
       </Canvas>
       <Leva />
