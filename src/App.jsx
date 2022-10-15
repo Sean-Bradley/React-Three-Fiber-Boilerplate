@@ -1,18 +1,14 @@
 import { Canvas } from '@react-three/fiber'
 import Polyhedron from './Polyhedron'
 import * as THREE from 'three'
-import { useMemo } from 'react'
 import { Stats, OrbitControls } from '@react-three/drei'
 
 export default function App() {
-  const polyhedron = useMemo(
-    () => [
-      new THREE.BoxGeometry(),
-      new THREE.SphereGeometry(0.785398),
-      new THREE.DodecahedronGeometry(0.785398)
-    ],
-    []
-  )
+  const polyhedron = [
+    new THREE.BoxGeometry(),
+    new THREE.SphereGeometry(0.785398),
+    new THREE.DodecahedronGeometry(0.785398)
+  ]
 
   return (
     <Canvas camera={{ position: [0, 0, 3] }}>
