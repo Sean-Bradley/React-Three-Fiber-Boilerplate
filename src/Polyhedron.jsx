@@ -5,6 +5,7 @@ export default function Polyhedron(props) {
   const [count, setCount] = useState(2)
 
   useEffect(() => {
+    console.log(ref.current.userData)
     ref.current.geometry = ref.current.userData.polyhedron[count]
   })
 

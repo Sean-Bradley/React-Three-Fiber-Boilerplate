@@ -15,13 +15,15 @@ export default function App() {
     []
   )
 
-  const options = {
-    x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
-    visible: true,
-    color: { value: 'red' }
-  }
+  const options = useMemo(() => {
+    return {
+      x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
+      y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
+      z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
+      visible: true,
+      color: { value: 'red' }
+    }
+  }, [])
 
   const pA = useControls('Polygon A', options)
   const pB = useControls('Polygon B', options)
