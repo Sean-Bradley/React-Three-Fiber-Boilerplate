@@ -74,7 +74,11 @@ export default function App() {
 
   return (
     <>
-      <Canvas camera={{ position: [10, 10, 10] }} onPointerDown={() => setLerping(false)} shadows>
+      <Canvas
+        camera={{ position: [10, 10, 10] }}
+        onPointerDown={() => setLerping(false)}
+        onWheel={() => setLerping(false)}
+        shadows>
         <directionalLight
           intensity={1}
           castShadow={true}
