@@ -86,7 +86,10 @@ export default function App() {
 
   return (
     <>
-      <Canvas camera={{ position: [10, 10, 10] }} onPointerDown={() => setLerping(false)}>
+      <Canvas
+        camera={{ position: [10, 10, 10] }}
+        onPointerDown={() => setLerping(false)}
+        onWheel={() => setLerping(false)}>
         <OrbitControls ref={ref} target={[8, 2, 3]} />
         <Suspense fallback={<Loader />}>
           <Environment preset="forest" background />
