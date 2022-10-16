@@ -1,45 +1,7 @@
-import { useGLTF, Html } from '@react-three/drei'
-import { useControls } from 'leva'
+import { useGLTF } from '@react-three/drei'
 
 export function Model(props) {
   const { nodes, materials } = useGLTF('./models/house-water.glb')
-
-  // using forEach
-  // const colorPickers = {}
-  // Object.keys(materials).forEach((m) => {
-  //   colorPickers[m] = {
-  //     value: true,
-  //     onChange: (v) => {
-  //       materials[m].visible = v
-  //     }
-  //   }
-  //   //   if (m.indexOf('wall') !== -1) {
-  //   //     console.log(materials[m])
-  //   //     // materials[m].transparent = true
-  //   //     // materials[m].opacity = 0.25
-  //   //     // materials[m].depthWrite = false
-  //   //   }
-  //   materials[m].flatShading = true
-  // })
-
-  // using reduce
-  // const colorPickers = Object.keys(materials).reduce(
-  //   (acc, m) =>
-  //     Object.assign(acc, {
-  //       [m]: {
-  //         value: materials[m].color,
-  //         onChange: (v) => {
-  //           materials[m].color = new Color(v)
-  //         }
-  //       }
-  //     }),
-  //   {}
-  // )
-
-  // useControls(colorPickers)
-
-  // JSX of glTF created using the command
-  // npx gltfjsx ..\public\house-water.glb
 
   return (
     <group {...props} dispose={null}>
