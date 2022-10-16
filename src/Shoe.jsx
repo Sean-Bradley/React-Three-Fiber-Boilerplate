@@ -13,7 +13,7 @@ export function Model(props) {
   // const colorPickers = {}
   // Object.keys(materials).forEach((m) => {
   //   colorPickers[m] = {
-  //     value: 'white',
+  //     value: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
   //     onChange: (v) => {
   //       materials[m].color = new Color(v)
   //     }
@@ -25,7 +25,7 @@ export function Model(props) {
     (acc, m) =>
       Object.assign(acc, {
         [m]: {
-          value: 'white',
+          value: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
           onChange: (v) => {
             materials[m].color = new Color(v)
           }
