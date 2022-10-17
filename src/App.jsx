@@ -92,7 +92,7 @@ export default function App() {
         onWheel={() => setLerping(false)}>
         <OrbitControls ref={ref} target={[8, 2, 3]} />
         <Suspense fallback={<Loader />}>
-          <Environment preset="forest" background />
+          <Environment preset="forest" />
           <Model />
           <Annotations selected={selected} gotoAnnotation={gotoAnnotation} />
           <Animate controls={ref} lerping={lerping} to={to} target={target} />

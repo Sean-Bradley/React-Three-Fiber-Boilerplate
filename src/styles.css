@@ -17,6 +17,7 @@ svg text {
 
 .annotationDescription {
   pointer-events: none;
+  user-select: none;
   font-size: 14px;
   position: absolute;
   top: 20px;
