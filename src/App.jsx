@@ -87,7 +87,7 @@ export default function App() {
   return (
     <>
       <Canvas
-        camera={{ position: [10, 10, 10] }}
+        camera={{ position: [8, 2, 12] }}
         onPointerDown={() => setLerping(false)}
         onWheel={() => setLerping(false)}>
         <OrbitControls ref={ref} target={[8, 2, 3]} />
