@@ -1,15 +1,14 @@
+import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useGLTF, OrbitControls, Environment, Stats, Html } from '@react-three/drei'
 import { Leva, useControls } from 'leva'
 import Models from './models'
 
-const cache = {}
+function Model({ url }) {
+  const { scene } = useGLTF(url)
+  const [cache, setCache] = useState({})
 
-function Model(props) {
-  const { scene } = useGLTF(props.url)
-
-  if (!cache[props.url]) {
-    console.log('Caching ' + props.url)
+  if (!cache[url]) {    
     const annotations = []
 
     scene.traverse((o) => {
@@ -22,15 +21,19 @@ function Model(props) {
       }
     })
 
-    cache[props.url] = (
-      <primitive object={scene}>
-        {annotations.map((a) => {
-          return a
-        })}
-      </primitive>
-    )
+    console.log('Caching JSX for url ' + url)
+    setCache({
+      ...cache,
+      [url]: (
+        <primitive object={scene}>
+          {annotations.map((a) => {
+            return a
+          })}
+        </primitive>
+      )
+    })
   }
-  return cache[props.url]
+  return cache[url]
 }
 
 export default function App() {
