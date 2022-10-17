@@ -8,7 +8,7 @@ createRoot(document.getElementById('root')).render(
     <Canvas camera={{ position: [0, 0, 2] }}>
       <mesh>
         <boxGeometry />
-        <meshBasicMaterial color={0x00ff00} wireframe={true} />
+        <meshBasicMaterial color={0x00ff00} wireframe />
       </mesh>
     </Canvas>
   </StrictMode>
