@@ -13,12 +13,13 @@ export default function Box(props) {
     <mesh
       {...props}
       ref={ref}
-      onPointerDown={() => console.log('pointer down ' + ref.current.name)}
-      onPointerUp={() => console.log('pointer up ' + ref.current.name)}
-      onPointerOver={() => console.log('pointer over ' + ref.current.name)}
-      onPointerOut={() => console.log('pointer out ' + ref.current.name)}>
+      onPointerDown={(e) => console.log('pointer down ' + e.object.name)}
+      onPointerUp={(e) => console.log('pointer up ' + e.object.name)}
+      onPointerOver={(e) => console.log('pointer over ' + e.object.name)}
+      onPointerOut={(e) => console.log('pointer out ' + e.object.name)}
+      onUpdate={(e) => console.log(e)}>
       <boxGeometry />
-      <meshBasicMaterial color={0x00ff00} wireframe={true} />
+      <meshBasicMaterial color={0x00ff00} wireframe />
     </mesh>
   )
 }
