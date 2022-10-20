@@ -1,11 +1,24 @@
 import { Canvas } from '@react-three/fiber'
-import Box from './Box'
+import { OrbitControls, Environment, CubeCamera } from '@react-three/drei'
 
 export default function App() {
   return (
-    <Canvas camera={{ position: [0, 0, 2] }}>
-      <Box position={[-0.75, 0, 0]} name="A"/>
-      <Box position={[0.75, 0, 0]} name="B"/>
+    <Canvas>
+      <Environment
+        background
+        files={['px', 'nx', 'py', 'ny', 'pz', 'nz'].map(
+          (n) => `/img/${n}_mw_25.jpg`
+        )}
+      />
+      <CubeCamera>
+        {(texture) => (
+          <mesh>
+            <meshBasicMaterial envMap={texture} roughness={0} metalness={1} />
+            <icosahedronGeometry args={[2.5, 0]} />
+          </mesh>
+        )}
+      </CubeCamera>
+      <OrbitControls autoRotate />
     </Canvas>
   )
 }
