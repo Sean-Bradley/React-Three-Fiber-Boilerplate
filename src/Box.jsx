@@ -17,7 +17,7 @@ export default function Box(props) {
       onPointerUp={(e) => console.log('pointer up ' + e.object.name)}
       onPointerOver={(e) => console.log('pointer over ' + e.object.name)}
       onPointerOut={(e) => console.log('pointer out ' + e.object.name)}
-      onUpdate={(e) => console.log(e)}>
+      onUpdate={(self) => console.log(self)}>
       <boxGeometry />
       <meshBasicMaterial color={0x00ff00} wireframe />
     </mesh>
