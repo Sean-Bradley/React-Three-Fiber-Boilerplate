@@ -18,7 +18,7 @@ export default function App() {
 
   return (
     <>
-      <Canvas camera={{ position: [5, 5, 5] }}>
+      <Canvas camera={{ position: [1, 2, 3] }}>
         <directionalLight position={(1, 1, 1)} />
         <mesh position-x={redBall.positionX} rotation-x={redBall.rotationX} scale={redBall.scaleX}>
           <sphereGeometry />
@@ -35,7 +35,7 @@ export default function App() {
             </mesh>
           </mesh>
         </mesh>
-        <OrbitControls target-x={8} />
+        <OrbitControls target-x={9} />
       </Canvas>
       <Leva />
     </>
