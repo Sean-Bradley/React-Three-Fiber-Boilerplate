@@ -23,7 +23,7 @@ export default function Polyhedron(props) {
         setCount((count + 1) % 3)
       }}
     >
-      <meshBasicMaterial color={'lime'} wireframe={true} />
+      <meshBasicMaterial color={'lime'} wireframe />
     </mesh>
   )
 }
