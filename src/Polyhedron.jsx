@@ -16,7 +16,7 @@ export default function Polyhedron(props) {
       onPointerDown={() => {
         setCount((count + 1) % 3)
       }}>
-      <meshBasicMaterial color={props.color} wireframe={true} />
+      <meshBasicMaterial color={props.color} wireframe />
     </mesh>
   )
 }
