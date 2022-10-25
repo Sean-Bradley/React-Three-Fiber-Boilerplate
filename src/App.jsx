@@ -21,16 +21,16 @@ export default function App() {
       <Canvas camera={{ position: [1, 2, 3] }}>
         <directionalLight position={(1, 1, 1)} />
         <mesh position-x={redBall.positionX} rotation-x={redBall.rotationX} scale={redBall.scaleX}>
-          <sphereGeometry />
-          <meshStandardMaterial color={'red'} />
+          <icosahedronGeometry args={[1, 1]} />
+          <meshStandardMaterial color={'red'} flatShading />
           <axesHelper args={[5]} />
           <mesh position-x={blueBall.positionX} rotation-x={blueBall.rotationX} scale={blueBall.scaleX}>
-            <sphereGeometry />
-            <meshStandardMaterial color={'blue'} />
+            <icosahedronGeometry args={[1, 1]} />
+            <meshStandardMaterial color={'blue'} flatShading />
             <axesHelper args={[5]} />
             <mesh position-x={greenBall.positionX} rotation-x={greenBall.rotationX} scale={greenBall.scaleX}>
-              <sphereGeometry />
-              <meshStandardMaterial color={'green'} />
+              <icosahedronGeometry args={[1, 1]} />
+              <meshStandardMaterial color={'green'} flatShading />
               <axesHelper args={[5]} />
             </mesh>
           </mesh>
