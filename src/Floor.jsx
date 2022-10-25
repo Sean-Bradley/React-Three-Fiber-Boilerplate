@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { MathUtils, TextureLoader } from 'three'
 
 export default function Floor(props) {
-  const normalMap = useLoader(TextureLoader, './img/NormalMap.png')
+  //const normalMap = useLoader(TextureLoader, './img/NormalMap.png')
 
   const { nodes, materials } = useGLTF('./models/floor.glb')
   return (
@@ -15,7 +15,7 @@ export default function Floor(props) {
       <mesh
         geometry={nodes.Plane.geometry}
         material={materials.brass_pan_01}
-        material-normalMap={normalMap}
+        //material-normalMap={normalMap}
       />
     </group>
   )

@@ -1,6 +1,7 @@
 import { Canvas, useThree, useFrame, useLoader } from '@react-three/fiber'
 import { Vector3, TextureLoader } from 'three'
 import { Stats, Environment } from '@react-three/drei'
+import Button from './Button'
 import Bolt from './Bolt'
 import Floor from './Floor'
 import Monkey from './Monkey'
@@ -36,21 +37,20 @@ export default function App() {
         shadow-mapSize-width={512}
         shadow-mapSize-height={512}
       />
-      {/* <mesh position={[0, 0, -.1]} receiveShadow>
-        <planeGeometry args={[40, 20]} />
+      <mesh position={[0, 0, -.2]} receiveShadow>
+        <planeGeometry args={[50, 50]} />
         <meshStandardMaterial />
-      </mesh> */}
-      {/* <Floor />
-      {[...Array(20)].map((_, x) =>
-        [...Array(20)].map((_, y) => (
-          <Bolt
+      </mesh>
+      {/* <Floor /> */}
+      {[...Array(20).keys()].map((x) =>
+        [...Array(20).keys()].map((y) => (
+          <Button
             key={x + y * 10}
-            position={[x * 2.5 - 20, y * 2.5 - 20, 0]}
-            scale={[50, 50, 50]}
+            position={[x * 2.5 - 22, y * 2.5 - 22, 0]}
           />
         ))
-      )} */}
-      <Monkey />
+      )}
+      {/* <Monkey /> */}
       <Rig />
       <Stats />
     </Canvas>
