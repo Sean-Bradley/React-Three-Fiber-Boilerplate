@@ -8,7 +8,7 @@ body,
 .counter {
   color: white;
   font-size: 3vh;
+  font-family: monospace;
   user-select: none;
   pointer-events: none;
-  font-family: monospace;
 }

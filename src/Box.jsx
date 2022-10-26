@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Color } from 'three'
 import { useEffect } from 'react'
-import { Html } from '@react-three/drei'
+import { Html, Text } from '@react-three/drei'
 
 export default function Box(props) {
   const ref = useRef()
@@ -20,19 +20,21 @@ export default function Box(props) {
   })
 
   return (
-    <mesh
-      {...props}
-      ref={ref}
-      onPointerDown={(e) => {
-        //e.stopPropagation()
-        setCount(count + 1)
-      }}>
-      <boxGeometry />
-      <meshStandardMaterial />
-      <Html position-z={0.5} transform>
-        <span className="counter">{count}</span>
-      </Html>
-      {props.children}
-    </mesh>
+    <>
+      <mesh
+        {...props}
+        ref={ref}
+        onPointerDown={(e) => {
+          //e.stopPropagation()
+          setCount(count + 1)
+        }}>
+        <boxGeometry />
+        <meshStandardMaterial />
+        <Text fontSize={0.5} font="monospace" position-z={0.501}>
+          {count}
+        </Text>
+        {props.children}
+      </mesh>
+    </>
   )
 }
