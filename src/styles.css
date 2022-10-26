@@ -5,3 +5,10 @@ body,
   margin: 0;
   background: #000000;
 }
+.counter {
+  color: white;
+  font-size: 3vh;
+  user-select: none;
+  pointer-events: none;
+  font-family: monospace;
+}
