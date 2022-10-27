@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Color } from 'three'
 import { useEffect } from 'react'
-import { Html, Text } from '@react-three/drei'
+import { Text } from '@react-three/drei'
 
 export default function Box(props) {
   const ref = useRef()
