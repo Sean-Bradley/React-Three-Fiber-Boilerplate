@@ -1,14 +1,11 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 
-export default function Polyhedron(props) {
+export default function Polyhedron({ position, polyhedron }) {
   const ref = useRef()
   const [count, setCount] = useState(0)
 
-  useEffect(() => {
-    console.log(ref.current.userData)
-    ref.current.geometry = ref.current.userData.polyhedron[count]
-  })
+  console.log(polyhedron)
 
   useFrame((_, delta) => {
     ref.current.rotation.x += delta
@@ -17,13 +14,14 @@ export default function Polyhedron(props) {
 
   return (
     <mesh
-      {...props}
+      position={position}
       ref={ref}
       onPointerDown={() => {
         setCount((count + 1) % 3)
       }}
+      geometry={polyhedron[count]}
     >
-      <meshBasicMaterial color={'lime'} wireframe={true} />
+      <meshBasicMaterial color={'lime'} wireframe />
     </mesh>
   )
 }
