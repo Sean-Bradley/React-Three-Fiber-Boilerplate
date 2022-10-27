@@ -1,13 +1,10 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 
-export default function Polyhedron(props) {
+export default function Polyhedron({ polyhedron, color, ...props }) {
   const ref = useRef()
   const [count, setCount] = useState(2)
 
-  useEffect(() => {
-    console.log(ref.current.userData)
-    ref.current.geometry = ref.current.userData.polyhedron[count]
-  })
+  console.log(polyhedron[count].uuid)
 
   return (
     <mesh
@@ -15,8 +12,9 @@ export default function Polyhedron(props) {
       ref={ref}
       onPointerDown={() => {
         setCount((count + 1) % 3)
-      }}>
-      <meshBasicMaterial color={props.color} wireframe />
+      }}
+      geometry={polyhedron[count]}>
+      <meshBasicMaterial color={color} wireframe />
     </mesh>
   )
 }

@@ -21,7 +21,7 @@ export default function App() {
       y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
       z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
       visible: true,
-      color: { value: 'red' }
+      color: { value: 'lime' }
     }
   }, [])
 
@@ -36,14 +36,14 @@ export default function App() {
           rotation={[pA.x, pA.y, pA.z]}
           visible={pA.visible}
           color={pA.color}
-          userData-polyhedron={polyhedron}
+          polyhedron={polyhedron}
         />
         <Polyhedron
           position={[1, 1, 0]}
           rotation={[pB.x, pB.y, pB.z]}
           visible={pB.visible}
           color={pB.color}
-          userData-polyhedron={polyhedron}
+          polyhedron={polyhedron}
         />
         <OrbitControls target-y={1} />
         <axesHelper args={[5]} />
