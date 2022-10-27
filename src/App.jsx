@@ -9,7 +9,6 @@ export default function App() {
     new THREE.SphereGeometry(0.785398),
     new THREE.DodecahedronGeometry(0.785398)
   ]
-
   return (
     <Canvas camera={{ position: [0, 0, 3] }}>
       <Polyhedron position={[-0.75, -0.75, 0]} polyhedron={polyhedron} />
