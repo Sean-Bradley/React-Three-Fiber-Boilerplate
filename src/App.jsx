@@ -25,8 +25,8 @@ export default function App() {
     }
   }, [])
 
-  const pA = useControls('Polygon A', options)
-  const pB = useControls('Polygon B', options)
+  const pA = useControls('Polyhedron A', options)
+  const pB = useControls('Polyhedron B', options)
 
   return (
     <>
