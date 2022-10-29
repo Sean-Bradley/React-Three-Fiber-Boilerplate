@@ -28,9 +28,7 @@ function Lights() {
     }
   })
 
-  return (
-      <directionalLight ref={directionalRef} intensity={lightControls.intensity} />
-  )
+  return <directionalLight ref={directionalRef} intensity={lightControls.intensity} />
 }
 
 export default function App() {
