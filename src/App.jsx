@@ -3,108 +3,67 @@ import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber'
 import { Stats, OrbitControls } from '@react-three/drei'
 import { useControls } from 'leva'
-import { useRef } from 'react'
 import Floor from './Floor'
 
 function Lights() {
-  const ambientRef = useRef()
-  const directionalRef = useRef()
-  const pointRef = useRef()
-  const spotRef = useRef()
-
-  useControls('Ambient Light', {
-    visible: {
-      value: false,
-      onChange: (v) => {
-        ambientRef.current.visible = v
-      }
-    },
+  const ambientCtl = useControls('Ambient Light', {
+    visible: false,
     intensity: {
       value: 1.0,
       min: 0,
       max: 1.0,
-      step: 0.1,
-      onChange: (v) => {
-        ambientRef.current.intensity = v
-      }
+      step: 0.1
     }
   })
 
-  useControls('Directional Light', {
-    visible: {
-      value: true,
-      onChange: (v) => {
-        directionalRef.current.visible = v
-      }
-    },
+  const directionalCtl = useControls('Directional Light', {
+    visible: true,
     position: {
       x: 3.3,
       y: 1.0,
-      z: 4.4,
-      onChange: (v) => {
-        directionalRef.current.position.copy(v)
-      }
+      z: 4.4
     },
-    castShadow: {
-      value: true,
-      onChange: (v) => {
-        directionalRef.current.castShadow = v
-      }
-    }
+    castShadow: true
   })
 
-  useControls('Point Light', {
-    visible: {
-      value: false,
-      onChange: (v) => {
-        pointRef.current.visible = v
-      }
-    },
+  const pointCtl = useControls('Point Light', {
+    visible: false,
     position: {
       x: 2,
       y: 0,
-      z: 0,
-      onChange: (v) => {
-        pointRef.current.position.copy(v)
-      }
+      z: 0
     },
-    castShadow: {
-      value: true,
-      onChange: (v) => {
-        pointRef.current.castShadow = v
-      }
-    }
+    castShadow: true
   })
 
-  useControls('Spot Light', {
-    visible: {
-      value: false,
-      onChange: (v) => {
-        spotRef.current.visible = v
-      }
-    },
+  const spotCtl = useControls('Spot Light', {
+    visible: false,
     position: {
       x: 3,
       y: 2.5,
-      z: 1,
-      onChange: (v) => {
-        spotRef.current.position.copy(v)
-      }
+      z: 1
     },
-    castShadow: {
-      value: true,
-      onChange: (v) => {
-        spotRef.current.castShadow = v
-      }
-    }
+    castShadow: true
   })
 
   return (
     <>
-      <ambientLight ref={ambientRef} />
-      <directionalLight ref={directionalRef} />
-      <pointLight ref={pointRef} />
-      <spotLight ref={spotRef} />
+      <ambientLight visible={ambientCtl.visible} intensity={ambientCtl.intensity} />
+      <directionalLight
+        visible={directionalCtl.visible}
+        position={[directionalCtl.position.x, directionalCtl.position.y, directionalCtl.position.z]}
+        castShadow={directionalCtl.castShadow}
+      />
+      <pointLight
+        visible={pointCtl.visible}
+        position={[pointCtl.position.x, pointCtl.position.y, pointCtl.position.z]}
+        castShadow={pointCtl.castShadow}
+      />
+      <spotLight
+        visible={spotCtl.visible}
+        position={[spotCtl.position.x, spotCtl.position.y, spotCtl.position.z]}
+        castShadow={spotCtl.castShadow}
+      />
     </>
   )
 }
