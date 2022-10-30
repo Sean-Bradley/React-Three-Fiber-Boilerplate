@@ -10,7 +10,7 @@ export default function Polyhedron(props) {
   })
 
   return (
-    <mesh {...props} ref={ref} castShadow={true}>
+    <mesh {...props} ref={ref} castShadow receiveShadow>
       <icosahedronGeometry args={[1, 1]} />
     </mesh>
   )
