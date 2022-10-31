@@ -10,12 +10,15 @@ import { useLoader } from '@react-three/fiber'
 function Lights() {
   const directionalRef = useRef()
 
-  const lightControls = useControls('Directional Light', {
+  useControls('Directional Light', {
     intensity: {
       value: 1,
       min: 0,
       max: 5,
-      step: 0.1
+      step: 0.1,
+      onChange: (v) => {
+        directionalRef.current.intensity = v
+      }
     },
 
     position: {
@@ -28,11 +31,16 @@ function Lights() {
     }
   })
 
-  return <directionalLight ref={directionalRef} intensity={lightControls.intensity} />
+  return (
+    <directionalLight ref={directionalRef} castShadow />
+  )
 }
 
 export default function App() {
-  const texture = useLoader(THREE.TextureLoader, './img/grid.png')
+  const texture = useLoader(
+    THREE.TextureLoader,
+    './img/grid.png'
+  )
 
   return (
     <Canvas camera={{ position: [4, 4, 1.5] }} shadows>
@@ -40,17 +48,28 @@ export default function App() {
       <Polyhedron
         name="meshBasicMaterial"
         position={[-3, 1, 0]}
-        material={new THREE.MeshBasicMaterial({ map: texture })}
+        material={
+          new THREE.MeshBasicMaterial({ map: texture })
+        }
       />
       <Polyhedron
         name="meshNormalMaterial"
         position={[-1, 1, 0]}
-        material={new THREE.MeshNormalMaterial({ flatShading: true })}
+        material={
+          new THREE.MeshNormalMaterial({
+            flatShading: true
+          })
+        }
       />
       <Polyhedron
         name="meshPhongMaterial"
         position={[1, 1, 0]}
-        material={new THREE.MeshPhongMaterial({ flatShading: true, map: texture })}
+        material={
+          new THREE.MeshPhongMaterial({
+            flatShading: true,
+            map: texture
+          })
+        }
       />
       <Polyhedron
         name="meshStandardMaterial"
