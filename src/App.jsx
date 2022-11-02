@@ -7,7 +7,7 @@ import {
 import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Canvas } from '@react-three/fiber'
-import { useControls } from 'leva'
+import { Leva, useControls } from 'leva'
 
 function Model() {
   const { scene } = useLoader(GLTFLoader, './models/scene.glb')
@@ -78,16 +78,20 @@ function Env() {
 
 export default function App() {
   return (
-    <Canvas
-      camera={{ position: [0, 6, 12] }}
-      onCreated={(state) => {
-        state.gl.physicallyCorrectLights = true
-      }}>
-      <Env />
-      <Model />
-      <ContactShadows scale={150} position={[0.33, -0.33, 0.33]} opacity={1.5} />
-      <OrbitControls target={[0, 1, 0]} maxPolarAngle={Math.PI / 2} />
-      <Stats />
-    </Canvas>
+    <>
+      <Canvas camera={{ position: [-8, 5, 8] }}>
+        <Env />
+        <Model />
+        <ContactShadows
+          scale={150}
+          position={[0.33, -0.33, 0.33]}
+          opacity={1.5}
+        />
+        <OrbitControls target={[0, 1, 0]} maxPolarAngle={Math.PI / 2} />
+        <Stats />
+      </Canvas>
+      <Leva collapsed />
+    </>
   )
 }
+
