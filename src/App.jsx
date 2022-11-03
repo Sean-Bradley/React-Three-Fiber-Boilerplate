@@ -4,9 +4,8 @@ import {
   Environment,
   ContactShadows
 } from '@react-three/drei'
-import { useLoader } from '@react-three/fiber'
+import { Canvas, useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Canvas } from '@react-three/fiber'
 import { Leva, useControls } from 'leva'
 
 function Model() {
