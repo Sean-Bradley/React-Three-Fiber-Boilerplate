@@ -1,23 +1,22 @@
 import { Canvas } from '@react-three/fiber'
-import { useGLTF, OrbitControls, Environment } from '@react-three/drei'
-import { Leva, useControls } from 'leva'
+import { Stats, OrbitControls, Environment, useGLTF } from '@react-three/drei'
+import { useControls } from 'leva'
 
-const Models = {
-  hammer: './models/hammer.glb',
-  drill: './models/drill.glb',
-  tapeMeasure: './models/tapeMeasure.glb'
-}
+const Models = [
+  { title: 'Hammer', url: './models/hammer.glb' },
+  { title: 'Drill', url: './models/drill.glb' },
+  { title: 'Tape Measure', url: './models/tapeMeasure.glb' }
+]
 
-function Model(props) {
-  const { scene } = useGLTF(props.url)
+function Model({ url }) {
+  const { scene } = useGLTF(url)
   return <primitive object={scene} />
 }
 
 export default function App() {
-  const dropDown = useControls({
-    model: {
-      value: 'hammer',
-      options: Object.keys(Models)
+  const { title } = useControls({
+    title: {
+      options: Models.map(({ title }) => title)
     }
   })
 
@@ -26,12 +25,14 @@ export default function App() {
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.025 }}>
         <Environment files="./img/workshop_1k.hdr" background />
         <group>
-          <Model url={Models[dropDown.model]} />
+          <Model url={Models[Models.findIndex((m) => m.title === title)].url} />
         </group>
         <OrbitControls autoRotate />
+        <Stats />
       </Canvas>
-      <Leva />
-      <span id="info">The {dropDown.model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
+      <span id="info">The {title} is selected.</span>
     </>
   )
 }
+
+//useGLTF.preload(Models.map(({ url }) => url))
