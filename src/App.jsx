@@ -31,7 +31,7 @@ function Model({ url }) {
 }
 
 export default function App() {
-  const dropDown = useControls({
+  const {model} = useControls({
     model: {
       value: 'hammer',
       options: Object.keys(Models)
@@ -43,12 +43,12 @@ export default function App() {
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.025 }}>
         <Environment files="./img/workshop_1k.hdr" background />
         <group>
-          <Model url={Models[dropDown.model]} />
+          <Model url={Models[model]} />
         </group>
         <OrbitControls autoRotate />
         <Stats />
       </Canvas>
-      <span id="info">The {dropDown.model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
+      <span id="info">The {model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
     </>
   )
 }
