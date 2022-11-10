@@ -1,46 +1,60 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useControls } from 'leva'
 import { Color } from 'three'
 
-export function Model(props) {
+export function Model() {
   const ref = useRef()
+  const [hovered, setHovered] = useState(false)
   const { nodes, materials } = useGLTF('./models/shoe-draco.glb')
 
-  console.log('creating color pickers')
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+  }, [hovered])
 
-  // using forEach
-  // const colorPickers = {}
-  // Object.keys(materials).forEach((m) => {
-  //   colorPickers[m] = {
-  //     value: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
-  //     onChange: (v) => {
-  //       materials[m].color = new Color(v)
-  //     }
-  //   }
-  // })
+  useControls('Shoe', () => {
+    console.log('creating color pickers')
 
-  // using reduce
-  const colorPickers = Object.keys(materials).reduce(
-    (acc, m) =>
-      Object.assign(acc, {
-        [m]: {
-          value: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
-          onChange: (v) => {
-            materials[m].color = new Color(v)
+    // using forEach
+    // const colorPickers = {}
+    // Object.keys(materials).forEach((m) => {
+    //   colorPickers[m] = {
+    //     value: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
+    //     onChange: (v) => {
+    //       materials[m].color = new Color(v)
+    //     }
+    //   }
+    // })
+    // return colorPickers
+
+    // using reduce
+    return Object.keys(materials).reduce(
+      (acc, m) =>
+        Object.assign(acc, {
+          [m]: {
+            value: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
+            onChange: (v) => {
+              materials[m].color = new Color(v)
+            }
           }
-        }
-      }),
-    {}
-  )
-
-  useControls('Shoe', colorPickers)
+        }),
+      {}
+    )
+  })
 
   // JSX of glTF created using the command
-  // npx gltfjsx .\public\models\shoe-draco.glb -r ./public
+  // npx gltfjsx .\public\models\shoe-draco.glb
 
   return (
-    <group ref={ref} {...props} dispose={null}>
+    <group
+      ref={ref}
+      dispose={null}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+      onClick={(e) => {
+        e.stopPropagation()
+        document.getElementById('Shoe.' + e.object.material.name).focus()
+      }}>
       <mesh geometry={nodes.shoe.geometry} material={materials.laces} />
       <mesh geometry={nodes.shoe_1.geometry} material={materials.mesh} />
       <mesh geometry={nodes.shoe_2.geometry} material={materials.caps} />
