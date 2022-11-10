@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useGLTF, OrbitControls, Environment, Stats, Html } from '@react-three/drei'
-import { Leva, useControls } from 'leva'
+import { useControls } from 'leva'
 import Models from './models'
 
 function Model({ url }) {
   const { scene } = useGLTF(url)
   const [cache, setCache] = useState({})
 
-  if (!cache[url]) {    
+  if (!cache[url]) {
     const annotations = []
 
     scene.traverse((o) => {
@@ -24,13 +24,7 @@ function Model({ url }) {
     console.log('Caching JSX for url ' + url)
     setCache({
       ...cache,
-      [url]: (
-        <primitive object={scene}>
-          {annotations.map((a) => {
-            return a
-          })}
-        </primitive>
-      )
+      [url]: <primitive object={scene}>{annotations}</primitive>
     })
   }
   return cache[url]
@@ -54,7 +48,6 @@ export default function App() {
         <OrbitControls autoRotate />
         <Stats />
       </Canvas>
-      <Leva />
       <span id="info">The {dropDown.model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
     </>
   )
