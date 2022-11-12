@@ -1,5 +1,7 @@
 import { useGLTF } from '@react-three/drei'
 
+// npx gltfjsx .\public\models\house-water.glb -T
+
 export function Model(props) {
   const { nodes, materials } = useGLTF('./models/house-water.glb')
   Object.keys(materials).forEach((m) => {
