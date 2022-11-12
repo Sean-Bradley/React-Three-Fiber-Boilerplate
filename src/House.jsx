@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei'
 // npx gltfjsx .\public\models\house-water.glb -T
 
 export function Model(props) {
-  const { nodes, materials } = useGLTF('./models/house-water.glb')
+  const { nodes, materials } = useGLTF('./models/house-water-transformed.glb')
   Object.keys(materials).forEach((m) => {
     if (!['sink_faiance','white_409','Ceramic'].includes(m)) {
       materials[m].flatShading = true
@@ -310,4 +310,4 @@ export function Model(props) {
   )
 }
 
-useGLTF.preload('/models/house-water.glb')
+useGLTF.preload('/models/house-water-transformed.glb')
