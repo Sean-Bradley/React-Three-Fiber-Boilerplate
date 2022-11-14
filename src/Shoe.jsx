@@ -1,10 +1,9 @@
-import { useRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useControls } from 'leva'
 import { Color } from 'three'
 
 export function Model() {
-  const ref = useRef()
   const [hovered, setHovered] = useState(false)
   const { nodes, materials } = useGLTF('./models/shoe-draco.glb')
 
@@ -47,7 +46,6 @@ export function Model() {
 
   return (
     <group
-      ref={ref}
       dispose={null}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
