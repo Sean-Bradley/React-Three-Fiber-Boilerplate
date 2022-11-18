@@ -1,6 +1,6 @@
 import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState } from 'react'
 import { Leva, useControls, button } from 'leva'
 import { Vector3 } from 'three'
 import annotations from './annotations.json'
@@ -10,21 +10,21 @@ function Arena({ controls, lerping, setLerping }) {
   const [to, setTo] = useState(new Vector3(10, 10, 10))
   const [target, setTarget] = useState(new Vector3(0, 1, 0))
 
-  // const buttons = useMemo(() => {
-  //   console.log("creating buttons")
-  //   const _buttons = {}
-  //   annotations.forEach(a => {
-  //     _buttons[a.title] = button(() => {
-  //       setTo(a.position)
-  //       setTarget(a.lookAt)
-  //       setLerping(true)
-  //     })
-  //   })
-  //   return _buttons
-  // }, [setLerping])
-
-  const buttons = useMemo(() => {
+  useControls('Camera', () => {
     console.log('creating buttons')
+
+    // using forEach
+    // const _buttons = {}
+    // annotations.forEach((a) => {
+    //   _buttons[a.title] = button(() => {
+    //     setTo(a.position)
+    //     setTarget(a.lookAt)
+    //     setLerping(true)
+    //   })
+    // })
+    // return _buttons
+
+    // using reduce
     const _buttons = annotations.reduce(
       (acc, a, i) =>
         Object.assign(acc, {
@@ -37,9 +37,7 @@ function Arena({ controls, lerping, setLerping }) {
       {}
     )
     return _buttons
-  }, [setLerping])
-
-  useControls('Camera', buttons)
+  })
 
   useFrame(({ camera }, delta) => {
     if (lerping) {
