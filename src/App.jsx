@@ -26,9 +26,9 @@ function Arena({ controls, lerping, setLerping }) {
 
     // using reduce
     const _buttons = annotations.reduce(
-      (acc, a, i) =>
+      (acc, a) =>
         Object.assign(acc, {
-          [`button ${i}`]: button(() => {
+          [a.title]: button(() => {
             setTo(a.position)
             setTarget(a.lookAt)
             setLerping(true)
