@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { Leva, useControls } from 'leva'
+import { useControls } from 'leva'
 
 export default function App() {
   const options = useMemo(() => {
@@ -17,27 +17,24 @@ export default function App() {
   const greenBall = useControls('Green', options)
 
   return (
-    <>
-      <Canvas camera={{ position: [1, 2, 3] }}>
-        <directionalLight position={(1, 1, 1)} />
-        <mesh position-x={redBall.positionX} rotation-x={redBall.rotationX} scale={redBall.scaleX}>
+    <Canvas camera={{ position: [1, 2, 3] }}>
+      <directionalLight position={(1, 1, 1)} />
+      <mesh position-x={redBall.positionX} rotation-x={redBall.rotationX} scale={redBall.scaleX}>
+        <icosahedronGeometry args={[1, 1]} />
+        <meshStandardMaterial color={'red'} flatShading />
+        <axesHelper args={[5]} />
+        <mesh position-x={blueBall.positionX} rotation-x={blueBall.rotationX} scale={blueBall.scaleX}>
           <icosahedronGeometry args={[1, 1]} />
-          <meshStandardMaterial color={'red'} flatShading />
+          <meshStandardMaterial color={'blue'} flatShading />
           <axesHelper args={[5]} />
-          <mesh position-x={blueBall.positionX} rotation-x={blueBall.rotationX} scale={blueBall.scaleX}>
+          <mesh position-x={greenBall.positionX} rotation-x={greenBall.rotationX} scale={greenBall.scaleX}>
             <icosahedronGeometry args={[1, 1]} />
-            <meshStandardMaterial color={'blue'} flatShading />
+            <meshStandardMaterial color={'green'} flatShading />
             <axesHelper args={[5]} />
-            <mesh position-x={greenBall.positionX} rotation-x={greenBall.rotationX} scale={greenBall.scaleX}>
-              <icosahedronGeometry args={[1, 1]} />
-              <meshStandardMaterial color={'green'} flatShading />
-              <axesHelper args={[5]} />
-            </mesh>
           </mesh>
         </mesh>
-        <OrbitControls target-x={9} />
-      </Canvas>
-      <Leva />
-    </>
+      </mesh>
+      <OrbitControls target-x={9} />
+    </Canvas>
   )
 }
