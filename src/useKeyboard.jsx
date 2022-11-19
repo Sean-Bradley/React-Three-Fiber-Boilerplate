@@ -9,6 +9,10 @@ export default function useKeyboard() {
     }
     document.addEventListener('keydown', onDocumentKey)
     document.addEventListener('keyup', onDocumentKey)
+    return () => {
+      document.removeEventListener('keydown', onDocumentKey)
+      document.removeEventListener('keyup', onDocumentKey)
+    }
   })
 
   return keyMap

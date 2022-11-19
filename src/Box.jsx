@@ -3,7 +3,6 @@ import { useFrame } from '@react-three/fiber'
 import useKeyboard from './useKeyboard'
 
 export default function Box(props) {
-  console.log('in box')
   const ref = useRef()
   const keyMap = useKeyboard()
 
