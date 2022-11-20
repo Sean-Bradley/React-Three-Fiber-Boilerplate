@@ -5,7 +5,7 @@
   "keywords": [],
   "main": "src/index.jsx",
   "dependencies": {
-    "@react-three/drei": "^9.40.0",
+    "@react-three/drei": "^9.41.0",
     "@react-three/fiber": "8.9.1",
     "leva": "^0.9.34",
     "react": "18.2.0",
