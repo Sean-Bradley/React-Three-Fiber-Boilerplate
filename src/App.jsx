@@ -1,7 +1,7 @@
 import { Suspense, useState, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, Html, useProgress, Stats } from '@react-three/drei'
-import { Instances, Model } from './House'
+import { Model } from './House'
 import annotations from './annotations.json'
 
 function Annotations({ selected, gotoAnnotation }) {
