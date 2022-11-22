@@ -1,25 +1,29 @@
-import { useRef, useState } from 'react'
-import { useFrame, useLoader } from '@react-three/fiber'
-import { MathUtils, TextureLoader } from 'three'
+import { useRef, useState, useMemo } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { MathUtils } from 'three'
+import { Color } from 'three'
+
+const black = new Color('black')
 
 export default function Button(props) {
   const ref = useRef()
-  const [count, setCount] = useState(0)
   const [hovered, setHover] = useState(false)
-  const normalMap = useLoader(TextureLoader, './img/NormalMap.png')
+  const [selected, setSelected] = useState(false)
+  const colorTo = useMemo(
+    () => new Color(Math.floor(Math.random() * 16777216)),
+    []
+  )
 
   useFrame(() => {
-    // ref.current.scale.x = ref.current.scale.z = MathUtils.lerp(
-    //   ref.current.scale.x,
-    //   hovered ? 1.2 : 1,
-    //   0.1
-    // )
-    ref.current.position.z = hovered
-      ? MathUtils.lerp(ref.current.position.z, 0.5, 0.025)
-      : MathUtils.lerp(ref.current.position.z, 0, 0.025)
-    ref.current.rotation.y = hovered
-      ? MathUtils.lerp(ref.current.rotation.y, -Math.PI * 2, 0.025)
-      : MathUtils.lerp(ref.current.rotation.y, 0, 0.025)
+    ref.current.rotation.x = hovered
+      ? MathUtils.lerp(ref.current.rotation.x, -Math.PI * 2, 0.025)
+      : MathUtils.lerp(ref.current.rotation.x, 0, 0.025)
+
+    ref.current.position.z = selected
+      ? MathUtils.lerp(ref.current.position.z, 0, 0.025)
+      : MathUtils.lerp(ref.current.position.z, -3, 0.025)
+
+    ref.current.material.color.lerp(selected ? colorTo : black, 0.025)
   })
 
   return (
@@ -27,17 +31,18 @@ export default function Button(props) {
       {...props}
       ref={ref}
       onPointerDown={() => {
-        setCount(count + 1)
+        setSelected(!selected)
       }}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
-      rotation-x={-Math.PI / 2}
       castShadow>
-      <cylinderGeometry args={[1, 1, 0.25, 8, 1]} />
+      <icosahedronGeometry />
       <meshPhysicalMaterial
-        roughness={0.25}
-        metalness={0.9}
-        normalMap={normalMap}
+        roughness={0}
+        metalness={0}
+        thickness={3.12}
+        ior={1.74}
+        transmission={1.0}
       />
     </mesh>
   )
