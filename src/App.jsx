@@ -7,7 +7,6 @@ export default function App() {
   const [mouseTime, setMouseTime] = useState(0)
   return (
     <Canvas
-      camera={{ position: [10, 10, 10] }}
       shadows
       onPointerDown={() => {
         setMouseTime(performance.now())
@@ -25,7 +24,7 @@ export default function App() {
         shadow-camera-top={30}
         shadow-camera-bottom={-30}
       />
-      <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" background />
+      <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" />
       <Arena mouseTime={mouseTime} />
       <PointerLockControls />
       <Stats />
