@@ -24,7 +24,7 @@ export default function App() {
         shadow-camera-top={30}
         shadow-camera-bottom={-30}
       />
-      <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" />
+      <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" background />
       <Arena mouseTime={mouseTime} />
       <PointerLockControls />
       <Stats />
