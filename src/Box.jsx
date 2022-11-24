@@ -7,10 +7,10 @@ export default function Box(props) {
   const keyMap = useKeyboard()
 
   useFrame((_, delta) => {
-    keyMap['a'] && (ref.current.position.x -= 1 * delta)
-    keyMap['d'] && (ref.current.position.x += 1 * delta)
-    keyMap['w'] && (ref.current.position.z -= 1 * delta)
-    keyMap['s'] && (ref.current.position.z += 1 * delta)
+    keyMap['KeyA'] && (ref.current.position.x -= 1 * delta)
+    keyMap['KeyD'] && (ref.current.position.x += 1 * delta)
+    keyMap['KeyW'] && (ref.current.position.z -= 1 * delta)
+    keyMap['KeyS'] && (ref.current.position.z += 1 * delta)
   })
 
   return (
