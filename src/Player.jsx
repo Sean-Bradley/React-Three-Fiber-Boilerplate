@@ -4,11 +4,12 @@ import { Vector3, IcosahedronGeometry, MeshStandardMaterial, Mesh, Sphere } from
 import { useFrame, useThree } from '@react-three/fiber'
 import useKeyboard from './useKeyboard'
 
+const GRAVITY = 30
+const STEPS_PER_FRAME = 5
+const NUM_SPHERES = 100
+const SPHERE_RADIUS = 0.2
+
 export default function Player({ worldOctree, mouseTime }) {
-  const GRAVITY = 30
-  const STEPS_PER_FRAME = 5
-  const NUM_SPHERES = 100
-  const SPHERE_RADIUS = 0.2
   const playerOnFloor = useRef(false)
   const playerVelocity = useRef(new Vector3())
   const playerDirection = useRef(new Vector3())
@@ -135,12 +136,12 @@ export default function Player({ worldOctree, mouseTime }) {
 
   function controls(camera, delta, playerVelocity, playerOnFloor, playerDirection) {
     const speedDelta = delta * (playerOnFloor ? 25 : 8)
-    keyboard['a'] && playerVelocity.add(getSideVector(camera, playerDirection).multiplyScalar(-speedDelta))
-    keyboard['d'] && playerVelocity.add(getSideVector(camera, playerDirection).multiplyScalar(speedDelta))
-    keyboard['w'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(speedDelta))
-    keyboard['s'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta))
+    keyboard['KeyA'] && playerVelocity.add(getSideVector(camera, playerDirection).multiplyScalar(-speedDelta))
+    keyboard['KeyD'] && playerVelocity.add(getSideVector(camera, playerDirection).multiplyScalar(speedDelta))
+    keyboard['KeyW'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(speedDelta))
+    keyboard['KeyS'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta))
     if (playerOnFloor) {
-      if (keyboard[' ']) {
+      if (keyboard['Space']) {
         playerVelocity.y = 15
       }
     }
