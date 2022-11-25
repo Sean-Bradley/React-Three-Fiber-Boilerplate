@@ -9,7 +9,7 @@ const STEPS_PER_FRAME = 5
 const NUM_SPHERES = 100
 const SPHERE_RADIUS = 0.2
 
-export default function Player({ worldOctree, mouseTime }) {
+export default function Player({ octree, mouseTime }) {
   const playerOnFloor = useRef(false)
   const playerVelocity = useRef(new Vector3())
   const playerDirection = useRef(new Vector3())
@@ -56,11 +56,11 @@ export default function Player({ worldOctree, mouseTime }) {
 
         if (d2 < r2) {
           const normal = v1.subVectors(s1.collider.center, s2.collider.center).normalize()
-          const v4 = v2.copy(normal).multiplyScalar(normal.dot(s1.velocity))
-          const v5 = v3.copy(normal).multiplyScalar(normal.dot(s2.velocity))
+          const s1Impact = v2.copy(normal).multiplyScalar(normal.dot(s1.velocity))
+          const s2Impact = v3.copy(normal).multiplyScalar(normal.dot(s2.velocity))
 
-          s1.velocity.add(v5).sub(v4)
-          s2.velocity.add(v4).sub(v5)
+          s1.velocity.add(s2Impact).sub(s1Impact)
+          s2.velocity.add(s1Impact).sub(s2Impact)
 
           const d = (r - Math.sqrt(d2)) / 2
 
@@ -107,10 +107,10 @@ export default function Player({ worldOctree, mouseTime }) {
       const d2 = point.distanceToSquared(sphere_center)
       if (d2 < r2) {
         const normal = v1.subVectors(point, sphere_center).normalize()
-        const v4 = v2.copy(normal).multiplyScalar(normal.dot(playerVelocity))
-        const v5 = v3.copy(normal).multiplyScalar(normal.dot(sphere.velocity))
-        playerVelocity.add(v5).sub(v4)
-        sphere.velocity.add(v4).sub(v5)
+        const playerImpact = v2.copy(normal).multiplyScalar(normal.dot(playerVelocity))
+        const sphereImpact = v3.copy(normal).multiplyScalar(normal.dot(sphere.velocity))
+        playerVelocity.add(sphereImpact).sub(playerImpact)
+        sphere.velocity.add(playerImpact).sub(sphereImpact)
         const d = (r - Math.sqrt(d2)) / 2
         sphere_center.addScaledVector(normal, -d)
       }
@@ -203,8 +203,8 @@ export default function Player({ worldOctree, mouseTime }) {
     controls(camera, delta, playerVelocity.current, playerOnFloor.current, playerDirection.current)
     const deltaSteps = Math.min(0.05, delta) / STEPS_PER_FRAME
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
-      playerOnFloor.current = updatePlayer(camera, deltaSteps, worldOctree, playerCollider.current, playerVelocity.current, playerOnFloor.current)
-      updateSpheres(deltaSteps, worldOctree, v1.current, v2.current, v3.current, playerCollider.current, playerVelocity.current)
+      playerOnFloor.current = updatePlayer(camera, deltaSteps, octree, playerCollider.current, playerVelocity.current, playerOnFloor.current)
+      updateSpheres(deltaSteps, octree, v1.current, v2.current, v3.current, playerCollider.current, playerVelocity.current)
     }
     teleportPlayerIfOob(camera, playerCollider.current, playerVelocity.current)
   })

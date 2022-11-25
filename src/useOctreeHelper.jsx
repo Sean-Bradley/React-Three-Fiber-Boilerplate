@@ -8,9 +8,13 @@ export default function useOctreeHelper(octree) {
   const { scene } = useThree()
   useEffect(() => {
     console.log('new OctreeHelper')
-    const helper = new OctreeHelper(octree, 0x888888)
+    const helper = new OctreeHelper(octree, 'hotpink')
     helper.name = 'octreeHelper'
     scene.add(helper)
+    return () => {
+      console.log('removing OctreeHelper')
+      scene.remove(helper)
+    }
   }, [octree, scene])
 
   useControls('Octree Helper', {
