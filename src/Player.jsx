@@ -8,7 +8,7 @@ import useKeyboard from './useKeyboard'
 const GRAVITY = 30
 const STEPS_PER_FRAME = 5
 
-export default function Player({ octree, clicked, position, colliders, ballCount }) {
+export default function Player({ octree, clicked, colliders, ballCount }) {
   const playerOnFloor = useRef(false)
   const playerVelocity = useMemo(() => {
     console.log('new player velocity')
