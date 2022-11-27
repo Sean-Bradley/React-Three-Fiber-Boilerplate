@@ -23,7 +23,9 @@ let tempSegment = new THREE.Line3()
 export default function Arena() {
   const collider = useRef()
   const state = useThree()
+  //const { nodes, materials } = useGLTF('./models/collision-world.glb')
   const { nodes, materials } = useGLTF('./models/scene.glb')
+  //const { nodes, materials } = useGLTF('./models/scene-1.glb')
   useBVH(collider)
   useHelper(collider, MeshBVHVisualizer, 10)
   const keyboard = useKeyboard()
@@ -42,7 +44,7 @@ export default function Arena() {
     player.castShadow = true
     player.receiveShadow = true
     player.material.shadowSide = 2
-    player.position.y = 5
+    player.position.y = 15
     state.scene.add(player)
   }, [state.scene])
 
@@ -50,10 +52,10 @@ export default function Arena() {
     lftPressed = keyboard['KeyA']
     rgtPressed = keyboard['KeyD']
     fwdPressed = keyboard['KeyW']
-    bkdPressed = keyboard['sKeyS']
+    bkdPressed = keyboard['KeyS']
     if (playerIsOnGround.current) {
       if (keyboard['Space']) {
-        playerVelocity.current.y = 15
+        playerVelocity.current.y = 30
       }
     }
   }
@@ -89,7 +91,7 @@ export default function Arena() {
     if (rgtPressed) {
       playerVelocity.current.add(getSideVector(state).multiplyScalar(speedDelta))
     }
-    
+
     const capsuleInfo = player.capsuleInfo
     tempBox.makeEmpty()
     tempMat.copy(collider.current.matrixWorld).invert()
@@ -173,11 +175,23 @@ export default function Arena() {
   return (
     <>
       {/* <group dispose={null}>
-        <mesh ref={mesh} geometry={nodes.Cube004.geometry} material={materials['Material.001']} position={[7.68, -5.59, 26.38]} scale={0.5} castShadow receiveShadow material-envMapIntensity={0.4} />
+        <mesh
+          ref={collider}
+          geometry={nodes.Cube004.geometry}
+          material={materials['Material.001']}
+          position={[7.68, -5.59, 26.38]}
+          scale={0.5}
+          castShadow
+          receiveShadow
+          material-envMapIntensity={0.4}
+        />
       </group> */}
       <group dispose={null}>
         <mesh ref={collider} castShadow receiveShadow geometry={nodes.Cone.geometry} material={materials['Material.001']} position={[17.93, 3.72, -21.95]} scale={3.71} />
       </group>
+      {/* <group dispose={null}>
+        <mesh ref={collider} geometry={nodes['house_water-2'].geometry} material={nodes['house_water-2'].material} rotation={[Math.PI / 2, 0, 0]} scale={0.01} />
+      </group> */}
       {/* <Player mouseTime={mouseTime} worldOctree={worldOctree} /> */}
     </>
   )
