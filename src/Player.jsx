@@ -10,14 +10,8 @@ const STEPS_PER_FRAME = 5
 
 export default function Player({ octree, clicked, colliders, ballCount }) {
   const playerOnFloor = useRef(false)
-  const playerVelocity = useMemo(() => {
-    console.log('new player velocity')
-    return new Vector3()
-  }, [])
-  const playerDirection = useMemo(() => {
-    console.log('new player direction')
-    return new Vector3()
-  }, [])
+  const playerVelocity = useMemo(() => new Vector3(), [])
+  const playerDirection = useMemo(() => new Vector3(), [])
   const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.5), [])
   const { camera } = useThree()
 
@@ -60,7 +54,7 @@ export default function Player({ octree, clicked, colliders, ballCount }) {
     }
   }
 
-  function updatePlayer(camera, delta, octree, playerCollider, playerVelocity, playerOnFloor) {
+  function updatePlayer(camera, delta, octree, capsule, playerVelocity, playerOnFloor) {
     let damping = Math.exp(-4 * delta) - 1
     if (!playerOnFloor) {
       playerVelocity.y -= GRAVITY * delta
@@ -68,42 +62,42 @@ export default function Player({ octree, clicked, colliders, ballCount }) {
     }
     playerVelocity.addScaledVector(playerVelocity, damping)
     const deltaPosition = playerVelocity.clone().multiplyScalar(delta)
-    playerCollider.translate(deltaPosition)
-    playerOnFloor = playerCollisions(playerCollider, octree, playerVelocity)
-    camera.position.copy(playerCollider.end)
+    capsule.translate(deltaPosition)
+    playerOnFloor = playerCollisions(capsule, octree, playerVelocity)
+    camera.position.copy(capsule.end)
     return playerOnFloor
   }
 
-  function throwBall(camera, playerCollider, playerDirection, playerVelocity, count) {
+  function throwBall(camera, capsule, playerDirection, playerVelocity, count) {
     const { sphere, velocity } = colliders[count % ballCount]
 
     camera.getWorldDirection(playerDirection)
 
-    sphere.center.copy(playerCollider.end).addScaledVector(playerDirection, playerCollider.radius * 1.5)
+    sphere.center.copy(capsule.end).addScaledVector(playerDirection, capsule.radius * 1.5)
 
     velocity.copy(playerDirection).multiplyScalar(50)
     velocity.addScaledVector(playerVelocity, 2)
   }
 
-  function playerCollisions(playerCollider, octree, playerVelocity) {
-    const result = octree.capsuleIntersect(playerCollider)
+  function playerCollisions(capsule, octree, playerVelocity) {
+    const result = octree.capsuleIntersect(capsule)
     let playerOnFloor = false
     if (result) {
       playerOnFloor = result.normal.y > 0
       if (!playerOnFloor) {
         playerVelocity.addScaledVector(result.normal, -result.normal.dot(playerVelocity))
       }
-      playerCollider.translate(result.normal.multiplyScalar(result.depth))
+      capsule.translate(result.normal.multiplyScalar(result.depth))
     }
     return playerOnFloor
   }
 
-  function teleportPlayerIfOob(camera, playerCollider, playerVelocity) {
+  function teleportPlayerIfOob(camera, capsule, playerVelocity) {
     if (camera.position.y <= -100) {
       playerVelocity.set(0, 0, 0)
-      playerCollider.start.set(0, 10, 0)
-      playerCollider.end.set(0, 11, 0)
-      camera.position.copy(playerCollider.end)
+      capsule.start.set(0, 10, 0)
+      capsule.end.set(0, 11, 0)
+      camera.position.copy(capsule.end)
       camera.rotation.set(0, 0, 0)
     }
   }
