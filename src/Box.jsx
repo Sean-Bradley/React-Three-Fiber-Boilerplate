@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import useKeyboard from './useKeyboard'
 
 export default function Box(props) {
   const ref = useRef()
-  const keyMap = useKeyboard()
+  const keyMap = props.keyMap
   const [selected, setSelected] = useState(props.selected)
 
   useFrame((_, delta) => {
