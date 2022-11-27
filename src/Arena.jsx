@@ -30,7 +30,8 @@ export default function Arena({ mouseTime }) {
   const collider = useRef()
   const state = useThree()
   //const { nodes, materials } = useGLTF('./models/collision-world.glb')
-  const { nodes, materials } = useGLTF('./models/scene.glb')
+  //const { nodes, materials } = useGLTF('./models/scene.glb')
+  const { nodes } = useGLTF('./models/scene-1.glb')
   useBVH(collider)
   useHelper(collider, MeshBVHVisualizer, 10)
   const keyboard = useKeyboard()
@@ -112,24 +113,24 @@ export default function Arena({ mouseTime }) {
 
     collider.current.geometry.boundsTree.shapecast({
       intersectsBounds: (box) => box.intersectsBox(tempBox),
-      // intersectsTriangle: (tri) => {
-      //   // check if the triangle is intersecting the capsule and adjust the
-      //   // capsule position if it is.
-      //   const triPoint = tempVector
-      //   const capsulePoint = tempVector2
+      intersectsTriangle: (tri) => {
+        // check if the triangle is intersecting the capsule and adjust the
+        // capsule position if it is.
+        const triPoint = tempVector
+        const capsulePoint = tempVector2
 
-      //   const distance = tri.closestPointToSegment(tempSegment, triPoint, capsulePoint)
-      //   if (distance < capsuleInfo.radius) {
-      //     console.log(distance)
-      //     const depth = capsuleInfo.radius - distance
-      //     const direction = capsulePoint.sub(triPoint).normalize()
+        const distance = tri.closestPointToSegment(tempSegment, triPoint, capsulePoint)
+        if (distance < capsuleInfo.radius) {
+          console.log(distance)
+          const depth = capsuleInfo.radius - distance
+          const direction = capsulePoint.sub(triPoint).normalize()
 
-      //     tempSegment.start.addScaledVector(direction, depth)
-      //     tempSegment.end.addScaledVector(direction, depth)
-      //   }else{
-      //     console.log(capsuleInfo.radius)
-      //   }
-      // }
+          tempSegment.start.addScaledVector(direction, depth)
+          tempSegment.end.addScaledVector(direction, depth)
+        }else{
+          console.log(capsuleInfo.radius)
+        }
+      }
     })
     const newPosition = tempVector
     newPosition.copy(tempSegment.start).applyMatrix4(collider.current.matrixWorld)
@@ -173,6 +174,8 @@ export default function Arena({ mouseTime }) {
     for (let i = 0; i < physicsSteps; i++) {
       updatePlayer(state, delta / physicsSteps)
     }
+    state.camera.position.copy(player.position)
+    
   })
 
   return (
@@ -180,8 +183,11 @@ export default function Arena({ mouseTime }) {
       {/* <group dispose={null}>
         <mesh ref={mesh} geometry={nodes.Cube004.geometry} material={materials['Material.001']} position={[7.68, -5.59, 26.38]} scale={0.5} castShadow receiveShadow material-envMapIntensity={0.4} />
       </group> */}
-      <group dispose={null}>
+      {/* <group dispose={null}>
         <mesh ref={collider} castShadow receiveShadow geometry={nodes.Cone.geometry} material={materials['Material.001']} position={[17.93, 3.72, -21.95]} scale={3.71} />
+      </group> */}
+      <group dispose={null}>
+        <mesh ref={collider} geometry={nodes['house_water-2'].geometry} material={nodes['house_water-2'].material} rotation={[Math.PI / 2, 0, 0]} scale={0.01} />
       </group>
       {/* <Player mouseTime={mouseTime} worldOctree={worldOctree} /> */}
     </>
