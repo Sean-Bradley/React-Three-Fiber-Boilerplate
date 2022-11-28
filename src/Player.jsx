@@ -12,7 +12,7 @@ export default function Player({ octree, clicked, colliders, ballCount }) {
   const playerOnFloor = useRef(false)
   const playerVelocity = useMemo(() => new Vector3(), [])
   const playerDirection = useMemo(() => new Vector3(), [])
-  const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.5), [])
+  const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.1), [])
   const { camera } = useThree()
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function Player({ octree, clicked, colliders, ballCount }) {
   }
 
   function playerCollisions(capsule, octree, playerVelocity) {
-    const result = octree.capsuleIntersect(capsule)
+    const result = octree.intersectsSphere(capsule)
     let playerOnFloor = false
     if (result) {
       playerOnFloor = result.normal.y > 0

@@ -19,11 +19,30 @@ export default function SphereCollider({ id, radius, octree, position, colliders
   function updateSphere(delta, octree, sphere, velocity) {
     sphere.center.addScaledVector(velocity, delta)
 
-    const result = octree.sphereIntersect(sphere)
+    //console.log(octree.geometry.boundsTree)
+    const result = octree.geometry.boundsTree.intersectsSphere(sphere)
+    // const result = octree.geometry.boundsTree.shapecast({
+    //   intersectsBounds: (box) => {
+    //     //console.log('box')
+    //     return box.intersectsSphere(sphere)
+    //     // if (box.intersectsSphere(sphere)) {
+    //     //   console.log(box)
+    //     //   return box //.intersectsSphere(sphere)
+    //     // }
+    //   },
+    //   intersectsTriangle: (tri) => {
+    //     //console.log('tri')
+    //     //if (tri.intersectsSphere(sphere)) return tri.plane
+    //   }
+    // })
+
+    //console.log(result)
+    //const result = false //octree.intersectsSphere(sphere)
 
     if (result) {
-      velocity.addScaledVector(result.normal, -result.normal.dot(velocity) * 1.5)
-      sphere.center.add(result.normal.multiplyScalar(result.depth))
+      //console.log(result)
+      //velocity.addScaledVector(result.normal, -result.normal.dot(velocity) * 1.5)
+      //sphere.center.add(result.normal.multiplyScalar(result.depth))
     } else {
       velocity.y -= GRAVITY * delta
     }
