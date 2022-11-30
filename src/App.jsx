@@ -7,7 +7,7 @@ import { SphereGeometry } from 'three'
 function Squircle() {
   const [segments, setSegments] = useState(32)
 
-  let geometry = useMemo(() => {
+  const geometry = useMemo(() => {
     const g = new SphereGeometry(1, segments, segments)
     const p = g.attributes.position
     const a = p.array
