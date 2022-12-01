@@ -6,7 +6,7 @@ import { useRef, useMemo } from 'react'
 import SphereCollider from './SphereCollider'
 import { Vector3 } from 'three'
 import Ball from './Ball'
-import { CuboidCollider, Debug, Physics, RigidBody } from '@react-three/rapier'
+import { Physics, useSphere, useTrimesh } from '@react-three/cannon'
 import { useFrame } from '@react-three/fiber'
 import useKeyboard from './useKeyboard'
 
@@ -20,6 +20,20 @@ const v3 = new Vector3()
 export default function Game({ clicked }) {
   const ref = useRef()
   const { nodes } = useGLTF('./models/scene-transformed.glb')
+  const {
+    attributes: {
+      position: { array: vertices },
+    },
+    index: { array: indices },
+  } = nodes.Suzanne007.geometry
+  const [triRef] = useTrimesh(
+    () => ({
+      args: [vertices, indices],
+      mass: 0,
+    }),
+    useRef(null),
+  )
+
   //const playerOnFloor = useRef(false)
   const playerPosition = useMemo(() => new Vector3(0, 2, 0), [])
   const playerVelocity = useMemo(() => new Vector3(), [])
@@ -74,25 +88,18 @@ export default function Game({ clicked }) {
 
   return (
     <>
-      <Physics>
-        <RigidBody colliders="trimesh" mass="0">
-          <mesh castShadow receiveShadow geometry={nodes.Suzanne007.geometry} material={nodes.Suzanne007.material} position={[1.74, 1.04, 24.97]} />
-        </RigidBody>
-        <RigidBody ref={ref} colliders="ball" position={[0, 10, 0]}>
-          <mesh>
-            <sphereGeometry args={[1]} />
-            <meshNormalMaterial />
-          </mesh>
-        </RigidBody>
+      <Physics shouldInvalidate={false}>
+        <mesh ref="triRef" mass={1} castShadow receiveShadow geometry={nodes.Suzanne007.geometry} material={nodes.Suzanne007.material} position={[1.74, 1.04, 24.97]} />
+        {/* <mesh mass={1} position={[0, 10, 0]}>
+          <sphereGeometry args={[1]} />
+          <meshNormalMaterial />
+        </mesh>
         {balls.map(({ position }, i) => (
-          <RigidBody key={i} colliders="ball" position={position}>
-            <mesh castShadow>
-              <sphereGeometry args={[radius]} />
-              <meshStandardMaterial />
-            </mesh>
-          </RigidBody>
-        ))}
-        <Debug />
+          <mesh castShadow key={i} position={position}>
+            <sphereGeometry args={[radius]} />
+            <meshStandardMaterial />
+          </mesh>
+        ))} */}
       </Physics>
     </>
   )

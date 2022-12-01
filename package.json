@@ -5,6 +5,7 @@
   "keywords": [],
   "main": "src/index.jsx",
   "dependencies": {
+    "@react-three/cannon": "^6.5.0",
     "@react-three/drei": "^9.41.0",
     "@react-three/fiber": "8.9.1",
     "@react-three/rapier": "^0.11.0",
