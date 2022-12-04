@@ -20,7 +20,7 @@ export default function Player({ octree, clicked, colliders, ballCount }) {
   })
 
   useEffect(() => {
-    console.log('adding reference to this capsule collider')
+    //console.log('adding reference to this capsule collider')
     colliders[ballCount] = { capsule: capsule, velocity: playerVelocity }
   }, [colliders, ballCount, capsule, playerVelocity])
 

@@ -1,13 +1,11 @@
 import { useFrame } from '@react-three/fiber'
 import { useEffect } from 'react'
 import { useMemo, useRef } from 'react'
-import { Sphere, Vector3 } from 'three'
+import { Vector3 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule.js'
+import * as Constants from './Constants'
 
-const GRAVITY = 30
-const STEPS_PER_FRAME = 5
-
-export default function CapsuleCollider({ id, radius, octree, position, colliders, checkCapsuleCollisions, children }) {
+export default function CapsuleCollider({ id, radius, octree, position, colliders, children }) {
   const ref = useRef()
   const capsule = useMemo(() => new Capsule(new Vector3(...position), new Vector3([position[0], position[1] + 1, position[2]]), radius), [position, radius])
   const velocity = useMemo(() => new Vector3(), [])
@@ -32,8 +30,8 @@ export default function CapsuleCollider({ id, radius, octree, position, collider
   }
 
   useFrame((_, delta) => {
-    const deltaSteps = Math.min(0.05, delta) / STEPS_PER_FRAME
-    for (let i = 0; i < STEPS_PER_FRAME; i++) {
+    const deltaSteps = Math.min(0.05, delta) / Constants.frameSteps
+    for (let i = 0; i < Constants.frameSteps; i++) {
       updateCapsule(deltaSteps, octree, capsule, velocity)
     }
   })
