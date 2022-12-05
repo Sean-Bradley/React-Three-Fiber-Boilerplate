@@ -89,7 +89,7 @@ export function Monkey(props) {
   const [ref] = useTrimesh(() => ({ args, mass: 1, ...props }), useRef())
   return (
     <group ref={ref} {...props} dispose={null}>
-      <mesh geometry={nodes.Suzanne.geometry} material={useMemo(() => new MeshNormalMaterial(), [])} />
+      <mesh castShadow geometry={nodes.Suzanne.geometry} material={useMemo(() => new MeshNormalMaterial(), [])} />
     </group>
   )
 }
@@ -97,8 +97,8 @@ export function Monkey(props) {
 export default function App() {
   return (
     <Canvas shadows camera={{ position: [0, 2, 4] }}>
-      <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} shadow-camera-near={0.5} shadow-camera-far={20} />
-      <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} shadow-camera-near={0.5} shadow-camera-far={20} />
+      <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow />
+      <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow />
       <Physics>
         <Debug>
           <Plane rotation={[-Math.PI / 2, 0, 0]} />
