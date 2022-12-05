@@ -1,9 +1,10 @@
 import { Stats, OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useRef, useMemo } from 'react'
-import { Debug, Physics, useBox, usePlane, useSphere, useTrimesh, useCylinder } from '@react-three/cannon'
-import { IcosahedronGeometry, TorusKnotGeometry } from 'three'
-import { MeshNormalMaterial } from 'three'
+import { Debug, Physics, useBox, usePlane, useSphere, useTrimesh, useCylinder, useConvexPolyhedron } from '@react-three/cannon'
+import { MeshNormalMaterial, IcosahedronGeometry, TorusKnotGeometry } from 'three'
+import { useControls } from 'leva'
+import CannonUtils from './CannonUtils'
 
 function Plane(props) {
   const [ref] = usePlane(() => ({ ...props }), useRef())
@@ -48,21 +49,10 @@ function Cylinder(props) {
   )
 }
 
-function createTrimesh(geometry) {
-  let vertices
-  if (geometry.index === null) {
-    vertices = geometry.attributes.position.array
-  } else {
-    vertices = geometry.clone().toNonIndexed().attributes.position.array
-  }
-  const indices = Object.keys(vertices).map(Number)
-  return [vertices, indices]
-}
-
 function Icosahedron(props) {
   const geometry = useMemo(() => new IcosahedronGeometry(1, 0), [])
-  const args = useMemo(() => createTrimesh(geometry), [geometry])
-  const [ref] = useTrimesh(() => ({ args, mass: 1, ...props }), useRef())
+  const args = useMemo(() => CannonUtils.toConvexPolyhedronProps(geometry), [geometry])
+  const [ref] = useConvexPolyhedron(() => ({ args, mass: 1, ...props }), useRef())
 
   return (
     <mesh ref={ref} castShadow geometry={geometry}>
@@ -72,7 +62,8 @@ function Icosahedron(props) {
 }
 
 function TorusKnot(props) {
-  const args = useMemo(() => createTrimesh(new TorusKnotGeometry()), [])
+  const geometry = useMemo(() => new TorusKnotGeometry(), [])
+  const args = useMemo(() => CannonUtils.toTrimeshProps(geometry), [geometry])
   const [ref] = useTrimesh(() => ({ args, mass: 1, ...props }), useRef())
 
   return (
@@ -85,7 +76,7 @@ function TorusKnot(props) {
 
 export function Monkey(props) {
   const { nodes } = useGLTF('/models/monkey.glb')
-  const args = useMemo(() => createTrimesh(nodes.Suzanne.geometry), [nodes.Suzanne.geometry])
+  const args = useMemo(() => CannonUtils.toTrimeshProps(nodes.Suzanne.geometry), [nodes.Suzanne.geometry])
   const [ref] = useTrimesh(() => ({ args, mass: 1, ...props }), useRef())
   return (
     <group ref={ref} {...props} dispose={null}>
@@ -95,11 +86,16 @@ export function Monkey(props) {
 }
 
 export default function App() {
+  const gravity = useControls('Gravity', {
+    x: { value: 0, min: -10, max: 10, step: 0.1 },
+    y: { value: -9.8, min: -10, max: 10, step: 0.1 },
+    z: { value: 0, min: -10, max: 10, step: 0.1 }
+  })
   return (
     <Canvas shadows camera={{ position: [0, 2, 4] }}>
       <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow />
       <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow />
-      <Physics>
+      <Physics gravity={[gravity.x, gravity.y, gravity.z]}>
         <Debug>
           <Plane rotation={[-Math.PI / 2, 0, 0]} />
           <Box position={[-4, 3, 0]} />
