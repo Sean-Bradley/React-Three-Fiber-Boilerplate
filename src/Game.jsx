@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect, useState } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import { Object3D, Vector3, Euler, Quaternion, Matrix4, AnimationMixer, LoopOnce, TextureLoader } from 'three'
 import Eve from './Eve'
 import { Debug, Physics, usePlane, useBox, useCompoundBody, useContactMaterial } from '@react-three/cannon'
@@ -152,7 +152,7 @@ function PlayerCollider({ followCamPivot, ...props }) {
   )
 }
 
-function Obstacle({ args, position, texture, ...props }) {
+function Obstacle({ args, position, ...props }) {
   const [ref] = useBox(() => ({ args: [...args], mass: 1, position: position, ...props }), useRef())
 
   return (

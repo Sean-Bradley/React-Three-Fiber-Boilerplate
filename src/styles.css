@@ -12,6 +12,7 @@ body,
   top: 10px;
   margin-left: -220px;
   font-family: monospace;
+  filter: drop-shadow(1px 1px 1px #000000);
 }
 #menuPanel {
   position: absolute;
@@ -32,4 +33,5 @@ body,
   color: white;
   font-family: monospace;
   user-select: none;
+  filter: drop-shadow(1px 1px 1px #000000);
 }
