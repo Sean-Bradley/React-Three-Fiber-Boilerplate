@@ -3,7 +3,6 @@ import Floor from './Floor'
 import Obstacles from './Obstacles'
 import Player from './Player'
 import { useControls } from 'leva'
-import useFollowCam from './useFollowCam'
 
 function ToggleDebug({ children }) {
   const debugRendererVisible = useControls('Debug Renderer', { visible: false })
@@ -12,8 +11,6 @@ function ToggleDebug({ children }) {
 }
 
 export default function Game() {
-  const { pivot } = useFollowCam()
-
   useContactMaterial('ground', 'slippery', {
     friction: 0,
     restitution: 0.3,
@@ -26,7 +23,7 @@ export default function Game() {
       <ToggleDebug>
         <Floor rotation={[-Math.PI / 2, 0, 0]} material={'ground'} />
         <Obstacles />
-        <Player pivot={pivot} position={[0, 1, 0]} linearDamping={0.95} material={'slippery'} />
+        <Player position={[0, 1, 0]} linearDamping={0.95} material={'slippery'} />
       </ToggleDebug>
     </>
   )

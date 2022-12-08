@@ -5,8 +5,10 @@ import { useCompoundBody } from '@react-three/cannon'
 import useKeyboard from './useKeyboard'
 import { useFrame } from '@react-three/fiber'
 import { Vec3 } from 'cannon-es'
+import useFollowCam from './useFollowCam'
 
-export default function PlayerCollider({ pivot, ...props }) {
+export default function PlayerCollider(props) {
+  const { pivot } = useFollowCam()
   const canJump = useRef(false)
   const group = useRef()
   const velocity = useMemo(() => new Vector3(), [])
