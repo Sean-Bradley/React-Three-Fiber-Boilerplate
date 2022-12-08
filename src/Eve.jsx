@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
+import { LoopOnce } from 'three'
 
 export default function Eve({ mixer, actions }) {
   const ref = useRef()
@@ -12,6 +13,10 @@ export default function Eve({ mixer, actions }) {
     actions['default'] = mixer.clipAction(animations[0], ref.current)
     actions['walk'] = mixer.clipAction(walkAnimation[0], ref.current)
     actions['jump'] = mixer.clipAction(jumpAnimation[0], ref.current)
+    actions['jump'].loop = LoopOnce
+    actions['jump'].clampWhenFinished = true
+
+    actions['walk'].play()
   })
 
   return (
@@ -19,7 +24,7 @@ export default function Eve({ mixer, actions }) {
       <group name="Scene">
         <group name="Armature" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
           <primitive object={nodes.mixamorigHips} />
-          <skinnedMesh name="Mesh" geometry={nodes.Mesh.geometry} material={materials.SpacePirate_M} skeleton={nodes.Mesh.skeleton} />
+          <skinnedMesh castShadow name="Mesh" frustumCulled={false} geometry={nodes.Mesh.geometry} material={materials.SpacePirate_M} skeleton={nodes.Mesh.skeleton} />
         </group>
       </group>
     </group>
