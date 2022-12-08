@@ -1,3 +1,8 @@
+// MIT License
+// Copyright (c) 2022 Sean Bradley
+// Based on https://sbcode.net/threejs/physics-cannonDebugrenderer/#srcclientutilscannonutilsts
+// Re written for my React Three Fiber course. 
+// Course Coupons @ https://sbcode.net/coupons
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 
