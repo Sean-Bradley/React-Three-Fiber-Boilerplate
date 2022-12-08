@@ -54,8 +54,6 @@ export default function PlayerCollider({ pivot, ...props }) {
     body.angularFactor.set(0, 0, 0)
 
     ref.current.getWorldPosition(worldPosition)
-    const p = new Vector3().copy(worldPosition)
-    //p.y -= 1
     const distance = worldPosition.distanceTo(group.current.position)
 
     if (canJump.current) {

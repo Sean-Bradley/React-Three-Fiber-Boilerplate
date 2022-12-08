@@ -5,14 +5,14 @@
   "keywords": [],
   "main": "src/index.jsx",
   "dependencies": {
-    "@react-three/cannon": "^6.5.0",
-    "@react-three/drei": "^9.46.4",
-    "@react-three/fiber": "8.9.0",
-    "leva": "^0.9.34",
+    "@react-three/cannon": "6.5.0",
+    "@react-three/drei": "9.46.4",
+    "@react-three/fiber": "8.9.1",
+    "leva": "0.9.34",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
-    "three": "0.146.0"
+    "three": "0.147.0"
   },
   "scripts": {
     "start": "react-scripts start",
