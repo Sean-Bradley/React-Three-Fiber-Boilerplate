@@ -1,7 +1,5 @@
 # React-Three-Fiber-Boilerplate
 
-## About
-
 This boilerplate is supplemental to my React Three Fiber course documentation hosted at [https://sbcode.net/react-three-fiber/](https://sbcode.net/react-three-fiber/)
 
 ![React Three Fiber Course Image](./docs/react-three-fiber-course-image-small.jpg)
@@ -35,7 +33,7 @@ npm install
 npm run start
 ```
 
-and, you will get a quite interactive demo of green wireframe cubes/spheres/dodecahedrons.
+and, you will get a quite interactive demo of some green wireframe cubes/spheres/dodecahedrons.
 
 There are many branches.
 
@@ -148,3 +146,7 @@ npm start
 To allow me to continue to release free MIT code, please check out my React Three Fiber course on [Udemy](https://www.udemy.com/course/react-three-fiber/?referralCode=338F7F03D9775AD115A7) and [YouTube (Channel membership required)](https://www.youtube.com/playlist?list=PLKWUX7aMnlEK9DrrY1yXdiUBro1CryZaX).
 
 [![React Three Fiber Course Introduction](./docs/react-three-fiber-course-image.jpg)](https://youtu.be/5k395TH7ksE)
+
+Thanks
+
+Sean Bradley
