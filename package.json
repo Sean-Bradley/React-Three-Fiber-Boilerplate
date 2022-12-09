@@ -4,7 +4,7 @@
   "description": "",
   "keywords": [],
   "main": "src/index.jsx",
-  "homepage": "https://sean-bradley.github.io/React-Three-Fiber-Boilerplate/",
+  "homepage": ".",
   "dependencies": {
     "@react-three/cannon": "6.5.0",
     "@react-three/drei": "9.46.4",
