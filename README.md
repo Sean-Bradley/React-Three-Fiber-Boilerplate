@@ -1,6 +1,6 @@
 # React-Three-Fiber-Boilerplate
 
-This boilerplate is supplemental to my React Three Fiber course documentation hosted at [https://sbcode.net/react-three-fiber/](https://sbcode.net/react-three-fiber/){target=\_blank}
+This boilerplate is supplemental to my React Three Fiber course documentation hosted at [https://sbcode.net/react-three-fiber/](https://sbcode.net/react-three-fiber/)
 
 ![React Three Fiber Course Image](./docs/react-three-fiber-course-image-small.jpg)
 
