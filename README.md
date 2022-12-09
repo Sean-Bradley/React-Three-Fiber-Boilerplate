@@ -145,7 +145,7 @@ npm start
 
 To allow me to continue to release free MIT code, please check out my React Three Fiber course on [Udemy](https://www.udemy.com/course/react-three-fiber/?referralCode=338F7F03D9775AD115A7) and [YouTube (Channel membership required)](https://www.youtube.com/playlist?list=PLKWUX7aMnlEK9DrrY1yXdiUBro1CryZaX).
 
-[![React Three Fiber Course Introduction](./docs/react-three-fiber-course-image.jpg)](https://youtu.be/5k395TH7ksE)
+[![React Three Fiber Course Introduction](./docs/react-three-fiber-course-image.jpg)](https://youtu.be/p_8rW0c4ASk)
 
 Thanks
 
