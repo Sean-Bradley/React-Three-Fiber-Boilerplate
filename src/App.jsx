@@ -1,31 +1,32 @@
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
+import Box from './Box'
+import { Stats } from '@react-three/drei'
 import { Vector3 } from 'three'
-import { Stats, Environment, Center } from '@react-three/drei'
-import Button from './Button'
 
 function Rig() {
   const { camera, mouse } = useThree()
   const vec = new Vector3()
+
   return useFrame(() => {
-    camera.position.lerp(
-      vec.set(mouse.x * 2, mouse.y * 2, camera.position.z),
-      0.05
-    )
+    camera.position.lerp(vec.set(mouse.x, mouse.y, camera.position.z), 0.05)
     camera.lookAt(0, 0, 0)
   })
 }
 
 export default function App() {
   return (
-    <Canvas camera={{ position: [0, 0, 5] }} shadows>
-      <Environment preset="forest" background />
-      <Center>
-        {[...Array(5).keys()].map((x) =>
-          [...Array(3).keys()].map((y) => (
-            <Button key={x + y * 5} position={[x * 2.5, y * 2.5, 0]} />
-          ))
-        )}
-      </Center>
+    <Canvas camera={{ position: [0, 0, 6] }}>
+      <directionalLight position={[0, 0, 1]} />
+      {[...Array(5).keys()].map((i) => (
+        <group key={i * 6}>
+          <Box position={[-5, -3 + i * 1.5, 0]} text={'S'} />
+          <Box position={[-3, -3 + i * 1.5, 0]} text={'B'} />
+          <Box position={[-1, -3 + i * 1.5, 0]} text={'C'} />
+          <Box position={[1, -3 + i * 1.5, 0]} text={'O'} />
+          <Box position={[3, -3 + i * 1.5, 0]} text={'D'} />
+          <Box position={[5, -3 + i * 1.5, 0]} text={'E'} />
+        </group>
+      ))}
       <Rig />
       <Stats />
     </Canvas>
