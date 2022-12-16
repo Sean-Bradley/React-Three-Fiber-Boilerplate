@@ -15,24 +15,18 @@ function Rig() {
 
 export default function App() {
   return (
-    <Canvas camera={{ position: [0, 0, 4] }}>
-      <directionalLight position={[1, 1, 1]} />
-      <Box position={[0, 1.5, 0]} name="A0">
-        <Box position={[-0.66, -1, 0]} name="B0">
-          <Box position={[-0.66, -1, 0]} name="C0">
-            <Box position={[-0.66, -1, 0]} name="D0" />
-            <Box position={[0.66, -1, 0]} name="D1" />
-          </Box>
-          <Box position={[0.66, -1, 0]} name="C1">
-            <Box position={[0.66, -1, 0]} name="D2" />
-          </Box>
-        </Box>
-        <Box position={[0.66, -1, 0]} name="B1">
-          <Box position={[0.66, -1, 0]} name="C2">
-            <Box position={[0.66, -1, 0]} name="D3" />
-          </Box>
-        </Box>
-      </Box>
+    <Canvas camera={{ position: [0, 0, 6] }}>
+      <directionalLight position={[0, 0, 1]} />
+      {[...Array(5).keys()].map((i) => (
+        <group key={i * 6}>
+          <Box position={[-5, -3 + i * 1.5, 0]} text={'S'} />
+          <Box position={[-3, -3 + i * 1.5, 0]} text={'B'} />
+          <Box position={[-1, -3 + i * 1.5, 0]} text={'C'} />
+          <Box position={[1, -3 + i * 1.5, 0]} text={'O'} />
+          <Box position={[3, -3 + i * 1.5, 0]} text={'D'} />
+          <Box position={[5, -3 + i * 1.5, 0]} text={'E'} />
+        </group>
+      ))}
       <Rig />
       <Stats />
     </Canvas>
