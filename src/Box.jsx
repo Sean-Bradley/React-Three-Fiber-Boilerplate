@@ -1,27 +1,36 @@
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Color } from 'three'
+import { useEffect } from 'react'
 import { Text } from '@react-three/drei'
 
-export default function Box({ text, ...props }) {
+export default function Box(props) {
   const ref = useRef()
-  const black = useMemo(() => new Color('black'), [])
-  const lime = useMemo(() => new Color('lime'), [])
-  const [hovered, setHovered] = useState(false)
+  const [count, setCount] = useState(0)
+  const black = new Color('black')
 
-  useFrame(({ mouse, viewport }) => {
-    const x = (mouse.x * viewport.width) / 2.5
-    const y = (mouse.y * viewport.height) / 2.5
-    ref.current.lookAt(x, y, 1)
-    ref.current.material.color.lerp(hovered ? lime : black, 0.05)
+  console.log('Box ' + props.name + ' count=' + count)
+
+  useEffect(() => {
+    ref.current.material.color.set(0x00ff00)
+  })
+
+  useFrame(() => {
+    ref.current.material.color.lerp(black, 0.1)
   })
 
   return (
-    <mesh {...props} ref={ref} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
+    <mesh
+      {...props}
+      ref={ref}
+      onPointerDown={(e) => {
+        //e.stopPropagation()
+        setCount(count + 1)
+      }}>
       <boxGeometry />
-      <meshStandardMaterial color={lime} />
-      <Text fontSize={0.5} position-z={0.501}>
-        {text}
+      <meshStandardMaterial />
+      <Text fontSize={0.5} font="monospace" position-z={0.501}>
+        {count}
       </Text>
       {props.children}
     </mesh>
