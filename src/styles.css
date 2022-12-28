@@ -5,3 +5,23 @@ body,
   margin: 0;
   background: #000000;
 }
+.btn {
+  position: absolute;
+  bottom: 10%;
+  user-select: none;
+}
+#btn0 {
+  left: 5%;
+}
+#btn1 {
+  left: 25%;
+}
+#btn2 {
+  left: 45%;
+}
+#btn3 {
+  left: 65%;
+}
+#btn4 {
+  left: 85%;
+}
