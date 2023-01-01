@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
-import { Room } from './Room'
-import { ArmChair } from './ArmChair'
+import Room from './Room'
+import ArmChair from './ArmChair'
 
 export default function App() {
   return (
