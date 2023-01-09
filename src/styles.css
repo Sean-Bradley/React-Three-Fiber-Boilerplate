@@ -4,4 +4,16 @@ body,
   height: 100%;
   margin: 0;
   background: #000000;
+  color: white;
+  font-family: monospace;
+}
+#instructions {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  margin-left: -200px;
+  filter: drop-shadow(1px 1px 1px #000000);
+}
+#instructions a {
+  color: white;
 }
