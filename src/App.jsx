@@ -21,7 +21,15 @@ function Teleport() {
       setDragging(false)
     }
     const onPointerMove = (e) => {
-      dragging && dragVector.set(e.movementX, e.movementY)
+      //dragging && dragVector.set(e.movementX, e.movementY)
+      //if(dragging){
+      //console.log(e)
+      dragVector.set(e.movementX, e.movementY)
+      //}
+      if (dragging) {
+        ref.current.rotation.y += ((dragVector.x / 10) * Math.PI) / 180
+        ref.current.children[0].rotation.x += ((dragVector.y / 10) * Math.PI) / 180
+      }
     }
     document.addEventListener('pointerdown', onPointerDown)
     document.addEventListener('pointerup', onPointerUp)
@@ -33,10 +41,6 @@ function Teleport() {
     }
   })
   useFrame((_, delta) => {
-    if (dragging) {
-      ref.current.rotation.y += ((dragVector.x / 18) * Math.PI) / 180
-      ref.current.children[0].rotation.x += ((dragVector.y / 18) * Math.PI) / 180
-    }
     lerping && ref.current.position.lerp(to, delta * 5)
   })
 
