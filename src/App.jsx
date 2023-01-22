@@ -3,18 +3,41 @@ import { Stats, Environment, PerspectiveCamera } from '@react-three/drei'
 import Model from './Scene'
 import { useRef, useState, useMemo } from 'react'
 import { Vector2, Vector3 } from 'three'
+import { useEffect } from 'react'
 
-function Teleport({ dragging, dragVector }) {
+function Teleport() {
   const ref = useRef()
   const circleRef = useRef()
   const [lerping, setLerping] = useState(false)
   const [to, setTo] = useState(new Vector3())
+  const [dragging, setDragging] = useState(false)
+  const dragVector = useMemo(() => new Vector2(), [])
+
+  useEffect(() => {
+    const onPointerDown = () => {
+      setDragging(true)
+    }
+    const onPointerUp = () => {
+      setDragging(false)
+    }
+    const onPointerMove = (e) => {
+      dragging && dragVector.set(e.movementX, e.movementY)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('pointerup', onPointerUp)
+    document.addEventListener('pointermove', onPointerMove)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('pointerup', onPointerUp)
+      document.removeEventListener('pointermove', onPointerMove)
+    }
+  })
   useFrame((_, delta) => {
     if (dragging) {
       ref.current.rotation.y += ((dragVector.x / 18) * Math.PI) / 180
       ref.current.children[0].rotation.x += ((dragVector.y / 18) * Math.PI) / 180
     }
-    lerping && ref.current.position.lerp(to, delta * 2)
+    lerping && ref.current.position.lerp(to, delta * 5)
   })
 
   return (
@@ -46,25 +69,9 @@ function Teleport({ dragging, dragVector }) {
 }
 
 export default function App() {
-  const [dragging, setDragging] = useState(false)
-  const dragVector = useMemo(() => new Vector2(), [])
-
   return (
-    <Canvas
-      onPointerDown={() => {
-        setDragging(true)
-      }}
-      onPointerUp={() => {
-        setDragging(false)
-      }}
-      onPointerMove={(e) => {
-        if (dragging) {
-          dragVector.set(e.movementX, e.movementY)
-        } else {
-          dragVector.set(0, 0)
-        }
-      }}>
-      <Teleport dragging={dragging} dragVector={dragVector} />
+    <Canvas>
+      <Teleport />
       <Environment files="./img/rustig_koppie_puresky_1k.hdr" background />
       <Model />
       <Stats />
