@@ -1,104 +1,73 @@
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, Environment, Sphere } from '@react-three/drei'
-import Room from './Room'
-import ArmChair from './ArmChair'
-import { useRef, useState } from 'react'
-import { Vector3 } from 'three'
-import { useMemo } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Stats, Environment, PerspectiveCamera } from '@react-three/drei'
+import Model from './Scene'
+import { useRef, useState, useMemo } from 'react'
+import { Vector2, Vector3 } from 'three'
 
-// function Animate({ lerping, to }) {
-//   useFrame(({ camera }, delta) => {
-//     if (lerping) {
-//       camera.position.lerp(to, delta * 2)
-//     }
-//   })
-// }
-
-function Teleport({ controls, lerping, setLerping }) {
+function Teleport({ dragging, dragVector }) {
   const ref = useRef()
-  const axesHelperRef = useRef()
-  const { camera } = useThree()
-
-  const [to, setTo] = useState(new Vector3(2.25, 1, 2.25))
-  const [target, setTarget] = useState(new Vector3(0, 1, 0))
-  //const v = useMemo(() => new Vector3(), [])
-
-  useFrame(({ camera }, delta) => {
-    //lerping && camera.position.lerp(to, delta * 2)
-
-    if (lerping) {
-      camera.position.lerp(to, delta * 2)
-      //v.set
-      //update carrunt target
-      //console.log(controls.current.target)
-      controls.current.target.lerp(target, 0.8)
-      //controls.current.update()
+  const circleRef = useRef()
+  const [lerping, setLerping] = useState(false)
+  const [to, setTo] = useState(new Vector3())
+  useFrame((_, delta) => {
+    if (dragging) {
+      ref.current.rotation.y += ((dragVector.x / 18) * Math.PI) / 180
+      ref.current.children[0].rotation.x += ((dragVector.y / 18) * Math.PI) / 180
     }
-    //controls.current.target.lerp(target, delta * 2) &&
-    axesHelperRef.current.position.x = controls.current.target.x
-    axesHelperRef.current.position.y = controls.current.target.y
-    axesHelperRef.current.position.z = controls.current.target.z
-    //controls.current.update()
+    lerping && ref.current.position.lerp(to, delta * 2)
   })
 
   return (
     <>
       <mesh
         rotation-x={-Math.PI / 2}
-        position={[2.5, 0.31, 2.5]}
+        position={[0, 0, 0]}
         onPointerMove={({ point }) => {
-          ref.current.position.z = point.z
-          ref.current.position.x = point.x
-        }}>
-        <planeGeometry args={[5, 5]} />
-        <meshBasicMaterial wireframe={true} />
-      </mesh>
-      <mesh
-        ref={ref}
-        rotation-x={-Math.PI / 2}
-        position-y={0.32}
+          circleRef.current.position.z = point.z
+          circleRef.current.position.x = point.x
+        }}
         onDoubleClick={({ point }) => {
-          controls.current.enabled = false
           const v = new Vector3(point.x, 1, point.z)
           setTo(v)
-          //console.log(v.sub(camera.position))
-          setTarget(v) //.sub(controls.current.target))
           setLerping(true)
         }}>
+        <planeGeometry args={[20, 20]} />
+        <meshBasicMaterial wireframe={true} color={0x00ff00} />
+      </mesh>
+      <mesh ref={circleRef} rotation-x={-Math.PI / 2} position-y={0.01}>
         <circleGeometry args={[0.2]} />
         <meshBasicMaterial color={'green'} />
       </mesh>
-      <axesHelper ref={axesHelperRef} />
-      {/* <Animate lerping={lerping} to={to} /> */}
+      <object3D ref={ref} position={[0, 1, 10]}>
+        <PerspectiveCamera makeDefault />
+      </object3D>
     </>
   )
 }
 
 export default function App() {
-  const ref = useRef()
-  const [lerping, setLerping] = useState(false)
+  const [dragging, setDragging] = useState(false)
+  const dragVector = useMemo(() => new Vector2(), [])
+
   return (
     <Canvas
-      shadows
-      camera={{ position: [2.25, 1, 2.25] }}
       onPointerDown={() => {
-        ref.current.enabled = true
-        setLerping(false)
+        setDragging(true)
+      }}
+      onPointerUp={() => {
+        setDragging(false)
+      }}
+      onPointerMove={(e) => {
+        if (dragging) {
+          dragVector.set(e.movementX, e.movementY)
+        } else {
+          dragVector.set(0, 0)
+        }
       }}>
-      <Environment
-        preset="forest"
-        background
-        ground={{
-          height: 2,
-          radius: 115,
-          scale: 100
-        }}
-      />
-      <directionalLight position={[5, 1.5, 3]} intensity={2} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} shadow-bias={-0.0001} />
-      <Room />
-      <ArmChair />
-      <OrbitControls ref={ref} target={[2.25, 1, 2.24]} minPolarAngle={0} maxPolarAngle={Math.PI / 2 + Math.PI / 12} enableZoom={false} enablePan ={false}/>
-      <Teleport controls={ref} lerping={lerping} setLerping={setLerping} />
+      <Teleport dragging={dragging} dragVector={dragVector} />
+      <Environment files="./img/rustig_koppie_puresky_1k.hdr" background />
+      <Model />
+      <Stats />
     </Canvas>
   )
 }
