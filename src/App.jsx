@@ -8,8 +8,7 @@ import { useEffect } from 'react'
 function Teleport() {
   const ref = useRef()
   const circleRef = useRef()
-  const [lerping, setLerping] = useState(false)
-  const [to, setTo] = useState(new Vector3())
+  const to = useMemo(() => new Vector3(0, 1, 10), [])
   const [dragging, setDragging] = useState(false)
   const dragVector = useMemo(() => new Vector2(), [])
 
@@ -21,15 +20,10 @@ function Teleport() {
       setDragging(false)
     }
     const onPointerMove = (e) => {
-      //dragging && dragVector.set(e.movementX, e.movementY)
-      //if(dragging){
-      //console.log(e)
       dragVector.set(e.movementX, e.movementY)
-      //}
-      if (dragging) {
-        ref.current.rotation.y += ((dragVector.x / 10) * Math.PI) / 180
-        ref.current.children[0].rotation.x += ((dragVector.y / 10) * Math.PI) / 180
-      }
+      dragging &&
+        (ref.current.rotation.y += ((dragVector.x / 10) * Math.PI) / 180) &&
+        (ref.current.children[0].rotation.x += ((dragVector.y / 10) * Math.PI) / 180)
     }
     document.addEventListener('pointerdown', onPointerDown)
     document.addEventListener('pointerup', onPointerUp)
@@ -41,7 +35,7 @@ function Teleport() {
     }
   })
   useFrame((_, delta) => {
-    lerping && ref.current.position.lerp(to, delta * 5)
+    ref.current.position.lerp(to, delta * 5)
   })
 
   return (
@@ -54,9 +48,7 @@ function Teleport() {
           circleRef.current.position.x = point.x
         }}
         onDoubleClick={({ point }) => {
-          const v = new Vector3(point.x, 1, point.z)
-          setTo(v)
-          setLerping(true)
+          to.set(point.x, 1, point.z)
         }}>
         <planeGeometry args={[20, 20]} />
         <meshBasicMaterial wireframe={true} color={0x00ff00} />
