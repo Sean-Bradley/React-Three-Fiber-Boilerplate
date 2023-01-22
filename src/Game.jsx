@@ -7,8 +7,7 @@ import SphereCollider from './SphereCollider'
 import Ball from './Ball'
 import * as Constants from './Constants'
 
-
-export default function Physics({ clicked }) {
+export default function Physics() {
   const { nodes, scene } = useGLTF('./models/scene-transformed.glb')
   const octree = useOctree(scene)
   useOctreeHelper(octree)
@@ -45,7 +44,7 @@ export default function Physics({ clicked }) {
             const impact1 = Constants.v2.copy(normal).multiplyScalar(normal.dot(c.velocity))
             const impact2 = Constants.v3.copy(normal).multiplyScalar(normal.dot(velocity))
             c.velocity.add(impact2).sub(impact1)
-            velocity.add(impact1).sub(impact2)            
+            velocity.add(impact1).sub(impact2)
             const d = (r - Math.sqrt(d2)) / 2
             sphere.center.addScaledVector(normal, -d)
           }
@@ -64,7 +63,7 @@ export default function Physics({ clicked }) {
           <Ball radius={Constants.radius} />
         </SphereCollider>
       ))}
-      <Player clicked={clicked} ballCount={Constants.ballCount} octree={octree} colliders={colliders.current} />
+      <Player ballCount={Constants.ballCount} octree={octree} colliders={colliders.current} />
     </>
   )
 }
