@@ -24,18 +24,21 @@ function Teleport({ controls, lerping, setLerping }) {
   //const v = useMemo(() => new Vector3(), [])
 
   useFrame(({ camera }, delta) => {
-    lerping && camera.position.lerp(to, delta * 2)
+    //lerping && camera.position.lerp(to, delta * 2)
 
     if (lerping) {
+      camera.position.lerp(to, delta * 2)
       //v.set
       //update carrunt target
       //console.log(controls.current.target)
       controls.current.target.lerp(target, 0.8)
+      //controls.current.update()
     }
     //controls.current.target.lerp(target, delta * 2) &&
     axesHelperRef.current.position.x = controls.current.target.x
     axesHelperRef.current.position.y = controls.current.target.y
     axesHelperRef.current.position.z = controls.current.target.z
+    //controls.current.update()
   })
 
   return (
@@ -59,7 +62,7 @@ function Teleport({ controls, lerping, setLerping }) {
           const v = new Vector3(point.x, 1, point.z)
           setTo(v)
           //console.log(v.sub(camera.position))
-          setTarget(v)//.sub(controls.current.target))
+          setTarget(v) //.sub(controls.current.target))
           setLerping(true)
         }}>
         <circleGeometry args={[0.2]} />
@@ -94,7 +97,7 @@ export default function App() {
       <directionalLight position={[5, 1.5, 3]} intensity={2} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} shadow-bias={-0.0001} />
       <Room />
       <ArmChair />
-      <OrbitControls ref={ref} target={[1.5, 0.8, 1.5]} minPolarAngle={0} maxPolarAngle={Math.PI / 2 + Math.PI / 12} />
+      <OrbitControls ref={ref} target={[2.25, 1, 2.24]} minPolarAngle={0} maxPolarAngle={Math.PI / 2 + Math.PI / 12} enableZoom={false} enablePan ={false}/>
       <Teleport controls={ref} lerping={lerping} setLerping={setLerping} />
     </Canvas>
   )
