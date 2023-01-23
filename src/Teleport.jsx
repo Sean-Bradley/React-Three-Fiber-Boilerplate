@@ -11,7 +11,6 @@ export default function Teleport() {
   const to = useMemo(() => new Vector3(0, 1, 10), [])
   const [dragging, setDragging] = useState(false)
   const dragVector = useMemo(() => new Vector2(), [])
-  const [showEffect, setShowEffect] = useState(false)
 
   useEffect(() => {
     const onPointerDown = () => {
