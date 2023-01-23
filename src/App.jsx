@@ -1,51 +1,36 @@
-import { Suspense } from 'react'
-import { Box, OrbitControls, Torus } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Physics, RigidBody, Debug, CuboidCollider } from '@react-three/rapier'
+import { Canvas } from '@react-three/fiber'
+import { Stats, PointerLockControls } from '@react-three/drei'
+import { useEffect, useState } from 'react'
 
-function Diorama() {
-  return (
-    <Physics>
-      <RigidBody>
-        <Box position={[0, 2, .5]}>
-          <meshNormalMaterial />
-        </Box>
-      </RigidBody>
-      <RigidBody>
-        <Box position={[.5, 4, 0]}>
-          <meshNormalMaterial />
-        </Box>
-      </RigidBody>
-      <RigidBody>
-        <Box position={[0, 6, -.5]}>
-          <meshNormalMaterial />
-        </Box>
-      </RigidBody>
-      <RigidBody>
-        <Box position={[-.5, 8, 0]}>
-          <meshNormalMaterial />
-        </Box>
-      </RigidBody>
-      
-      <CuboidCollider args={[10, 0.5, 10]}>
-        <Box args={[20, 1, 20]}>
-          <meshNormalMaterial />
-        </Box>
-      </CuboidCollider>
-
-      <Debug />
-    </Physics>
-  )
-}
-
-//useFrame(() => {})
 export default function App() {
+  const [showInstructions, setShowInstructions] = useState(true)
+
+  function pointerlockchange() {
+    setShowInstructions(!showInstructions)
+  }
+
+  useEffect(() => {
+    document.addEventListener('pointerlockchange', pointerlockchange, false)
+    return () => {
+      document.removeEventListener('pointerlockchange', pointerlockchange, false)
+    }
+  })
+
   return (
-    <Canvas camera={{ position: [10, 10, 10] }}>
-      <Suspense>
-        <Diorama />
-        <OrbitControls />
-      </Suspense>
-    </Canvas>
+    <>
+      <Canvas>
+        <mesh>
+          <boxGeometry args={[100, 10, 100, 100, 10, 100]} />
+          <meshBasicMaterial wireframe color={'lime'} />
+        </mesh>
+        <PointerLockControls selector="#button" />
+        <Stats />
+      </Canvas>
+      <div id="instructions" className={showInstructions ? 'show' : 'hide'}>
+        Instructions
+        <br />
+        <button id="button">Click To Enter</button>
+      </div>
+    </>
   )
 }

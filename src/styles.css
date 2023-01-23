@@ -5,3 +5,31 @@ body,
   margin: 0;
   background: #000000;
 }
+#instructions {
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 50%;
+  left: 50%;
+  height: 70px;
+  width: 200px;
+  margin-top: -35px;
+  margin-left: -100px;
+  position: absolute;
+  font-size: 24px;
+  font-family: monospace;
+  color: white;
+  text-align: center;
+  pointer-events: none;
+}
+#instructions button {
+  font-size: 24px;
+  pointer-events: auto;
+}
+
+.show {
+  transition: opacity 1s linear;
+  opacity: 1;
+}
+.hide {
+  transition: opacity 1s linear;
+  opacity: 0;
+}
