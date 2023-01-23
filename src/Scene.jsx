@@ -77,6 +77,24 @@ function Cone({ geometry, material, position }) {
   )
 }
 
+function Selectable({ geometry, material, position }) {
+  const [hovered, hover] = useState(null)
+  return (
+    <Select enabled={hovered}>
+      <mesh
+        onPointerOver={(e) => {
+          e.stopPropagation()
+          hover(true)          
+        }}
+        onPointerOut={() => hover(false)}
+        geometry={geometry}
+        material={material}
+        position={position}
+      />
+    </Select>
+  )
+}
+
 export default function Model() {
   const { nodes, materials } = useGLTF('./models/scene-transformed.glb')
 
@@ -85,13 +103,13 @@ export default function Model() {
       <mesh geometry={nodes.Plane.geometry} material={nodes.Plane.material} scale={[10, 1, 10]} />
       <Selection>
         <EffectComposer multisampling={8} autoClear={false}>
-          <Outline blur visibleEdgeColor="white" edgeStrength={100} width={500} />
+          <Outline blur visibleEdgeColor="white" edgeStrength={100} width={1000} />
         </EffectComposer>
-        <Cube geometry={nodes.Cube.geometry} material={materials.Material} position={[8, 1, 8]} />
-        <Cylinder geometry={nodes.Cylinder.geometry} material={nodes.Cylinder.material} position={[8, 1, -8]} />
-        <Icosphere geometry={nodes.Icosphere.geometry} material={nodes.Icosphere.material} position={[-8, 1, -8]} />
-        <Cone geometry={nodes.Cone.geometry} material={nodes.Cone.material} position={[-8, 1, 8]} />
-        <Suzanne geometry={nodes.Suzanne.geometry} material={nodes.Suzanne.material} position={[0, 1, 0]} />
+        <Selectable geometry={nodes.Cube.geometry} material={materials.Material} position={[8, 1, 8]} />
+        <Selectable geometry={nodes.Cylinder.geometry} material={nodes.Cylinder.material} position={[8, 1, -8]} />
+        <Selectable geometry={nodes.Icosphere.geometry} material={nodes.Icosphere.material} position={[-8, 1, -8]} />
+        <Selectable geometry={nodes.Cone.geometry} material={nodes.Cone.material} position={[-8, 1, 8]} />
+        <Selectable geometry={nodes.Suzanne.geometry} material={nodes.Suzanne.material} position={[0, 1, 0]} />
       </Selection>
     </group>
   )
