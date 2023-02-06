@@ -2,81 +2,6 @@ import { useGLTF } from '@react-three/drei'
 import { Selection, Select, EffectComposer, Outline } from '@react-three/postprocessing'
 import { useState } from 'react'
 
-function Suzanne({ geometry, material, position }) {
-  const [hovered, hover] = useState(null)
-  return (
-    <Select enabled={hovered}>
-      <mesh
-        onPointerOver={() => hover(true)}
-        onPointerOut={() => hover(false)}
-        geometry={geometry}
-        material={material}
-        position={position}
-      />
-    </Select>
-  )
-}
-
-function Cube({ geometry, material, position }) {
-  const [hovered, hover] = useState(null)
-  return (
-    <Select enabled={hovered}>
-      <mesh
-        onPointerOver={() => hover(true)}
-        onPointerOut={() => hover(false)}
-        geometry={geometry}
-        material={material}
-        position={position}
-      />
-    </Select>
-  )
-}
-
-function Cylinder({ geometry, material, position }) {
-  const [hovered, hover] = useState(null)
-  return (
-    <Select enabled={hovered}>
-      <mesh
-        onPointerOver={() => hover(true)}
-        onPointerOut={() => hover(false)}
-        geometry={geometry}
-        material={material}
-        position={position}
-      />
-    </Select>
-  )
-}
-
-function Icosphere({ geometry, material, position }) {
-  const [hovered, hover] = useState(null)
-  return (
-    <Select enabled={hovered}>
-      <mesh
-        onPointerOver={() => hover(true)}
-        onPointerOut={() => hover(false)}
-        geometry={geometry}
-        material={material}
-        position={position}
-      />
-    </Select>
-  )
-}
-
-function Cone({ geometry, material, position }) {
-  const [hovered, hover] = useState(null)
-  return (
-    <Select enabled={hovered}>
-      <mesh
-        onPointerOver={() => hover(true)}
-        onPointerOut={() => hover(false)}
-        geometry={geometry}
-        material={material}
-        position={position}
-      />
-    </Select>
-  )
-}
-
 function Selectable({ geometry, material, position }) {
   const [hovered, hover] = useState(null)
   return (
@@ -84,7 +9,7 @@ function Selectable({ geometry, material, position }) {
       <mesh
         onPointerOver={(e) => {
           e.stopPropagation()
-          hover(true)          
+          hover(true)
         }}
         onPointerOut={() => hover(false)}
         geometry={geometry}

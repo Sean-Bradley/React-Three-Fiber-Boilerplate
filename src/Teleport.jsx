@@ -56,8 +56,7 @@ export default function Teleport() {
           circleEffectRef.current.scale.set(1, 1, 1)
           circleEffectRef.current.material.opacity = 1
         }}>
-        <planeGeometry args={[20, 20]} />
-        <meshBasicMaterial color={'red'} />
+        <planeGeometry args={[19.4, 19.4]} />
       </mesh>
       <mesh ref={circleRef} rotation-x={-Math.PI / 2} position-y={0.01}>
         <ringGeometry args={[0.3, 0.4]} />
