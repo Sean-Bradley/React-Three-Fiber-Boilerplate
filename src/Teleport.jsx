@@ -42,6 +42,9 @@ export default function Teleport() {
 
   return (
     <>
+      <group ref={ref} position={[0, 1, 10]}>
+        <PerspectiveCamera makeDefault />
+      </group>
       <mesh
         visible={false}
         rotation-x={-Math.PI / 2}
@@ -60,15 +63,12 @@ export default function Teleport() {
       </mesh>
       <mesh ref={circleRef} rotation-x={-Math.PI / 2} position-y={0.01}>
         <ringGeometry args={[0.3, 0.4]} />
-        <meshBasicMaterial color={'black'} transparent opacity={0.25}/>
+        <meshBasicMaterial color={'black'} transparent opacity={0.25} />
       </mesh>
       <mesh ref={circleEffectRef} rotation-x={-Math.PI / 2} position-y={0.03}>
         <ringGeometry args={[0.39, 0.4]} />
         <meshBasicMaterial color={'black'} transparent />
       </mesh>
-      <group ref={ref} position={[0, 1, 10]}>
-        <PerspectiveCamera makeDefault />
-      </group>
     </>
   )
 }
