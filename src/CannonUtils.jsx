@@ -9,7 +9,7 @@ import * as CANNON from 'cannon-es'
 class CannonUtils {
   static toTrimeshProps(geometry) {
     let vertices
-    if (geometry.index === null) {
+    if (geometry.index === null) {    
       vertices = geometry.attributes.position.array
     } else {
       vertices = geometry.clone().toNonIndexed().attributes.position.array

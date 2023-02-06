@@ -17,10 +17,10 @@ function Plane(props) {
 }
 
 function Box(props) {
-  const [ref] = useBox(() => ({ args: [1, 1, 1], mass: 1, ...props }), useRef())
+  const [ref, api] = useBox(() => ({ args: [1, 1, 1], mass: 1, ...props }), useRef())
 
   return (
-    <mesh ref={ref} castShadow>
+    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
       <boxGeometry args={[1, 1, 1]} />
       <meshNormalMaterial />
     </mesh>
@@ -28,10 +28,10 @@ function Box(props) {
 }
 
 function Sphere(props) {
-  const [ref] = useSphere(() => ({ args: [0.75], mass: 1, ...props }), useRef())
+  const [ref, api] = useSphere(() => ({ args: [0.75], mass: 1, ...props }), useRef())
 
   return (
-    <mesh ref={ref} castShadow>
+    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
       <sphereGeometry args={[0.75]} />
       <meshNormalMaterial />
     </mesh>
@@ -39,10 +39,10 @@ function Sphere(props) {
 }
 
 function Cylinder(props) {
-  const [ref] = useCylinder(() => ({ args: [1, 1, 2, 8], mass: 1, ...props }), useRef())
+  const [ref, api] = useCylinder(() => ({ args: [1, 1, 2, 8], mass: 1, ...props }), useRef())
 
   return (
-    <mesh ref={ref} castShadow>
+    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
       <cylinderGeometry args={[1, 1, 2, 8]} />
       <meshNormalMaterial />
     </mesh>
@@ -52,10 +52,10 @@ function Cylinder(props) {
 function Icosahedron(props) {
   const geometry = useMemo(() => new IcosahedronGeometry(1, 0), [])
   const args = useMemo(() => CannonUtils.toConvexPolyhedronProps(geometry), [geometry])
-  const [ref] = useConvexPolyhedron(() => ({ args, mass: 1, ...props }), useRef())
+  const [ref, api] = useConvexPolyhedron(() => ({ args, mass: 1, ...props }), useRef())
 
   return (
-    <mesh ref={ref} castShadow geometry={geometry}>
+    <mesh ref={ref} castShadow geometry={geometry} onPointerDown={() => api.velocity.set(0, 5, 0)}>
       <meshNormalMaterial />
     </mesh>
   )
@@ -63,11 +63,10 @@ function Icosahedron(props) {
 
 function TorusKnot(props) {
   const geometry = useMemo(() => new TorusKnotGeometry(), [])
-  const args = useMemo(() => CannonUtils.toTrimeshProps(geometry), [geometry])
-  const [ref] = useTrimesh(() => ({ args, mass: 1, ...props }), useRef())
+  const [ref, api] = useTrimesh(() => ({ args: [geometry.attributes.position.array, geometry.index.array], mass: 1, ...props }), useRef())
 
   return (
-    <mesh ref={ref} castShadow>
+    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
       <torusKnotGeometry />
       <meshNormalMaterial />
     </mesh>
@@ -76,10 +75,9 @@ function TorusKnot(props) {
 
 export function Monkey(props) {
   const { nodes } = useGLTF('/models/monkey.glb')
-  const args = useMemo(() => CannonUtils.toTrimeshProps(nodes.Suzanne.geometry), [nodes.Suzanne.geometry])
-  const [ref] = useTrimesh(() => ({ args, mass: 1, ...props }), useRef())
+  const [ref, api] = useTrimesh(() => ({ args: [nodes.Suzanne.geometry.attributes.position.array, nodes.Suzanne.geometry.index.array], mass: 1, ...props }), useRef())
   return (
-    <group ref={ref} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null} onPointerDown={() => api.velocity.set(0, 5, 0)}>
       <mesh castShadow geometry={nodes.Suzanne.geometry} material={useMemo(() => new MeshNormalMaterial(), [])} />
     </group>
   )
