@@ -7,7 +7,7 @@ import { useControls } from 'leva'
 import CannonUtils from './CannonUtils'
 
 function Plane(props) {
-  const [ref] = usePlane(() => ({ ...props }), useRef())
+  const [ref] = usePlane(() => ({ mass: 0, ...props }), useRef())
   return (
     <mesh ref={ref} receiveShadow>
       <planeGeometry args={[25, 25]} />
@@ -63,7 +63,14 @@ function Icosahedron(props) {
 
 function TorusKnot(props) {
   const geometry = useMemo(() => new TorusKnotGeometry(), [])
-  const [ref, api] = useTrimesh(() => ({ args: [geometry.attributes.position.array, geometry.index.array], mass: 1, ...props }), useRef())
+  const [ref, api] = useTrimesh(
+    () => ({
+      args: [geometry.attributes.position.array, geometry.index.array],
+      mass: 1,
+      ...props
+    }),
+    useRef()
+  )
 
   return (
     <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
@@ -75,7 +82,14 @@ function TorusKnot(props) {
 
 export function Monkey(props) {
   const { nodes } = useGLTF('/models/monkey.glb')
-  const [ref, api] = useTrimesh(() => ({ args: [nodes.Suzanne.geometry.attributes.position.array, nodes.Suzanne.geometry.index.array], mass: 1, ...props }), useRef())
+  const [ref, api] = useTrimesh(
+    () => ({
+      args: [nodes.Suzanne.geometry.attributes.position.array, nodes.Suzanne.geometry.index.array],
+      mass: 1,
+      ...props
+    }),
+    useRef()
+  )
   return (
     <group ref={ref} {...props} dispose={null} onPointerDown={() => api.velocity.set(0, 5, 0)}>
       <mesh castShadow geometry={nodes.Suzanne.geometry} material={useMemo(() => new MeshNormalMaterial(), [])} />

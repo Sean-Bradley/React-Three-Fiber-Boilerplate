@@ -1,7 +1,7 @@
 // MIT License
 // Copyright (c) 2022 Sean Bradley
 // Based on https://sbcode.net/threejs/physics-cannonDebugrenderer/#srcclientutilscannonutilsts
-// Re written for my React Three Fiber course. 
+// Re written for my React Three Fiber course.
 // Course Coupons @ https://sbcode.net/coupons
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
@@ -9,13 +9,12 @@ import * as CANNON from 'cannon-es'
 class CannonUtils {
   static toTrimeshProps(geometry) {
     let vertices
-    if (geometry.index === null) {    
+    if (geometry.index === null) {
       vertices = geometry.attributes.position.array
     } else {
       vertices = geometry.clone().toNonIndexed().attributes.position.array
     }
-    const indices = Object.keys(vertices).map(Number)
-    return [vertices, indices]
+    return [vertices, geometry.index.array]
   }
 
   static toConvexPolyhedronProps(geometry) {
@@ -28,7 +27,13 @@ class CannonUtils {
     const faces = []
     for (let i = 0; i < position.count; i += 3) {
       const vertexNormals =
-        normal === undefined ? [] : [new THREE.Vector3().fromBufferAttribute(normal, i), new THREE.Vector3().fromBufferAttribute(normal, i + 1), new THREE.Vector3().fromBufferAttribute(normal, i + 2)]
+        normal === undefined
+          ? []
+          : [
+              new THREE.Vector3().fromBufferAttribute(normal, i),
+              new THREE.Vector3().fromBufferAttribute(normal, i + 1),
+              new THREE.Vector3().fromBufferAttribute(normal, i + 2)
+            ]
       const face = {
         a: i,
         b: i + 1,
@@ -43,10 +48,17 @@ class CannonUtils {
     const changes = []
     for (let i = 0, il = vertices.length; i < il; i++) {
       const v = vertices[i]
-      const key = Math.round(v.x * 100) + '_' + Math.round(v.y * 100) + '_' + Math.round(v.z * 100)
+      const key =
+        Math.round(v.x * 100) +
+        '_' +
+        Math.round(v.y * 100) +
+        '_' +
+        Math.round(v.z * 100)
       if (verticesMap[key] === undefined) {
         verticesMap[key] = i
-        points.push(new CANNON.Vec3(vertices[i].x, vertices[i].y, vertices[i].z))
+        points.push(
+          new CANNON.Vec3(vertices[i].x, vertices[i].y, vertices[i].z)
+        )
         changes[i] = points.length - 1
       } else {
         changes[i] = changes[verticesMap[key]]
