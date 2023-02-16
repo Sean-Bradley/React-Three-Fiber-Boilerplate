@@ -1,36 +1,58 @@
-import { Canvas } from '@react-three/fiber'
-import { Stats, PointerLockControls } from '@react-three/drei'
-import { useEffect, useState } from 'react'
+import { Stats, OrbitControls } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { useRef } from 'react'
+import { Debug, Physics, useBox, usePlane } from '@react-three/cannon'
+import { useControls } from 'leva'
 
-export default function App() {
-  const [showInstructions, setShowInstructions] = useState(true)
+function Plane(props) {
+  usePlane(() => ({ ...props }))
+}
 
-  function pointerlockchange() {
-    setShowInstructions(!showInstructions)
-  }
+function InstancedBoxes() {
+  const [ref, { at }] = useBox(
+    (i) => ({
+      args: [1, 1, 1],
+      type: 'Dynamic',
+      position: [Math.floor(i % 8) * 1.01 - 4, Math.floor((i / 64) % 64) * 1.01 + 4, Math.floor((i / 8) % 8) * 1.01 - 4]
+    }),
+    useRef()
+  )
 
-  useEffect(() => {
-    document.addEventListener('pointerlockchange', pointerlockchange, false)
-    return () => {
-      document.removeEventListener('pointerlockchange', pointerlockchange, false)
-    }
+  useFrame(() => {
+    console.log(at(0))
   })
 
   return (
-    <>
-      <Canvas>
-        <mesh>
-          <boxGeometry args={[100, 10, 100, 100, 10, 100]} />
-          <meshBasicMaterial wireframe color={'lime'} />
-        </mesh>
-        <PointerLockControls selector="#button" />
-        <Stats />
-      </Canvas>
-      <div id="instructions" className={showInstructions ? 'show' : 'hide'}>
-        Instructions
-        <br />
-        <button id="button">Click To Enter</button>
-      </div>
-    </>
+    <instancedMesh
+      ref={ref}
+      args={[undefined, undefined, 512]}
+      onPointerDown={(e) => {
+        e.stopPropagation()
+        at(e.instanceId).mass.set(1)
+      }}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshNormalMaterial />
+    </instancedMesh>
+  )
+}
+
+export default function App() {
+  const gravity = useControls('Gravity', {
+    x: { value: 0, min: -10, max: 10, step: 0.1 },
+    y: { value: -9.8, min: -10, max: 10, step: 0.1 },
+    z: { value: 0, min: -10, max: 10, step: 0.1 }
+  })
+
+  return (
+    <Canvas camera={{ position: [6, 9, 9] }}>
+      <Physics gravity={[gravity.x, gravity.y, gravity.z]} broadphase="SAP">
+        <Debug color={0x004400}>
+          <Plane rotation={[-Math.PI / 2, 0, 0]} />
+        </Debug>
+        <InstancedBoxes />
+      </Physics>
+      <OrbitControls target-y={5} />
+      <Stats />
+    </Canvas>
   )
 }
