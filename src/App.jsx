@@ -31,21 +31,21 @@ function Model({ url }) {
 }
 
 export default function App() {
-  const {model} = useControls({
+  const { model } = useControls({
     model: {
-      value: 'hammer',
+      value: 'ambulance',
       options: Object.keys(Models)
     }
   })
 
   return (
     <>
-      <Canvas camera={{ position: [0, 0, -0.2], near: 0.025 }}>
-        <Environment files="./img/workshop_1k.hdr" background />
+      <Canvas camera={{ position: [0, 1, 3] }}>
+        <Environment files="./img/workshop_1k.hdr" background blur={0.5} />
         <group>
           <Model url={Models[model]} />
         </group>
-        <OrbitControls autoRotate />
+        <OrbitControls target={[0, 1, 0]} />
         <Stats />
       </Canvas>
       <span id="info">The {model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>

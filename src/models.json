@@ -1,5 +1,22 @@
 {
-  "hammer": "./models/hammer.glb",
-  "drill": "./models/drill.glb",
-  "tapeMeasure": "./models/tapeMeasure.glb"
+  "ambulance": "./models/ambulance.glb",
+  "delivery": "./models/delivery.glb",
+  "delivery flat": "./models/deliveryFlat.glb",
+  "fire truck": "./models/firetruck.glb",
+  "garbageTruck": "./models/garbageTruck.glb",
+  "hatchbackSports": "./models/hatchbackSports.glb",
+  "police": "./models/police.glb",
+  "race": "./models/race.glb",
+  "raceFuture": "./models/raceFuture.glb",
+  "sedan": "./models/sedan.glb",
+  "sedanSports": "./models/sedanSports.glb",
+  "suv": "./models/suv.glb",
+  "suvLuxury": "./models/suvLuxury.glb",
+  "taxi": "./models/taxi.glb",
+  "tractor": "./models/tractor.glb",
+  "tractorPolice": "./models/tractorPolice.glb",
+  "tractorShovel": "./models/tractorShovel.glb",
+  "truck": "./models/truck.glb",
+  "truckFlat": "./models/truckFlat.glb",
+  "van": "./models/van.glb"
 }
