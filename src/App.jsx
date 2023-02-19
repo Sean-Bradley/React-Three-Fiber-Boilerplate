@@ -1,19 +1,18 @@
 import { Canvas } from '@react-three/fiber'
-import { Stats, useProgress, Html } from '@react-three/drei'
+import { Stats } from '@react-three/drei'
 import Game from './Game'
 import { Physics } from '@react-three/cannon'
 import { Suspense } from 'react'
 
 function Loader() {
-  const { progress } = useProgress()
-  return <Html center>{progress} % loaded</Html>
+  return <h2>🌀 Loading...</h2>
 }
 
 export default function App() {
   return (
     <>
-      <Canvas shadows onPointerDown={(e) => e.target.requestPointerLock()}>
-        <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader />}>
+        <Canvas shadows onPointerDown={(e) => e.target.requestPointerLock()}>
           <spotLight position={[2.5, 5, 5]} angle={Math.PI / 3} penumbra={0.5} castShadow shadow-mapSize-height={2048} shadow-mapSize-width={2048} />
           <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 3} penumbra={0.5} castShadow shadow-mapSize-height={2048} shadow-mapSize-width={2048} />
           <Physics>
@@ -21,18 +20,18 @@ export default function App() {
           </Physics>
           <gridHelper />
           <Stats />
-        </Suspense>
-      </Canvas>
-      <div id="instructions">
-        WASD to move
-        <br />
-        SPACE to jump.
-        <br />
-        Model from{' '}
-        <a href="https://www.mixamo.com" target="_blank" rel="nofollow noreferrer">
-          Mixamo
-        </a>
-      </div>
+        </Canvas>
+        <div id="instructions">
+          WASD to move
+          <br />
+          SPACE to jump.
+          <br />
+          Model from{' '}
+          <a href="https://www.mixamo.com" target="_blank" rel="nofollow noreferrer">
+            Mixamo
+          </a>
+        </div>
+      </Suspense>
     </>
   )
 }

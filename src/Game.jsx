@@ -5,9 +5,9 @@ import Player from './Player'
 import { useControls } from 'leva'
 
 function ToggleDebug({ children }) {
-  const debugRendererVisible = useControls('Debug Renderer', { visible: false })
+  const debugRendererVisible = useControls('Debug Renderer', { visible: true })
 
-  return <>{debugRendererVisible.visible ? <Debug>{children}</Debug> : <>{children}</>}</>
+  return <>{debugRendererVisible.visible ? <Debug color={0x008800}>{children}</Debug> : <>{children}</>}</>
 }
 
 export default function Game() {

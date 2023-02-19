@@ -25,22 +25,22 @@ export default function PlayerCollider(props) {
 
   const keyboard = useKeyboard()
 
-  const [ref, body] = useCompoundBody(
+  const [ref, api] = useCompoundBody(
     () => ({
       mass: 1,
       shapes: [
-        { args: [0.5], position: [0, 0.5, 0], type: 'Sphere' },
-        { args: [0.5], position: [0, 1.5, 0], type: 'Sphere' }
+        { args: [0.4], position: [0, 0.4, 0], type: 'Sphere' },
+        { args: [0.4], position: [0, 1.1, 0], type: 'Sphere' }
       ],
       onCollide: (e) => {
         if (e.contact.bi.id === e.body.id) {
-          e.contact.ni.negate(contactNormal)
+          e.contact.ni.reverse(contactNormal)
         } else {
           contactNormal.set(...e.contact.ni)
         }
         if (contactNormal.dot(upAxis) > 0.5) {
           if (!canJump.current) {
-            actions['jump'].fadeOut(0.1)
+            actions['jump'].fadeOut(0.5)
             actions['walk'].reset().fadeIn(0.1).play()
 
             canJump.current = true
@@ -53,7 +53,7 @@ export default function PlayerCollider(props) {
   )
 
   useFrame((_, delta) => {
-    body.angularFactor.set(0, 0, 0)
+    api.angularFactor.set(0, 0, 0)
 
     ref.current.getWorldPosition(worldPosition)
     const distance = worldPosition.distanceTo(group.current.position)
@@ -92,7 +92,7 @@ export default function PlayerCollider(props) {
       if (keyboard['Space']) {
         if (canJump.current) {
           canJump.current = false
-          inputVelocity.y = 10
+          inputVelocity.y = 3
           actions['walk'].fadeOut(0.1).stop()
           actions['jump'].reset().fadeIn(0.1).play()
         }
@@ -104,7 +104,7 @@ export default function PlayerCollider(props) {
       inputVelocity.applyQuaternion(quat)
       velocity.set(inputVelocity.x, inputVelocity.y, inputVelocity.z)
 
-      body.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
+      api.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
     }
     group.current.position.lerp(worldPosition, 0.1)
 
