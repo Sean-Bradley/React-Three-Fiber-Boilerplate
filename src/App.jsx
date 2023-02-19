@@ -5,7 +5,7 @@ import { Physics } from '@react-three/cannon'
 import { Suspense } from 'react'
 
 function Loader() {
-  return <h2>🌀 Loading...</h2>
+  return <h1>Loading...</h1>
 }
 
 export default function App() {
