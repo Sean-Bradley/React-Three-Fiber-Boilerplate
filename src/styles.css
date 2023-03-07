@@ -5,9 +5,9 @@ body,
   margin: 0;
   background: #000000;
 }
-#instructions {
-  background-color: rgba(0, 0, 0, 0.5);
-  top: 50%;
+#button {
+  background-color: rgba(201, 191, 112, 0.5);
+  top: 66%;
   left: 50%;
   height: 70px;
   width: 200px;
@@ -18,18 +18,5 @@ body,
   font-family: monospace;
   color: white;
   text-align: center;
-  pointer-events: none;
-}
-#instructions button {
-  font-size: 24px;
   pointer-events: auto;
-}
-
-.show {
-  transition: opacity 1s linear;
-  opacity: 1;
-}
-.hide {
-  transition: opacity 1s linear;
-  opacity: 0;
 }

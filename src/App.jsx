@@ -1,58 +1,28 @@
-import { Stats, OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
-import { Debug, Physics, useBox, usePlane } from '@react-three/cannon'
-import { useControls } from 'leva'
+import { create } from 'zustand'
 
-function Plane(props) {
-  usePlane(() => ({ ...props }))
-}
-
-function InstancedBoxes() {
-  const [ref, { at }] = useBox(
-    (i) => ({
-      args: [1, 1, 1],
-      type: 'Dynamic',
-      position: [Math.floor(i % 8) * 1.01 - 4, Math.floor((i / 64) % 64) * 1.01 + 4, Math.floor((i / 8) % 8) * 1.01 - 4]
-    }),
-    useRef()
-  )
-
-  useFrame(() => {
-    console.log(at(0))
-  })
-
-  return (
-    <instancedMesh
-      ref={ref}
-      args={[undefined, undefined, 512]}
-      onPointerDown={(e) => {
-        e.stopPropagation()
-        at(e.instanceId).mass.set(1)
-      }}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshNormalMaterial />
-    </instancedMesh>
-  )
-}
+const useStore = create((set) => ({
+  position: [0, 1, 10],
+  setPosition: (position) => set({ position })
+}))
 
 export default function App() {
-  const gravity = useControls('Gravity', {
-    x: { value: 0, min: -10, max: 10, step: 0.1 },
-    y: { value: -9.8, min: -10, max: 10, step: 0.1 },
-    z: { value: 0, min: -10, max: 10, step: 0.1 }
-  })
-
+  const setPosition = useStore((state) => state.setPosition)
   return (
-    <Canvas camera={{ position: [6, 9, 9] }}>
-      <Physics gravity={[gravity.x, gravity.y, gravity.z]} broadphase="SAP">
-        <Debug color={0x004400}>
-          <Plane rotation={[-Math.PI / 2, 0, 0]} />
-        </Debug>
-        <InstancedBoxes />
-      </Physics>
-      <OrbitControls target-y={5} />
-      <Stats />
-    </Canvas>
+    <>
+      <Canvas>
+        <MyCameraReactsToStateChanges />
+        <gridHelper />
+      </Canvas>
+      <button id="button" onClick={() => setPosition([0, 7, 0])}>click me</button>
+    </>
   )
+}
+
+function MyCameraReactsToStateChanges() {
+  const [x, y, z] = useStore((state) => state.position)
+  useFrame(({ camera }) => {
+    camera.position.lerp({ x, y, z }, 0.1)
+    camera.lookAt(0, 0, 0)
+  })
 }
