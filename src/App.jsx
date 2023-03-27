@@ -1,17 +1,72 @@
 import { Stats, OrbitControls, Environment } from '@react-three/drei'
-import { Canvas, useLoader } from '@react-three/fiber'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber'
+import { useControls } from 'leva'
+import { useEffect, useRef } from 'react'
+import { TextureLoader } from 'three'
 
-export default function App() {
-  const gltf = useLoader(GLTFLoader, './models/monkey.glb')
+function Earth() {
+  const ref = useRef()
+  const { gl } = useThree()
+  const texture = useLoader(TextureLoader, './img/worldColour.5400x2700.jpg')
+  const displacementMap = useLoader(TextureLoader, './img/gebco_bathy_2700x1350.jpg')
+
+  const material = useControls({
+    wireframe: false,
+    displacementScale: { value: 0.5, min: 0, max: 1.0, step: 0.01 }
+  })
+
+  useEffect(() => {
+    texture.anisotropy = gl.capabilities.getMaxAnisotropy()
+  }, [texture, gl])
+
+  useFrame((_, delta) => {
+    ref.current.rotation.y += delta / 4
+  })
 
   return (
-    <Canvas camera={{ position: [-0.5, 1, 2] }}>
-      <Environment files="./img/venice_sunset_1k.hdr" background blur={0.5} />
-      <directionalLight position={[3.3, 1.0, 4.4]} />
-      <primitive object={gltf.scene} position={[0, 1, 0]} />
-      <OrbitControls target={[0, 1, 0]} autoRotate />
-      <axesHelper args={[5]} />
+    <mesh ref={ref} castShadow={true} receiveShadow={true}>
+      <icosahedronGeometry args={[1, 128]} />
+      <meshStandardMaterial
+        wireframe={material.wireframe}
+        map={texture}
+        displacementMap={displacementMap}
+        displacementScale={material.displacementScale}
+      />
+    </mesh>
+  )
+}
+export default function App() {
+  return (
+    <Canvas shadows camera={{ position: [0, 0, 1.75] }}>
+      <Environment files="./img/venice_sunset_1k.hdr" />
+      <directionalLight
+        intensity={2}
+        position={[4, 0, 2]}
+        castShadow={true}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-camera-left={-2}
+        shadow-camera-right={2}
+        shadow-camera-top={-2}
+        shadow-camera-bottom={2}
+        shadow-camera-near={0.1}
+        shadow-camera-far={7}
+      />
+      <directionalLight
+        intensity={2}
+        position={[3, 0, 3]}
+        castShadow={true}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-camera-left={-2}
+        shadow-camera-right={2}
+        shadow-camera-top={-2}
+        shadow-camera-bottom={2}
+        shadow-camera-near={0.1}
+        shadow-camera-far={7}
+      />
+      <Earth />
+      <OrbitControls />
       <Stats />
     </Canvas>
   )
