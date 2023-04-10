@@ -24,8 +24,14 @@ export default function Box(props) {
         e.stopPropagation()
         setRotate(!rotate)
       }}
-      onPointerOver={(e) => (e.stopPropagation(), setHover(true))}
-      onPointerOut={(e) => (e.stopPropagation(), setHover(false))}>
+      onPointerOver={(e) => {
+        e.stopPropagation()
+        setHover(true)
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation()
+        setHover(false)
+      }}>
       <boxGeometry onUpdate={(e) => e.rotateZ(Math.PI / 2)} />
       <meshBasicMaterial wireframe />
       {props.children}
