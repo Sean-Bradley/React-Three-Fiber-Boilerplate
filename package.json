@@ -7,13 +7,13 @@
   "homepage": ".",
   "dependencies": {
     "@react-three/cannon": "6.5.2",
-    "@react-three/drei": "9.56.17",
-    "@react-three/fiber": "8.10.4",
+    "@react-three/drei": "9.71.0",
+    "@react-three/fiber": "8.13.0",
     "leva": "0.9.34",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
-    "three": "0.149.0"
+    "three": "0.153.0"
   },
   "scripts": {
     "start": "react-scripts start",
