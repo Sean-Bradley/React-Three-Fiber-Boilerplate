@@ -1,5 +1,6 @@
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Stats, OrbitControls, Environment, useGLTF } from '@react-three/drei'
+import { Stats, OrbitControls, Environment, useGLTF, Clone } from '@react-three/drei'
 import { useControls } from 'leva'
 
 const Models = [
@@ -10,7 +11,7 @@ const Models = [
 
 function Model({ url }) {
   const { scene } = useGLTF(url)
-  return <primitive object={scene} />
+  return <Clone object={scene} />
 }
 
 export default function App() {
@@ -24,9 +25,9 @@ export default function App() {
     <>
       <Canvas camera={{ position: [0, 0, -0.2], near: 0.025 }}>
         <Environment files="./img/workshop_1k.hdr" background />
-        <group>
+        <Suspense>
           <Model url={Models[Models.findIndex((m) => m.title === title)].url} />
-        </group>
+        </Suspense>
         <OrbitControls autoRotate />
         <Stats />
       </Canvas>
