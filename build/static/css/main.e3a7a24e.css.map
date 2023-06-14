@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.e3a7a24e.css","mappings":"AAAA,gBAKE,eAAmB,CAFnB,WAAY,CACZ,QAEF","sources":["styles.css"],"sourcesContent":["html,\r\nbody,\r\n#root {\r\n  height: 100%;\r\n  margin: 0;\r\n  background: #000000;\r\n}\r\n"],"names":[],"sourceRoot":""}

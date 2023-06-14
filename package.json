@@ -3,16 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "keywords": [],
-  "main": "src/index.jsx",
-  "dependencies": {
-    "@react-three/drei": "^9.56.17",
-    "@react-three/fiber": "^8.10.4",
-    "leva": "^0.9.34",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "three": "^0.149.0"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -20,15 +10,27 @@
     "eject": "react-scripts eject"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@react-three/drei": "9.74.15",
+    "@react-three/fiber": "8.13.3",
+    "leva": "0.9.35",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "three": "0.153.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "@types/react": "^18.2.12",
+    "@types/react-dom": "^18.2.5",
+    "@types/three": "^0.152.1",
+    "react-scripts": "^5.0.1",
+    "typescript": "^5.1.3"
   }
 }
