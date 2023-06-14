@@ -18,7 +18,7 @@ function Rig() {
 export default function App() {
   return (
     <Canvas camera={{ position: [0, 0, 5] }} shadows>
-      <Environment preset="forest" background />
+      <Environment files="./img/forest_slope_1k.hdr" background />
       <Center>
         {[...Array(5).keys()].map((x) =>
           [...Array(3).keys()].map((y) => (
