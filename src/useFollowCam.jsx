@@ -5,7 +5,12 @@ import { Object3D } from 'three'
 export default function useFollowCam() {
   const { scene, camera } = useThree()
 
-  const pivot = useMemo(() => new Object3D(), [])
+  const pivot = useMemo(() => {
+    const p = new Object3D()
+    p.rotation.y = Math.PI
+    return p
+  }, [])
+  
   const followCam = useMemo(() => {
     const o = new Object3D()
     o.position.set(0, 1, 1.5)

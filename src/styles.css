@@ -7,13 +7,37 @@ body,
   font-family: monospace;
   color: white;
 }
+
 #instructions {
-  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 50%;
   left: 50%;
-  top: 10px;
+  height: 200px;
+  width: 400px;
+  margin-top: -100px;
   margin-left: -200px;
-  filter: drop-shadow(1px 1px 1px #000000);
+  position: absolute;
+  font-size: 24px;
+  font-family: monospace;
+  color: white;
+  text-align: center;
+  pointer-events: none;
 }
+
 #instructions a {
   color: white;
+}
+
+#instructions button {
+  font-size: 24px;
+  pointer-events: auto;
+}
+
+.show {
+  transition: opacity 1s linear;
+  opacity: 1;
+}
+.hide {
+  transition: opacity 0.25s linear;
+  opacity: 0;
 }

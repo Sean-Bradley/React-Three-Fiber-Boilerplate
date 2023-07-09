@@ -29,12 +29,12 @@ export default function PlayerCollider(props) {
     () => ({
       mass: 1,
       shapes: [
-        { args: [0.5], position: [0, 0.5, 0], type: 'Sphere' },
-        { args: [0.5], position: [0, 1.5, 0], type: 'Sphere' }
+        { args: [0.4], position: [0, 0.4, 0], type: 'Sphere' },
+        { args: [0.4], position: [0, 1.2, 0], type: 'Sphere' }
       ],
       onCollide: (e) => {
         if (e.contact.bi.id === e.body.id) {
-          e.contact.ni.negate(contactNormal)
+          //e.contact.ni.negate(contactNormal)
         } else {
           contactNormal.set(...e.contact.ni)
         }
@@ -47,7 +47,8 @@ export default function PlayerCollider(props) {
           }
         }
       },
-      ...props
+      material: 'slippery',
+      linearDamping: 0.95
     }),
     useRef()
   )
@@ -106,6 +107,13 @@ export default function PlayerCollider(props) {
 
       body.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
     }
+
+    if (worldPosition.y < -3) {
+      console.log('reset')
+      body.position.set(0, 2, 0)
+      group.current.position.set(0, 2, 0)
+    }
+
     group.current.position.lerp(worldPosition, 0.1)
 
     pivot.position.lerp(worldPosition, 0.2)
