@@ -7,7 +7,7 @@ import { useFrame } from '@react-three/fiber'
 import { Vec3 } from 'cannon-es'
 import useFollowCam from './useFollowCam'
 
-export default function PlayerCollider(props) {
+export default function PlayerCollider() {
   const { pivot } = useFollowCam()
   const canJump = useRef(false)
   const group = useRef()

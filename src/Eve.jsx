@@ -6,11 +6,13 @@ import { LoopOnce } from 'three'
 export default function Eve({ mixer, actions }) {
   const ref = useRef()
   const { nodes, materials, animations } = useGLTF('./models/eve.glb')
+  const idleAnimation = useGLTF('./models/eve@idle.glb').animations
   const walkAnimation = useGLTF('./models/eve@walking.glb').animations
   const jumpAnimation = useGLTF('./models/eve@jump.glb').animations
 
   useEffect(() => {
     actions['default'] = mixer.clipAction(animations[0], ref.current)
+    actions['idle'] = mixer.clipAction(idleAnimation[0], ref.current)
     actions['walk'] = mixer.clipAction(walkAnimation[0], ref.current)
     actions['jump'] = mixer.clipAction(jumpAnimation[0], ref.current)
     actions['jump'].loop = LoopOnce

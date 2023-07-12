@@ -15,12 +15,14 @@
     "react-scripts": "^5.0.1",
     "three": "0.154.0"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [

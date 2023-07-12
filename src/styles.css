@@ -26,6 +26,7 @@ body,
 
 #instructions a {
   color: white;
+  pointer-events: auto;
 }
 
 #instructions button {
