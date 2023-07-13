@@ -6,47 +6,52 @@ import { useRef } from 'react'
 import SphereCollider from './SphereCollider'
 import Ball from './Ball'
 import * as Constants from './Constants'
+import Spinner from './Spinner'
 
 export default function Physics() {
-  const { nodes, scene } = useGLTF('./models/scene-transformed.glb')
+  //const { nodes, scene } = useGLTF('./models/scene-transformed.glb')
+  const { nodes, scene, materials } = useGLTF('./models/obstacleCourse.glb')
+
   const octree = useOctree(scene)
   useOctreeHelper(octree)
 
   const colliders = useRef([])
 
   function checkSphereCollisions(sphere, velocity) {
+    //console.log(colliders.current.length)
     for (let i = 0, length = colliders.current.length; i < length; i++) {
       const c = colliders.current[i]
+      if (c) {
+        if (c.sphere) {
+          const d2 = sphere.center.distanceToSquared(c.sphere.center)
+          const r = sphere.radius + c.sphere.radius
+          const r2 = r * r
 
-      if (c.sphere) {
-        const d2 = sphere.center.distanceToSquared(c.sphere.center)
-        const r = sphere.radius + c.sphere.radius
-        const r2 = r * r
-
-        if (d2 < r2) {
-          const normal = Constants.v1.subVectors(sphere.center, c.sphere.center).normalize()
-          const impact1 = Constants.v2.copy(normal).multiplyScalar(normal.dot(velocity))
-          const impact2 = Constants.v3.copy(normal).multiplyScalar(normal.dot(c.velocity))
-          velocity.add(impact2).sub(impact1)
-          c.velocity.add(impact1).sub(impact2)
-          const d = (r - Math.sqrt(d2)) / 2
-          sphere.center.addScaledVector(normal, d)
-          c.sphere.center.addScaledVector(normal, -d)
-        }
-      } else if (c.capsule) {
-        const center = Constants.v1.addVectors(c.capsule.start, c.capsule.end).multiplyScalar(0.5)
-        const r = sphere.radius + c.capsule.radius
-        const r2 = r * r
-        for (const point of [c.capsule.start, c.capsule.end, center]) {
-          const d2 = point.distanceToSquared(sphere.center)
           if (d2 < r2) {
-            const normal = Constants.v1.subVectors(point, sphere.center).normalize()
-            const impact1 = Constants.v2.copy(normal).multiplyScalar(normal.dot(c.velocity))
-            const impact2 = Constants.v3.copy(normal).multiplyScalar(normal.dot(velocity))
-            c.velocity.add(impact2).sub(impact1)
-            velocity.add(impact1).sub(impact2)
+            const normal = Constants.v1.subVectors(sphere.center, c.sphere.center).normalize()
+            const impact1 = Constants.v2.copy(normal).multiplyScalar(normal.dot(velocity))
+            const impact2 = Constants.v3.copy(normal).multiplyScalar(normal.dot(c.velocity))
+            velocity.add(impact2).sub(impact1)
+            c.velocity.add(impact1).sub(impact2)
             const d = (r - Math.sqrt(d2)) / 2
-            sphere.center.addScaledVector(normal, -d)
+            sphere.center.addScaledVector(normal, d)
+            c.sphere.center.addScaledVector(normal, -d)
+          }
+        } else if (c.capsule) {
+          const center = Constants.v1.addVectors(c.capsule.start, c.capsule.end).multiplyScalar(0.5)
+          const r = sphere.radius + c.capsule.radius
+          const r2 = r * r
+          for (const point of [c.capsule.start, c.capsule.end, center]) {
+            const d2 = point.distanceToSquared(sphere.center)
+            if (d2 < r2) {
+              const normal = Constants.v1.subVectors(point, sphere.center).normalize()
+              const impact2= Constants.v2.copy(normal).multiplyScalar(normal.dot(c.velocity))
+              const impact1 = Constants.v3.copy(normal).multiplyScalar(normal.dot(velocity))
+              c.velocity.add(impact2).sub(impact1)
+              velocity.add(impact1).sub(impact2)
+              const d = (r - Math.sqrt(d2)) / 2
+              sphere.center.addScaledVector(normal, -d)
+            }
           }
         }
       }
@@ -55,15 +60,29 @@ export default function Physics() {
 
   return (
     <>
-      <group dispose={null}>
-        <mesh castShadow receiveShadow geometry={nodes.Suzanne007.geometry} material={nodes.Suzanne007.material} position={[1.74, 1.04, 24.97]} />
-      </group>
-      {Constants.balls.map(({ position }, i) => (
+      {/* {Constants.balls.map(({ position }, i) => (
         <SphereCollider key={i} id={i} radius={Constants.radius} octree={octree} position={position} colliders={colliders.current} checkSphereCollisions={checkSphereCollisions}>
           <Ball radius={Constants.radius} />
         </SphereCollider>
-      ))}
+      ))} */}
       <Player ballCount={Constants.ballCount} octree={octree} colliders={colliders.current} />
+
+      <group dispose={null}>
+        <mesh castShadow receiveShadow geometry={nodes.Cube.geometry} material={materials['Material.001']} />
+        <mesh castShadow receiveShadow geometry={nodes.Cube001.geometry} material={materials['Material.001']} position={[5.197, 1.002, -6.42]} scale={[0.597, 0.091, 1]} />
+        <mesh castShadow receiveShadow geometry={nodes.Cube002.geometry} material={materials['Material.001']} position={[-0.013, 1.002, -6.42]} scale={[3.04, 0.091, 0.128]} />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube003.geometry}
+          material={materials['Material.001']}
+          position={[-4.803, 1.936, -4.561]}
+          rotation={[-0.447, 0, 0]}
+          scale={[0.597, 0.077, 2.726]}
+        />
+        <mesh castShadow receiveShadow geometry={nodes.Cube004.geometry} material={materials['Material.001']} position={[-4.875, 3.025, 0.845]} scale={[2.289, 0.091, 2.208]} />
+        <Spinner position={[-4, 3.8, 1]} colliders={colliders.current} checkSphereCollisions={checkSphereCollisions} />
+      </group>
     </>
   )
 }

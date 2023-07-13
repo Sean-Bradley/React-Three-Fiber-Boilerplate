@@ -6,20 +6,13 @@ import * as Constants from './Constants'
 
 export default function SphereCollider({ id, radius, octree, position, colliders, checkSphereCollisions, children }) {
   const ref = useRef()
-  //const normalArrowRef = useRef()
-  //const rotationArrowRef = useRef()
 
   const sphere = useMemo(() => new Sphere(new Vector3(...position), radius), [position, radius])
   const velocity = useMemo(() => new Vector3(), [])
-  // const angularVelocity = useMemo(() => new Vector3(), [])
-  // const v0 = useMemo(() => new Vector3(), [])
-  // const q = useMemo(() => new Quaternion(), [])
-  
+
   useEffect(() => {
     console.log('adding reference to this sphere collider')
     colliders[id] = { sphere: sphere, velocity: velocity }
-    //normalArrowRef.current.setColor(new Color(0xff0000))
-    //rotationArrowRef.current.setColor(new Color(0x00ff00))
   }, [colliders, id, sphere, velocity])
 
   function updateSphere(delta, octree, sphere, velocity) {
@@ -31,16 +24,7 @@ export default function SphereCollider({ id, radius, octree, position, colliders
       const factor = -result.normal.dot(velocity)
       velocity.addScaledVector(result.normal, factor * 1.5)
 
-      // angularVelocity.x += result.normal.x
-      // angularVelocity.z += result.normal.z
-      // angularVelocity.y += result.normal.y
-      // rotationArrowRef.current.setDirection(result.normal.clone().normalize())
-
       sphere.center.add(result.normal.multiplyScalar(result.depth))
-
-      // normalArrowRef.current.setDirection(result.normal.clone().normalize())
-      // normalArrowRef.current.setLength(factor * 1.5)
-      // normalArrowRef.current.position.copy(sphere.center)
     } else {
       velocity.y -= Constants.Gravity * delta
     }
@@ -51,11 +35,6 @@ export default function SphereCollider({ id, radius, octree, position, colliders
     checkSphereCollisions(sphere, velocity)
 
     ref.current.position.copy(sphere.center)
-
-    // q.setFromAxisAngle(angularVelocity, delta * radius).normalize()
-    // ref.current.applyQuaternion(q)
-    // angularVelocity.lerp(v0, delta)
-
   }
 
   useFrame((_, delta) => {
@@ -67,11 +46,7 @@ export default function SphereCollider({ id, radius, octree, position, colliders
 
   return (
     <>
-      {/* <arrowHelper ref={normalArrowRef} /> */}
-      <group ref={ref}>
-        {children}
-        {/* <arrowHelper ref={rotationArrowRef} /> */}
-      </group>
+      <group ref={ref}>{children}</group>
     </>
   )
 }

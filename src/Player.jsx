@@ -6,7 +6,7 @@ import useKeyboard from './useKeyboard'
 import useFollowCam from './useFollowCam'
 import Eve from './Eve'
 
-const GRAVITY = 30
+const GRAVITY = 9.8
 const STEPS_PER_FRAME = 5
 
 export default function Player({ octree, colliders, ballCount }) {
@@ -18,7 +18,7 @@ export default function Player({ octree, colliders, ballCount }) {
   const playerBasePosition = useMemo(() => new Vector3(), [])
   const targetQuaternion = useMemo(() => new Quaternion(), [])
   const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
-  const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.25), [])
+  const capsule = useMemo(() => new Capsule(new Vector3(0, 2, 0), new Vector3(0, 3, 0), 0.25), [])
   let clicked = 0
 
   const group = useRef()
@@ -32,7 +32,7 @@ export default function Player({ octree, colliders, ballCount }) {
 
     sphere.center.copy(capsule.end).addScaledVector(playerDirection, capsule.radius * 1.5)
 
-    velocity.copy(playerDirection).multiplyScalar(50)
+    velocity.copy(playerDirection).multiplyScalar(10)
     velocity.addScaledVector(playerVelocity, 2)
   }
 
@@ -72,7 +72,7 @@ export default function Player({ octree, colliders, ballCount }) {
     keyboard['KeyS'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta))
     if (playerOnFloor) {
       if (keyboard['Space']) {
-        playerVelocity.y = 12
+        playerVelocity.y = 5 
       }
     }
   }
@@ -112,10 +112,10 @@ export default function Player({ octree, colliders, ballCount }) {
   }
 
   function teleportPlayerIfOob(capsule, playerVelocity) {
-    if (capsule.end.y <= -100) {
+    if (capsule.end.y <= -10) {
       playerVelocity.set(0, 0, 0)
-      capsule.start.set(0, 10, 0)
-      capsule.end.set(0, 11, 0)
+      capsule.start.set(0, 4, 0)
+      capsule.end.set(0, 5, 0)
     }
   }
 

@@ -1,7 +1,7 @@
 import { Vector3 } from 'three'
 
-export const Gravity = 30
-export const ballCount = 100
+export const Gravity = 9.8
+export const ballCount = 10
 export const radius = 0.2
 export const balls = [...Array(ballCount)].map(() => ({ position: [Math.random() * 50 - 25, 20, Math.random() * 50 - 25] }))
 export const v1 = new Vector3()
