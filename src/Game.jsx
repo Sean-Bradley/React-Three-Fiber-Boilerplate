@@ -10,7 +10,7 @@ import { useFrame } from '@react-three/fiber'
 //import { useFrame } from '@react-three/fiber'
 
 function ToggleDebug({ children }) {
-  const debugRendererVisible = useControls('Debug Renderer', { visible: true })
+  const debugRendererVisible = useControls('Debug Renderer', { visible: false })
 
   return <>{debugRendererVisible.visible ? <Debug>{children}</Debug> : <>{children}</>}</>
 }
@@ -25,7 +25,7 @@ export default function Game() {
   })
 
   useContactMaterial('ground', 'slippery', {
-    friction: 0,
+    friction: 0.018,
     restitution: 0.3,
     contactEquationStiffness: 1e8,
     contactEquationRelaxation: 3
@@ -34,25 +34,25 @@ export default function Game() {
   return (
     <>
       <ToggleDebug>
-        <Start args={[1, 0.1, 5]} />
+        <Start args={[10, 0.1, 10]} />
 
         <Platform args={[1, 0.1, 2]} position={[0, 0, 6]} />
 
         <Platform args={[2, 0.1, 1]} position={[3, 0, 6]} />
 
         <Platform args={[2, 0.1, 1]} position={[5, 1, 6]} />
-        
+
         <Platform args={[0.25, 0.1, 5]} position={[5, 2, 2]} />
 
         <Platform args={[4, 0.1, 5]} position={[5, 2, -3]} />
         <Spinner position={[5, 3, -3]} />
 
-        <Platform args={[1, 0.1, 2]} position={[5, 2, -8]} />
+        <Platform args={[1, 0.1, 2]} position={[5, 2.5, -8]} />
 
         <Platform args={[4, 0.1, 4]} position={[1, 3, -8]} />
         <Spinner position={[1, 4, -8]} />
 
-        <Platform args={[1, 0.1, 2]} position={[1, 3, -3]} />
+        <Platform args={[1, 0.1, 2]} position={[1, 3, -3.5]} />
 
         {/* <Player position={[1, 4, -3]} /> */}
         <Player position={[0, 1, 0]} />

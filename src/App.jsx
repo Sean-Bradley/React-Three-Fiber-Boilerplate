@@ -46,9 +46,8 @@ export default function App() {
           <br />
           <button
             id="button"
-            onClick={(e) => {
-              e.target.requestPointerLock()
-              e.target.blur()
+            onClick={async (e) => {
+              showInstructions && (await e.target.requestPointerLock())
             }}>
             Click To Enter
           </button>

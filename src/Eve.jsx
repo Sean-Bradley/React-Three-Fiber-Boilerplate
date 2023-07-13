@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
-import { LoopOnce } from 'three'
+import { LoopOnce, LoopRepeat } from 'three'
 
 export default function Eve({ mixer, actions }) {
   const ref = useRef()
@@ -13,12 +13,16 @@ export default function Eve({ mixer, actions }) {
   useEffect(() => {
     actions['default'] = mixer.clipAction(animations[0], ref.current)
     actions['idle'] = mixer.clipAction(idleAnimation[0], ref.current)
+    actions['idle'].loop = LoopOnce
+    actions['idle'].clampWhenFinished = true
     actions['walk'] = mixer.clipAction(walkAnimation[0], ref.current)
+    actions['walk'].loop = LoopRepeat
     actions['jump'] = mixer.clipAction(jumpAnimation[0], ref.current)
     actions['jump'].loop = LoopOnce
     actions['jump'].clampWhenFinished = true
 
-    actions['walk'].play()
+    actions['idle'].play()
+    //actions['walk'].play()
   })
 
   return (
@@ -33,4 +37,4 @@ export default function Eve({ mixer, actions }) {
   )
 }
 
-useGLTF.preload(['./models/eve.glb', './models/eve@walking.glb', './models/eve@jump.glb'])
+useGLTF.preload(['./models/eve.glb', './models/eve@idle.glb', './models/eve@walking.glb', './models/eve@jump.glb'])
