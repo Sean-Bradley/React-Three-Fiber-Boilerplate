@@ -47,13 +47,14 @@ export default function PlayerCollider() {
             //     actions['walk'].reset().fadeIn(0.1).play()
             actions['jump'].fadeOut(0.5)
             actions['idle'].reset().fadeIn(0.5).play()
+            body.linearDamping.set(0.999)
             onTheGround.current = true
             //console.log(prevActiveAction.current)
           }
         }
       },
       material: 'slippery',
-      linearDamping: 0.95
+      linearDamping: 0.999
     }),
     useRef()
   )
@@ -70,11 +71,11 @@ export default function PlayerCollider() {
     const rotationMatrix = new Matrix4()
     rotationMatrix.lookAt(worldPosition, group.current.position, group.current.up)
     targetQuaternion.setFromRotationMatrix(rotationMatrix)
-    if (distance > 0.001 && !group.current.quaternion.equals(targetQuaternion)) {
+    if (distance > 0.0001 && !group.current.quaternion.equals(targetQuaternion)) {
       targetQuaternion.z = 0
       targetQuaternion.x = 0
       targetQuaternion.normalize()
-      group.current.quaternion.rotateTowards(targetQuaternion, delta * 10)
+      group.current.quaternion.rotateTowards(targetQuaternion, delta * 20)
     }
     if (document.pointerLockElement) {
       inputVelocity.set(0, 0, 0)
@@ -82,19 +83,19 @@ export default function PlayerCollider() {
         activeAction = 0
         if (keyboard['KeyW']) {
           activeAction = 1
-          inputVelocity.z = -20 * delta
+          inputVelocity.z = -15 * delta
         }
         if (keyboard['KeyS']) {
           activeAction = 1
-          inputVelocity.z = 20 * delta
+          inputVelocity.z = 15 * delta
         }
         if (keyboard['KeyA']) {
           activeAction = 1
-          inputVelocity.x = -20 * delta
+          inputVelocity.x = -15 * delta
         }
         if (keyboard['KeyD']) {
           activeAction = 1
-          inputVelocity.x = 20 * delta
+          inputVelocity.x = 15 * delta
         }
       }
       //console.log(inputVelocity.x)
@@ -105,9 +106,10 @@ export default function PlayerCollider() {
         activeAction = 2
         if (onTheGround.current) {
           onTheGround.current = false
-          inputVelocity.y = 8
-          inputVelocity.x *= 10
-          inputVelocity.z *= 10
+          body.linearDamping.set(0)
+          inputVelocity.y = 5
+          //inputVelocity.x *= 2
+          //inputVelocity.z *= 2
         }
       }
 
@@ -116,7 +118,7 @@ export default function PlayerCollider() {
         if (prevActiveAction.current === 0 && activeAction === 1) {
           console.log('idle --> walking')
           actions['idle'].fadeOut(0.5)
-          actions['walk'].reset().fadeIn(0.5).play()
+          actions['walk'].reset().fadeIn(0.1).play()
         }
         if (prevActiveAction.current === 1 && activeAction === 0) {
           console.log('walking --> idle')
@@ -132,19 +134,11 @@ export default function PlayerCollider() {
         prevActiveAction.current = activeAction
       }
 
-      // //console.log(distance)
-      //if (activeAction === 1) {
-      //   // walking
-
-      // } else {
-      //   // in the air, idle
-      //   mixer.update(delta)
-      // }
-
       euler.y = pivot.rotation.y
-      euler.order = 'XYZ'
+      euler.order = 'YZX'
       quat.setFromEuler(euler)
       inputVelocity.applyQuaternion(quat)
+      //inputVelocity.setLength(.3)
       velocity.set(inputVelocity.x, inputVelocity.y, inputVelocity.z)
 
       body.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
@@ -160,7 +154,9 @@ export default function PlayerCollider() {
       console.log('reset')
       // prevActiveAction.current = 0
       // onTheGround.current = true
+      body.velocity.set(0, 0, 0)
       body.position.set(0, 2, 0)
+      body.linearDamping.set(0.999)
       group.current.position.set(0, 2, 0)
     }
 
