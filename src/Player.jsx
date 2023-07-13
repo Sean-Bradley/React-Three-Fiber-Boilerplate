@@ -1,7 +1,7 @@
 import { useRef, useEffect, useMemo } from 'react'
 import { Capsule } from 'three/examples/jsm/math/Capsule.js'
 import { Vector3, AnimationMixer, Matrix4, Quaternion } from 'three'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import useKeyboard from './useKeyboard'
 import useFollowCam from './useFollowCam'
 import Eve from './Eve'
@@ -19,7 +19,6 @@ export default function Player({ octree, colliders, ballCount }) {
   const targetQuaternion = useMemo(() => new Quaternion(), [])
   const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
   const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.25), [])
-  const { camera } = useThree()
   let clicked = 0
 
   const group = useRef()
@@ -27,8 +26,16 @@ export default function Player({ octree, colliders, ballCount }) {
   const actions = useRef({})
 
   const onPointerDown = () => {
-    throwBall(camera, capsule, playerDirection, playerVelocity, clicked++)
+    const { sphere, velocity } = colliders[clicked++ % ballCount]
+
+    group.current.getWorldDirection(playerDirection)
+
+    sphere.center.copy(capsule.end).addScaledVector(playerDirection, capsule.radius * 1.5)
+
+    velocity.copy(playerDirection).multiplyScalar(50)
+    velocity.addScaledVector(playerVelocity, 2)
   }
+
   useEffect(() => {
     document.addEventListener('pointerdown', onPointerDown)
     return () => {
@@ -82,17 +89,6 @@ export default function Player({ octree, colliders, ballCount }) {
     playerOnFloor = playerCollisions(capsule, octree, playerVelocity)
     //camera.position.copy(capsule.end)
     return playerOnFloor
-  }
-
-  function throwBall(camera, capsule, playerDirection, playerVelocity, count) {
-    const { sphere, velocity } = colliders[count % ballCount]
-
-    camera.getWorldDirection(playerDirection)
-
-    sphere.center.copy(capsule.end).addScaledVector(playerDirection, capsule.radius * 1.5)
-
-    velocity.copy(playerDirection).multiplyScalar(50)
-    velocity.addScaledVector(playerVelocity, 2)
   }
 
   function playerCollisions(capsule, octree, playerVelocity) {
@@ -164,7 +160,7 @@ export default function Player({ octree, colliders, ballCount }) {
       if (prevActiveAction.current === 0 && activeAction === 1) {
         console.log('idle --> walking')
         actions['idle'].fadeOut(0.5)
-        actions['walk'].reset().fadeIn(0.5).play()
+        actions['walk'].reset().fadeIn(0.1).play()
       }
       if (prevActiveAction.current === 1 && activeAction === 0) {
         console.log('walking --> idle')
