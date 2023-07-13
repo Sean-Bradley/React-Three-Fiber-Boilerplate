@@ -1,9 +1,10 @@
 import { useRef, useEffect, useMemo } from 'react'
 import { Capsule } from 'three/examples/jsm/math/Capsule.js'
-import { Vector3 } from 'three'
+import { Vector3, AnimationMixer, Matrix4, Quaternion } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import useKeyboard from './useKeyboard'
 import useFollowCam from './useFollowCam'
+import Eve from './Eve'
 
 const GRAVITY = 30
 const STEPS_PER_FRAME = 5
@@ -11,13 +12,19 @@ const STEPS_PER_FRAME = 5
 export default function Player({ octree, colliders, ballCount }) {
   const { pivot } = useFollowCam()
   const playerOnFloor = useRef(false)
+  const awaitingLanding = useRef(true)
   const playerVelocity = useMemo(() => new Vector3(), [])
   const playerDirection = useMemo(() => new Vector3(), [])
-  const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.5), [])
+  const playerBasePosition = useMemo(() => new Vector3(), [])
+  const targetQuaternion = useMemo(() => new Quaternion(), [])
+  const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
+  const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.25), [])
   const { camera } = useThree()
   let clicked = 0
 
-  const model = useRef()
+  const group = useRef()
+  const mixer = useMemo(() => new AnimationMixer(), [])
+  const actions = useRef({})
 
   const onPointerDown = () => {
     throwBall(camera, capsule, playerDirection, playerVelocity, clicked++)
@@ -51,14 +58,14 @@ export default function Player({ octree, colliders, ballCount }) {
   }
 
   function controls(camera, delta, playerVelocity, playerOnFloor, playerDirection) {
-    const speedDelta = delta * (playerOnFloor ? 25 : 8)
+    const speedDelta = delta * (playerOnFloor ? 12 : 4)
     keyboard['KeyA'] && playerVelocity.add(getSideVector(camera, playerDirection).multiplyScalar(-speedDelta))
     keyboard['KeyD'] && playerVelocity.add(getSideVector(camera, playerDirection).multiplyScalar(speedDelta))
     keyboard['KeyW'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(speedDelta))
     keyboard['KeyS'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta))
     if (playerOnFloor) {
       if (keyboard['Space']) {
-        playerVelocity.y = 15
+        playerVelocity.y = 12
       }
     }
   }
@@ -98,6 +105,13 @@ export default function Player({ octree, colliders, ballCount }) {
       }
       capsule.translate(result.normal.multiplyScalar(result.depth))
     }
+
+    if (awaitingLanding.current && playerOnFloor) {
+      console.log('just landed')
+      awaitingLanding.current = false 
+      actions['jump'].fadeOut(0.5)
+      actions['idle'].reset().fadeIn(0.5).play()
+    }
     return playerOnFloor
   }
 
@@ -119,15 +133,64 @@ export default function Player({ octree, colliders, ballCount }) {
     }
     teleportPlayerIfOob(capsule, playerVelocity)
 
-    pivot.position.lerp(model.current.position, 0.1)
+    const distance = playerBasePosition.distanceTo(group.current.position)
+    const rotationMatrix = new Matrix4()
+    rotationMatrix.lookAt(playerBasePosition, group.current.position, group.current.up)
+    targetQuaternion.setFromRotationMatrix(rotationMatrix)
+    if (distance > 0.001 && !group.current.quaternion.equals(targetQuaternion)) {
+      targetQuaternion.z = 0
+      targetQuaternion.x = 0
+      targetQuaternion.normalize()
+      group.current.quaternion.rotateTowards(targetQuaternion, delta * 10)
+    }
 
-    model.current.position.copy(capsule.end)
+    playerBasePosition.copy(capsule.start)
+    playerBasePosition.y -= 0.25
+
+    group.current.position.lerp(playerBasePosition, 0.3)
+
+    pivot.position.lerp(group.current.position, 0.1)
+
+    let activeAction = 0 // 0:idle, 1:walking, 2:jumping
+
+    if (playerOnFloor.current && (keyboard['KeyA'] || keyboard['KeyD'] || keyboard['KeyW'] || keyboard['KeyS'])) {
+      activeAction = 1
+    }
+    if (keyboard['Space']) {
+      activeAction = 2
+    }
+
+    if (activeAction !== prevActiveAction.current) {
+      if (prevActiveAction.current === 0 && activeAction === 1) {
+        console.log('idle --> walking')
+        actions['idle'].fadeOut(0.5)
+        actions['walk'].reset().fadeIn(0.5).play()
+      }
+      if (prevActiveAction.current === 1 && activeAction === 0) {
+        console.log('walking --> idle')
+        actions['walk'].fadeOut(0.5)
+        actions['idle'].reset().fadeIn(0.5).play()
+      }
+      if (prevActiveAction.current !== 2 && activeAction === 2) {
+        console.log('jumping')
+        awaitingLanding.current = true
+        actions['walk'].fadeOut(0.5)
+        actions['idle'].fadeOut(0.5)
+        actions['jump'].reset().fadeIn(0.5).play()
+      }
+      prevActiveAction.current = activeAction
+    }
+
+    if (activeAction === 1) {
+      mixer.update(delta * distance * 20)
+    } else {
+      mixer.update(delta)
+    }
   })
 
   return (
-    <mesh ref={model}>
-      <sphereGeometry args={[0.2]} />
-      <meshStandardMaterial wireframe={true} />
-    </mesh>
+    <group ref={group}>
+      <Eve mixer={mixer} actions={actions} />
+    </group>
   )
 }
