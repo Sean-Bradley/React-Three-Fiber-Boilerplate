@@ -1,4 +1,4 @@
-import { Stats, Environment, PointerLockControls } from '@react-three/drei'
+import { Stats, Environment } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Game from './Game'
 import Overlay from './Overlay'
@@ -6,7 +6,7 @@ import Overlay from './Overlay'
 export default function App() {
   return (
     <>
-      <Canvas shadows>
+      <Canvas shadows onPointerDown={(e) => e.target.requestPointerLock()}>
         <directionalLight
           intensity={1}
           castShadow={true}
@@ -22,7 +22,6 @@ export default function App() {
         />
         <Environment files="./img/rustig_koppie_puresky_1k.hdr" background />
         <Game />
-        <PointerLockControls />
         <Stats />
       </Canvas>
       <Overlay />

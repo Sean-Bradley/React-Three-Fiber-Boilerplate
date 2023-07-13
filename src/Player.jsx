@@ -3,17 +3,21 @@ import { Capsule } from 'three/examples/jsm/math/Capsule.js'
 import { Vector3 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import useKeyboard from './useKeyboard'
+import useFollowCam from './useFollowCam'
 
 const GRAVITY = 30
 const STEPS_PER_FRAME = 5
 
 export default function Player({ octree, colliders, ballCount }) {
+  const { pivot } = useFollowCam()
   const playerOnFloor = useRef(false)
   const playerVelocity = useMemo(() => new Vector3(), [])
   const playerDirection = useMemo(() => new Vector3(), [])
   const capsule = useMemo(() => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.5), [])
   const { camera } = useThree()
   let clicked = 0
+
+  const model = useRef()
 
   const onPointerDown = () => {
     throwBall(camera, capsule, playerDirection, playerVelocity, clicked++)
@@ -59,7 +63,7 @@ export default function Player({ octree, colliders, ballCount }) {
     }
   }
 
-  function updatePlayer(camera, delta, octree, capsule, playerVelocity, playerOnFloor) {
+  function updatePlayer(delta, octree, capsule, playerVelocity, playerOnFloor) {
     let damping = Math.exp(-4 * delta) - 1
     if (!playerOnFloor) {
       playerVelocity.y -= GRAVITY * delta
@@ -69,7 +73,7 @@ export default function Player({ octree, colliders, ballCount }) {
     const deltaPosition = playerVelocity.clone().multiplyScalar(delta)
     capsule.translate(deltaPosition)
     playerOnFloor = playerCollisions(capsule, octree, playerVelocity)
-    camera.position.copy(capsule.end)
+    //camera.position.copy(capsule.end)
     return playerOnFloor
   }
 
@@ -97,22 +101,33 @@ export default function Player({ octree, colliders, ballCount }) {
     return playerOnFloor
   }
 
-  function teleportPlayerIfOob(camera, capsule, playerVelocity) {
-    if (camera.position.y <= -100) {
+  function teleportPlayerIfOob(capsule, playerVelocity) {
+    if (capsule.end.y <= -100) {
       playerVelocity.set(0, 0, 0)
       capsule.start.set(0, 10, 0)
       capsule.end.set(0, 11, 0)
-      camera.position.copy(capsule.end)
-      camera.rotation.set(0, 0, 0)
     }
   }
 
   useFrame(({ camera }, delta) => {
-    controls(camera, delta, playerVelocity, playerOnFloor.current, playerDirection)
+    if (document.pointerLockElement) {
+      controls(camera, delta, playerVelocity, playerOnFloor.current, playerDirection)
+    }
     const deltaSteps = Math.min(0.05, delta) / STEPS_PER_FRAME
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
-      playerOnFloor.current = updatePlayer(camera, deltaSteps, octree, capsule, playerVelocity, playerOnFloor.current)
+      playerOnFloor.current = updatePlayer(deltaSteps, octree, capsule, playerVelocity, playerOnFloor.current)
     }
-    teleportPlayerIfOob(camera, capsule, playerVelocity)
+    teleportPlayerIfOob(capsule, playerVelocity)
+
+    pivot.position.lerp(model.current.position, 0.1)
+
+    model.current.position.copy(capsule.end)
   })
+
+  return (
+    <mesh ref={model}>
+      <sphereGeometry args={[0.2]} />
+      <meshStandardMaterial wireframe={true} />
+    </mesh>
+  )
 }
