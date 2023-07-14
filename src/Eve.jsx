@@ -2,13 +2,17 @@ import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
 import { LoopOnce, LoopRepeat } from 'three'
+import { useStore } from './Game'
 
-export default function Eve({ mixer, actions }) {
+export default function Eve() {  
+  //console.log('creating Eve')
   const ref = useRef()
   const { nodes, materials, animations } = useGLTF('./models/eve.glb')
   const idleAnimation = useGLTF('./models/eve@idle.glb').animations
   const walkAnimation = useGLTF('./models/eve@walking.glb').animations
   const jumpAnimation = useGLTF('./models/eve@jump.glb').animations
+
+  const { actions, mixer } = useStore((state) => state)
 
   useEffect(() => {
     actions['default'] = mixer.clipAction(animations[0], ref.current)

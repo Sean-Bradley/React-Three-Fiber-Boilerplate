@@ -1,5 +1,5 @@
-import { useMemo, useRef } from 'react'
-import { Vector3, Euler, Quaternion, Matrix4, AnimationMixer } from 'three'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Vector3, Euler, Quaternion, Matrix4 } from 'three'
 import Eve from './Eve'
 import { useCompoundBody, useContactMaterial } from '@react-three/cannon'
 import useKeyboard from './useKeyboard'
@@ -9,6 +9,7 @@ import useFollowCam from './useFollowCam'
 import { useStore } from './Game'
 
 export default function Player({ position }) {
+  //console.log("creating Player")
   const { pivot } = useFollowCam()
   const playerGrounded = useRef(false)
   const inJumpAction = useRef(false)
@@ -23,15 +24,10 @@ export default function Player({ position }) {
   const contactNormal = useMemo(() => new Vec3(0, 0, 0), [])
   const down = useMemo(() => new Vec3(0, -1, 0), [])
   const rotationMatrix = useMemo(() => new Matrix4(), [])
-
   const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
-
-  const mixer = useMemo(() => new AnimationMixer(), [])
-  const actions = useRef({})
-
   const keyboard = useKeyboard()
 
-  const groundObjects = useStore((state) => state.groundObjects)
+  const { groundObjects, actions, mixer } = useStore((state) => state)
 
   useContactMaterial('ground', 'slippery', {
     friction: 0,
@@ -68,8 +64,12 @@ export default function Player({ position }) {
     useRef()
   )
 
+  // useEffect(() => {
+  //   console.log(body.at[1])
+  // }, [body])
+
   useFrame(({ raycaster }, delta) => {
-    //console.log(Object.keys(groundObjects).length)
+    //console.log(Object.keys(actions).length)
 
     let activeAction = 0 // 0:idle, 1:walking, 2:jumping
     body.angularFactor.set(0, 0, 0)
@@ -80,9 +80,7 @@ export default function Player({ position }) {
     raycasterOffset.copy(worldPosition)
     raycasterOffset.y += 0.01
     raycaster.set(raycasterOffset, down)
-    const intersects = raycaster.intersectObjects(Object.values(groundObjects), false)
-    //console.log(intersects.length)
-    intersects.forEach((i) => {
+    raycaster.intersectObjects(Object.values(groundObjects), false).forEach((i) => {
       //console.log(i.distance)
       if (i.distance < 0.011) {
         playerGrounded.current = true
@@ -130,25 +128,22 @@ export default function Player({ position }) {
 
       if (activeAction !== prevActiveAction.current) {
         //console.log('active action changed')
-        if (prevActiveAction.current === 0 && activeAction === 1) {
+        if (prevActiveAction.current !== 1 && activeAction === 1) {
           //console.log('idle --> walking')
           actions['idle'].fadeOut(0.1)
           actions['walk'].reset().fadeIn(0.1).play()
         }
-        if (prevActiveAction.current === 1 && activeAction === 0) {
+        if (prevActiveAction.current !== 0 && activeAction === 0) {
           //console.log('walking --> idle')
           actions['walk'].fadeOut(0.1)
           actions['idle'].reset().fadeIn(0.1).play()
         }
-        // if (prevActiveAction.current !== 2 && activeAction === 2) {
-        //   //console.log('jumping')
-
-        // }
         prevActiveAction.current = activeAction
       }
 
       if (keyboard['Space']) {
         if (playerGrounded.current && !inJumpAction.current) {
+          console.log('jump')
           activeAction = 2
           inJumpAction.current = true
           actions['walk'].fadeOut(0.1)
@@ -188,7 +183,7 @@ export default function Player({ position }) {
   return (
     <>
       <group ref={group} position={position}>
-        <Eve mixer={mixer} actions={actions} />
+        <Eve />
       </group>
     </>
   )

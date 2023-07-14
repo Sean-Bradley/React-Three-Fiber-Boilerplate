@@ -8,8 +8,15 @@ import { useControls } from 'leva'
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { create } from 'zustand'
+import { AnimationMixer } from 'three'
 
-export const useStore = create(() => ({ groundObjects: [] }))
+export const useStore = create(() => ({
+  groundObjects: [],
+  actions: {},
+  mixer: new AnimationMixer(),
+  // activeAction: 0, //0:idle, 1:walking, 2:jumping
+  // setActiveAction: (v) => set({ activeAction: v })
+}))
 
 function ToggleDebug({ children }) {
   const debugRendererVisible = useControls('Debug Renderer', { visible: false })
@@ -49,11 +56,9 @@ export default function Game() {
 
         <Platform args={[1, 0.1, 2]} position={[1.5, 3.5, -3.5]} />
 
-        {/* <Player position={[1, 4, -3]} /> */}
-        <Player position={[0, 1, 0]} />
-
         <Finish position={[-5.5, 0, 5.5]} />
       </ToggleDebug>
+      <Player position={[0, 1, 0]} />
       <directionalLight
         ref={lightRef}
         position={[10, 7.5, 7.5]}
