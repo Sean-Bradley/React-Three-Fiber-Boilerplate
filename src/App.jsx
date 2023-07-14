@@ -12,17 +12,6 @@ function Loader() {
 export default function App() {
   return (
     <>
-      <Canvas shadows onPointerDown={(e) => e.target.requestPointerLock()}>
-        <Suspense fallback={<Loader />}>
-          <spotLight position={[2.5, 5, 5]} angle={Math.PI / 3} penumbra={0.5} castShadow shadow-mapSize-height={2048} shadow-mapSize-width={2048} />
-          <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 3} penumbra={0.5} castShadow shadow-mapSize-height={2048} shadow-mapSize-width={2048} />
-          <Physics>
-            <Game />
-          </Physics>
-          <gridHelper />
-          <Stats />
-        </Suspense>
-      </Canvas>
       <div id="instructions">
         WASD to move
         <br />
@@ -33,6 +22,16 @@ export default function App() {
           Mixamo
         </a>
       </div>
+      <Canvas shadows onPointerDown={(e) => e.target.requestPointerLock()}>
+        <Suspense fallback={<Loader />}>
+          <spotLight position={[2.5, 5, 5]} angle={Math.PI / 3} penumbra={0.5} castShadow shadow-mapSize-height={2048} shadow-mapSize-width={2048} />
+          <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 3} penumbra={0.5} castShadow shadow-mapSize-height={2048} shadow-mapSize-width={2048} />
+          <Physics>
+            <Game />
+          </Physics>
+          <Stats />
+        </Suspense>
+      </Canvas>
     </>
   )
 }
