@@ -94,7 +94,6 @@ export default function Player({ position }) {
       inputVelocity.set(0, 0, 0)
       if (playerGrounded.current) {
         // if grounded I can walk
-        activeAction = 0
         if (keyboard['KeyW']) {
           activeAction = 1
           inputVelocity.z = -40 * delta
@@ -112,17 +111,13 @@ export default function Player({ position }) {
           inputVelocity.x = 40 * delta
         }
       }
-      //console.log(inputVelocity.x)
-      // inputVelocity.x = Math.min(Math.max(inputVelocity.x, -0.5), 0.5)
-      // inputVelocity.z = Math.min(Math.max(inputVelocity.z, -0.5), 0.5)
-
-      inputVelocity.setLength(.7)
+      inputVelocity.setLength(0.7) // clamps walking speed
 
       if (keyboard['Space']) {
         activeAction = 2
         if (playerGrounded.current && !inJumpAction.current) {
           //playerGrounded.current = false
-          inputVelocity.y = 7
+          inputVelocity.y = 6
         }
       }
 
