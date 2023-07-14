@@ -7,9 +7,11 @@ import { useFrame } from '@react-three/fiber'
 import { Vec3 } from 'cannon-es'
 import useFollowCam from './useFollowCam'
 
-export default function PlayerCollider() {
+export default function Player({ position }) {
   const { pivot } = useFollowCam()
-  const onTheGround = useRef(true)
+  //const onTheGround = useRef(true)
+  const playerGrounded = useRef(false)
+  const inJumpAction = useRef(false)
   const group = useRef()
   const velocity = useMemo(() => new Vector3(), [])
   const inputVelocity = useMemo(() => new Vector3(), [])
@@ -18,7 +20,7 @@ export default function PlayerCollider() {
   const targetQuaternion = useMemo(() => new Quaternion(), [])
   const worldPosition = useMemo(() => new Vector3(), [])
   const contactNormal = useMemo(() => new Vec3(0, 0, 0), [])
-  const upAxis = useMemo(() => new Vec3(0, -1, 0), [])
+  const down = useMemo(() => new Vec3(0, -1, 0), [])
 
   const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
 
@@ -39,33 +41,44 @@ export default function PlayerCollider() {
         if (e.contact.bi.id !== e.body.id) {
           contactNormal.set(...e.contact.ni)
         }
-        if (contactNormal.dot(upAxis) > 0.5) {
-          console.log('onTheGround')
-          if (!onTheGround.current) {
-            console.log('landed')
-            //     actions['jump'].fadeOut(0.1)
-            //     actions['walk'].reset().fadeIn(0.1).play()
-            actions['jump'].fadeOut(0.5)
-            actions['idle'].reset().fadeIn(0.5).play()
-            body.linearDamping.set(0.999)
-            onTheGround.current = true
-            //console.log(prevActiveAction.current)
+        if (contactNormal.dot(down) > 0.5) {
+          if (inJumpAction.current) {
+            //console.log('landed')
+            inJumpAction.current = false
+            actions['jump'].fadeOut(0.1)
+            actions['idle'].reset().fadeIn(0.1).play()
           }
         }
       },
       material: 'slippery',
-      linearDamping: 0.999
+      linearDamping: 1.0,
+      position: position
     }),
     useRef()
   )
 
-  useFrame((_, delta) => {
+  useFrame(({ scene, raycaster }, delta) => {
     let activeAction = 0 // 0:idle, 1:walking, 2:jumping
     body.angularFactor.set(0, 0, 0)
 
-    //console.log(body.velocity.get())
-
     ref.current.getWorldPosition(worldPosition)
+
+    playerGrounded.current = false
+    const offset = worldPosition.clone()
+    offset.y += 0.01
+    raycaster.set(offset, down)
+    raycaster.intersectObjects(scene.children, false).forEach((i) => {
+      if (i.distance < 0.011) {
+        playerGrounded.current = true
+      }
+    })
+    if (!playerGrounded.current) {
+      //console.log('in air')
+      body.linearDamping.set(0)
+    } else {
+      body.linearDamping.set(0.9999999)
+    }
+
     const distance = worldPosition.distanceTo(group.current.position)
 
     const rotationMatrix = new Matrix4()
@@ -79,54 +92,55 @@ export default function PlayerCollider() {
     }
     if (document.pointerLockElement) {
       inputVelocity.set(0, 0, 0)
-      if (onTheGround.current) {
+      if (playerGrounded.current) {
+        // if grounded I can walk
         activeAction = 0
         if (keyboard['KeyW']) {
           activeAction = 1
-          inputVelocity.z = -15 * delta
+          inputVelocity.z = -40 * delta
         }
         if (keyboard['KeyS']) {
           activeAction = 1
-          inputVelocity.z = 15 * delta
+          inputVelocity.z = 40 * delta
         }
         if (keyboard['KeyA']) {
           activeAction = 1
-          inputVelocity.x = -15 * delta
+          inputVelocity.x = -40 * delta
         }
         if (keyboard['KeyD']) {
           activeAction = 1
-          inputVelocity.x = 15 * delta
+          inputVelocity.x = 40 * delta
         }
       }
       //console.log(inputVelocity.x)
-      //inputVelocity.x = Math.min(Math.max(inputVelocity.x, -0.33), 0.33)
-      //inputVelocity.z = Math.min(Math.max(inputVelocity.z, -0.33), 0.33)
+      // inputVelocity.x = Math.min(Math.max(inputVelocity.x, -0.5), 0.5)
+      // inputVelocity.z = Math.min(Math.max(inputVelocity.z, -0.5), 0.5)
+
+      inputVelocity.setLength(.7)
 
       if (keyboard['Space']) {
         activeAction = 2
-        if (onTheGround.current) {
-          onTheGround.current = false
-          body.linearDamping.set(0)
-          inputVelocity.y = 5
-          //inputVelocity.x *= 2
-          //inputVelocity.z *= 2
+        if (playerGrounded.current && !inJumpAction.current) {
+          //playerGrounded.current = false
+          inputVelocity.y = 7
         }
       }
 
       if (activeAction !== prevActiveAction.current) {
         //console.log('active action changed')
         if (prevActiveAction.current === 0 && activeAction === 1) {
-          console.log('idle --> walking')
-          actions['idle'].fadeOut(0.5)
+          //console.log('idle --> walking')
+          actions['idle'].fadeOut(0.1)
           actions['walk'].reset().fadeIn(0.1).play()
         }
         if (prevActiveAction.current === 1 && activeAction === 0) {
-          console.log('walking --> idle')
-          actions['walk'].fadeOut(0.5)
-          actions['idle'].reset().fadeIn(0.5).play()
+          //console.log('walking --> idle')
+          actions['walk'].fadeOut(0.1)
+          actions['idle'].reset().fadeIn(0.1).play()
         }
         if (prevActiveAction.current !== 2 && activeAction === 2) {
-          console.log('jumping')
+          //console.log('jumping')
+          inJumpAction.current = true
           actions['walk'].fadeOut(0.5)
           actions['idle'].fadeOut(0.5)
           actions['jump'].reset().fadeIn(0.5).play()
@@ -138,26 +152,22 @@ export default function PlayerCollider() {
       euler.order = 'YZX'
       quat.setFromEuler(euler)
       inputVelocity.applyQuaternion(quat)
-      //inputVelocity.setLength(.3)
       velocity.set(inputVelocity.x, inputVelocity.y, inputVelocity.z)
 
       body.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
     }
 
     if (activeAction === 1) {
-      mixer.update(delta * distance * 20)
+      mixer.update(delta * distance * 22.5)
     } else {
       mixer.update(delta)
     }
 
     if (worldPosition.y < -3) {
-      console.log('reset')
-      // prevActiveAction.current = 0
-      // onTheGround.current = true
+      //console.log('reset')
       body.velocity.set(0, 0, 0)
-      body.position.set(0, 2, 0)
-      body.linearDamping.set(0.999)
-      group.current.position.set(0, 2, 0)
+      body.position.set(0, 1, 0)
+      group.current.position.set(0, 1, 0)
     }
 
     group.current.position.lerp(worldPosition, 0.3)
@@ -167,7 +177,7 @@ export default function PlayerCollider() {
 
   return (
     <>
-      <group ref={group}>
+      <group ref={group} position={position}>
         <Eve mixer={mixer} actions={actions} />
       </group>
     </>

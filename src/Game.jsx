@@ -2,12 +2,10 @@ import { Debug, useContactMaterial } from '@react-three/cannon'
 import Start from './Start'
 import Platform from './Platform'
 import Spinner from './Spinner'
-//import Obstacles from './Obstacles'
 import Player from './Player'
 import { useControls } from 'leva'
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-//import { useFrame } from '@react-three/fiber'
 
 function ToggleDebug({ children }) {
   const debugRendererVisible = useControls('Debug Renderer', { visible: false })
@@ -26,7 +24,7 @@ export default function Game() {
 
   useContactMaterial('ground', 'slippery', {
     friction: 0,
-    restitution: 0.1,
+    restitution: 0.01,
     contactEquationStiffness: 1e8,
     contactEquationRelaxation: 3
   })
@@ -38,7 +36,7 @@ export default function Game() {
 
         <Platform args={[1, 0.1, 2]} position={[0, 0, 6]} />
 
-        <Platform args={[2, 0.1, 1]} position={[3, 0, 6]} />
+        <Platform args={[2, 0.1, 1]} position={[3, 0.25, 6]} />
 
         <Platform args={[2, 0.1, 1]} position={[6, 1, 6]} />
 
