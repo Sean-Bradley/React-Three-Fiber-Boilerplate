@@ -32,7 +32,7 @@ export default function Obstacles() {
   return (
     <>
       {obstacles.map(({ position, args }, i) => (
-        <Obstacle key={i} id={i} position={position} args={args} material={'ground'}></Obstacle>
+        <Obstacle key={i} position={position} args={args} material={'ground'}></Obstacle>
       ))}
     </>
   )
