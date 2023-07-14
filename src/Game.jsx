@@ -13,7 +13,7 @@ import { AnimationMixer } from 'three'
 export const useStore = create(() => ({
   groundObjects: [],
   actions: {},
-  mixer: new AnimationMixer(),
+  mixer: new AnimationMixer()
   // activeAction: 0, //0:idle, 1:walking, 2:jumping
   // setActiveAction: (v) => set({ activeAction: v })
 }))
@@ -54,7 +54,7 @@ export default function Game() {
         <Platform args={[4, 0.1, 4]} position={[2.5, 3, -8]} />
         <Spinner position={[2.5, 3.8, -8]} />
 
-        <Platform args={[1, 0.1, 2]} position={[1.5, 3.5, -3.5]} />
+        <Platform args={[1, 0.1, 2]} position={[1.5, 3.5, -3.5]} rotation-x={Math.PI / 2} />
 
         <Finish position={[-5.5, 0, 5.5]} />
       </ToggleDebug>

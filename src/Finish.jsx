@@ -27,12 +27,14 @@ export default function Finish({ position }) {
     texture.flipY = true
   }, [texture])
 
-  useFrame((_, delta) => {
-    interval.current += delta
-    if (interval.current > 0.5) {
-      interval.current -= 0.5
+  useEffect(() => {
+    const interval = setInterval(() => {
       materials['Material.002'].map.rotation += Math.PI
-    }
+    }, 500)
+    return () => clearInterval(interval)
+  }, [materials])
+
+  useFrame((_, delta) => {
     texture.offset.x += delta / 3
   })
 

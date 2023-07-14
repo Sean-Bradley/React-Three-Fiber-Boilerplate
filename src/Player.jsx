@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import { Vector3, Euler, Quaternion, Matrix4 } from 'three'
 import Eve from './Eve'
 import { useCompoundBody, useContactMaterial } from '@react-three/cannon'
@@ -183,7 +183,9 @@ export default function Player({ position }) {
   return (
     <>
       <group ref={group} position={position}>
-        <Eve />
+        <Suspense fallback={null}>
+          <Eve />
+        </Suspense>
       </group>
     </>
   )
