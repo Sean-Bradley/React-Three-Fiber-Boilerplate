@@ -22,17 +22,12 @@ export default function Eve({ mixer, actions }) {
     actions['jump'].clampWhenFinished = true
 
     actions['idle'].play()
-    //actions['walk'].play()
-  })
+  }, [mixer, actions, animations, idleAnimation, walkAnimation, jumpAnimation])
 
   return (
-    <group ref={ref} dispose={null}>
-      <group name="Scene">
-        <group name="Armature" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
-          <primitive object={nodes.mixamorigHips} />
-          <skinnedMesh castShadow name="Mesh" frustumCulled={false} geometry={nodes.Mesh.geometry} material={materials.SpacePirate_M} skeleton={nodes.Mesh.skeleton} />
-        </group>
-      </group>
+    <group ref={ref} dispose={null} rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+      <primitive object={nodes.mixamorigHips} />
+      <skinnedMesh castShadow name="Mesh" frustumCulled={false} geometry={nodes.Mesh.geometry} material={materials.SpacePirate_M} skeleton={nodes.Mesh.skeleton} />
     </group>
   )
 }

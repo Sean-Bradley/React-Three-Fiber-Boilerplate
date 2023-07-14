@@ -1,11 +1,15 @@
-import { Debug, useContactMaterial } from '@react-three/cannon'
+import { Debug } from '@react-three/cannon'
 import Start from './Start'
+import Finish from './Finish'
 import Platform from './Platform'
 import Spinner from './Spinner'
 import Player from './Player'
 import { useControls } from 'leva'
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { create } from 'zustand'
+
+export const useStore = create(() => ({ groundObjects: [] }))
 
 function ToggleDebug({ children }) {
   const debugRendererVisible = useControls('Debug Renderer', { visible: false })
@@ -22,17 +26,10 @@ export default function Game() {
     lightRef.current.target.updateMatrixWorld()
   })
 
-  useContactMaterial('ground', 'slippery', {
-    friction: 0,
-    restitution: 0.01,
-    contactEquationStiffness: 1e8,
-    contactEquationRelaxation: 3
-  })
-
   return (
     <>
       <ToggleDebug>
-        <Start args={[8, 0.1, 8]} />
+        <Start position={[0, -0.5, 0]} />
 
         <Platform args={[1, 0.1, 2]} position={[0, 0, 6]} />
 
@@ -54,6 +51,8 @@ export default function Game() {
 
         {/* <Player position={[1, 4, -3]} /> */}
         <Player position={[0, 1, 0]} />
+
+        <Finish position={[-5.5, 0, 5.5]} />
       </ToggleDebug>
       <directionalLight
         ref={lightRef}

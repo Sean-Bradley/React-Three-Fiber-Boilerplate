@@ -1,15 +1,15 @@
 import { useMemo, useRef } from 'react'
 import { Vector3, Euler, Quaternion, Matrix4, AnimationMixer } from 'three'
 import Eve from './Eve'
-import { useCompoundBody } from '@react-three/cannon'
+import { useCompoundBody, useContactMaterial } from '@react-three/cannon'
 import useKeyboard from './useKeyboard'
 import { useFrame } from '@react-three/fiber'
 import { Vec3 } from 'cannon-es'
 import useFollowCam from './useFollowCam'
+import { useStore } from './Game'
 
 export default function Player({ position }) {
   const { pivot } = useFollowCam()
-  //const onTheGround = useRef(true)
   const playerGrounded = useRef(false)
   const inJumpAction = useRef(false)
   const group = useRef()
@@ -19,8 +19,10 @@ export default function Player({ position }) {
   const quat = useMemo(() => new Quaternion(), [])
   const targetQuaternion = useMemo(() => new Quaternion(), [])
   const worldPosition = useMemo(() => new Vector3(), [])
+  const raycasterOffset = useMemo(() => new Vector3(), [])
   const contactNormal = useMemo(() => new Vec3(0, 0, 0), [])
   const down = useMemo(() => new Vec3(0, -1, 0), [])
+  const rotationMatrix = useMemo(() => new Matrix4(), [])
 
   const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
 
@@ -28,6 +30,15 @@ export default function Player({ position }) {
   const actions = useRef({})
 
   const keyboard = useKeyboard()
+
+  const groundObjects = useStore((state) => state.groundObjects)
+
+  useContactMaterial('ground', 'slippery', {
+    friction: 0,
+    restitution: 0.01,
+    contactEquationStiffness: 1e8,
+    contactEquationRelaxation: 3
+  })
 
   const [ref, body] = useCompoundBody(
     () => ({
@@ -57,17 +68,22 @@ export default function Player({ position }) {
     useRef()
   )
 
-  useFrame(({ scene, raycaster }, delta) => {
+  useFrame(({ raycaster }, delta) => {
+    //console.log(Object.keys(groundObjects).length)
+
     let activeAction = 0 // 0:idle, 1:walking, 2:jumping
     body.angularFactor.set(0, 0, 0)
 
     ref.current.getWorldPosition(worldPosition)
 
     playerGrounded.current = false
-    const offset = worldPosition.clone()
-    offset.y += 0.01
-    raycaster.set(offset, down)
-    raycaster.intersectObjects(scene.children, false).forEach((i) => {
+    raycasterOffset.copy(worldPosition)
+    raycasterOffset.y += 0.01
+    raycaster.set(raycasterOffset, down)
+    const intersects = raycaster.intersectObjects(Object.values(groundObjects), false)
+    //console.log(intersects.length)
+    intersects.forEach((i) => {
+      //console.log(i.distance)
       if (i.distance < 0.011) {
         playerGrounded.current = true
       }
@@ -81,7 +97,6 @@ export default function Player({ position }) {
 
     const distance = worldPosition.distanceTo(group.current.position)
 
-    const rotationMatrix = new Matrix4()
     rotationMatrix.lookAt(worldPosition, group.current.position, group.current.up)
     targetQuaternion.setFromRotationMatrix(rotationMatrix)
     if (distance > 0.0001 && !group.current.quaternion.equals(targetQuaternion)) {
@@ -113,14 +128,6 @@ export default function Player({ position }) {
       }
       inputVelocity.setLength(0.7) // clamps walking speed
 
-      if (keyboard['Space']) {
-        activeAction = 2
-        if (playerGrounded.current && !inJumpAction.current) {
-          //playerGrounded.current = false
-          inputVelocity.y = 6
-        }
-      }
-
       if (activeAction !== prevActiveAction.current) {
         //console.log('active action changed')
         if (prevActiveAction.current === 0 && activeAction === 1) {
@@ -133,14 +140,22 @@ export default function Player({ position }) {
           actions['walk'].fadeOut(0.1)
           actions['idle'].reset().fadeIn(0.1).play()
         }
-        if (prevActiveAction.current !== 2 && activeAction === 2) {
-          //console.log('jumping')
-          inJumpAction.current = true
-          actions['walk'].fadeOut(0.5)
-          actions['idle'].fadeOut(0.5)
-          actions['jump'].reset().fadeIn(0.5).play()
-        }
+        // if (prevActiveAction.current !== 2 && activeAction === 2) {
+        //   //console.log('jumping')
+
+        // }
         prevActiveAction.current = activeAction
+      }
+
+      if (keyboard['Space']) {
+        if (playerGrounded.current && !inJumpAction.current) {
+          activeAction = 2
+          inJumpAction.current = true
+          actions['walk'].fadeOut(0.1)
+          actions['idle'].fadeOut(0.1)
+          actions['jump'].reset().fadeIn(0.1).play()
+          inputVelocity.y = 6
+        }
       }
 
       euler.y = pivot.rotation.y

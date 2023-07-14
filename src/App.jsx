@@ -2,7 +2,8 @@ import { Canvas } from '@react-three/fiber'
 import { Stats, Environment } from '@react-three/drei'
 import Game from './Game'
 import { Physics } from '@react-three/cannon'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense } from 'react'
+import Instructions from './Instructions'
 
 function Loader() {
   //const { progress } = useProgress()
@@ -11,19 +12,6 @@ function Loader() {
 }
 
 export default function App() {
-  const [showInstructions, setShowInstructions] = useState(true)
-
-  function pointerlockchange() {
-    setShowInstructions(!showInstructions)
-  }
-
-  useEffect(() => {
-    document.addEventListener('pointerlockchange', pointerlockchange, false)
-    return () => {
-      document.removeEventListener('pointerlockchange', pointerlockchange, false)
-    }
-  })
-
   return (
     <>
       <Suspense fallback={<Loader />}>
@@ -34,24 +22,7 @@ export default function App() {
           </Physics>
           <Stats />
         </Canvas>
-        <div id="instructions" className={showInstructions ? 'show' : 'hide'}>
-          WASD to move
-          <br />
-          SPACE to jump.
-          <br />
-          Model from{' '}
-          <a href="https://www.mixamo.com" target="_blank" rel="nofollow noreferrer">
-            Mixamo
-          </a>
-          <br />
-          <button
-            id="button"
-            onClick={async (e) => {
-              showInstructions && (await e.target.requestPointerLock())
-            }}>
-            Click To Enter
-          </button>
-        </div>
+        <Instructions />
       </Suspense>
     </>
   )

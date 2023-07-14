@@ -21,7 +21,7 @@ export default function Spinner({ position }) {
   useEffect(() => {
     api.angularFactor.set(0, 1, 0) // causes the obstacles to remain upright in case of collision
     api.linearFactor.set(0, 0, 0) // locks it in place so it doesnt slide when bumped
-  })
+  }, [api.angularFactor, api.linearFactor])
 
   useFrame((_, delta) => {
     api.angularVelocity.set(0, 100 * delta, 0)
