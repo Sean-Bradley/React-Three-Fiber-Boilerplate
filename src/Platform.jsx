@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { useBox } from '@react-three/cannon'
-import { useStore } from './Game'
+import { useStore } from './App'
 
-export default function Platform({ args, position }) {
-  const [ref] = useBox(() => ({ args: args, mass: 0, position: position, material: 'ground' }), useRef())
+export default function Platform({ args, position, rotation }) {
+  const [ref] = useBox(() => ({ args: args, mass: 0, position: position, rotation: rotation, material: 'ground' }), useRef())
 
   const groundObjects = useStore((state) => state.groundObjects)
 
@@ -16,7 +16,7 @@ export default function Platform({ args, position }) {
   }, [groundObjects, ref])
 
   return (
-    <mesh ref={ref} receiveShadow position={position}>
+    <mesh ref={ref} receiveShadow rotation={rotation}>
       <boxGeometry args={args} />
       <meshStandardMaterial />
     </mesh>

@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
 import { LoopOnce, LoopRepeat } from 'three'
-import { useStore } from './Game'
+import { useStore } from './App'
 
 export default function Eve() {  
   //console.log('creating Eve')

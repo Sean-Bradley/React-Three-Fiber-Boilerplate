@@ -21,7 +21,7 @@ export default function useFollowCam() {
     if (document.pointerLockElement) {
       pivot.rotation.y -= e.movementX * 0.002
       const v = followCam.rotation.x - e.movementY * 0.002
-      if (v >= -1.0 && v <= 0.4) {
+      if (v >= -1.0 && v <= 0.2) {
         followCam.rotation.x = v
         followCam.position.y = -v * followCam.position.z + 1
       }

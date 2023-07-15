@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
+import { useStore } from './App'
 
 export default function Instructions() {
   const [showInstructions, setShowInstructions] = useState(true)
+  const setGameStarted = useStore((state) => state.setGameStarted)
 
   function pointerlockchange() {
     setShowInstructions(!showInstructions)
+    //if(!showInstructions){
+    setGameStarted(showInstructions)
+    //}
   }
 
   useEffect(() => {
@@ -16,14 +21,12 @@ export default function Instructions() {
 
   return (
     <div id="instructions" className={showInstructions ? 'show' : 'hide'}>
-      WASD to move
+      <h1>Obstacle Course</h1>
+      <p>Get to the end and be the best</p>
+      <kbd>W</kbd>&nbsp;<kbd>A</kbd>&nbsp;<kbd>S</kbd>&nbsp;<kbd>D</kbd> to move
       <br />
-      SPACE to jump.
+      <kbd>SPACE</kbd> to jump.
       <br />
-      Model from{' '}
-      <a href="https://www.mixamo.com" target="_blank" rel="nofollow noreferrer">
-        Mixamo
-      </a>
       <br />
       <button
         id="button"
@@ -32,6 +35,12 @@ export default function Instructions() {
         }}>
         Click To Enter
       </button>
+      <p>
+        Eve model and animations from{' '}
+        <a href="https://www.mixamo.com" target="_blank" rel="nofollow noreferrer">
+          Mixamo
+        </a>
+      </p>
     </div>
   )
 }

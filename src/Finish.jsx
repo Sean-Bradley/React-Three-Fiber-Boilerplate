@@ -2,14 +2,13 @@ import { useEffect, useRef } from 'react'
 import { useCylinder } from '@react-three/cannon'
 import { useGLTF } from '@react-three/drei'
 import { useFrame, useLoader } from '@react-three/fiber'
-import { useStore } from './Game'
+import { useStore } from './App'
 import { TextureLoader, DoubleSide, RepeatWrapping } from 'three'
 
 export default function Finish({ position }) {
   const [ref] = useCylinder(() => ({ args: [3.4, 3.4, 0.37, 12], mass: 0, position: position, material: 'ground' }), useRef())
   const { nodes, materials } = useGLTF('./models/finish.glb')
   const groundObjects = useStore((state) => state.groundObjects)
-  const interval = useRef(0)
 
   const texture = useLoader(TextureLoader, './img/finish.png')
 
@@ -40,7 +39,7 @@ export default function Finish({ position }) {
 
   return (
     <group dispose={null}>
-      <mesh ref={ref} position={position} geometry={nodes.Cylinder.geometry} material={materials['Material.002']} receiveShadow>
+      <mesh ref={ref} geometry={nodes.Cylinder.geometry} material={materials['Material.002']} receiveShadow>
         <mesh position-y={3}>
           <cylinderGeometry args={[3.4, 3.4, 2, 12, 1, true]} />
           <meshPhongMaterial map={texture} transparent={true} opacity={0.75} side={DoubleSide} />

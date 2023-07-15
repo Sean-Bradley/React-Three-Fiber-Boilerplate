@@ -4,17 +4,26 @@ import Game from './Game'
 import { Physics } from '@react-three/cannon'
 import { Suspense } from 'react'
 import Instructions from './Instructions'
+import { create } from 'zustand'
+import { AnimationMixer } from 'three'
+
+export const useStore = create((set) => ({
+  groundObjects: [],
+  actions: {},
+  mixer: new AnimationMixer(),
+  gameStarted: false,
+  setGameStarted: (v) => set({ gameStarted: v })
+}))
 
 function Loader() {
   const { progress } = useProgress()
-  console.log('progress', progress)
+  //console.log('progress', progress)
   return <Html center>{progress} % loaded</Html>
 }
 
 export default function App() {
   return (
     <>
-      <Instructions />
       <Canvas shadows>
         <Suspense fallback={<Loader />}>
           <Environment files="./img/rustig_koppie_puresky_1k.hdr" background />
@@ -24,6 +33,7 @@ export default function App() {
           <Stats />
         </Suspense>
       </Canvas>
+      <Instructions />
     </>
   )
 }

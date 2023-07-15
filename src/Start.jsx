@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useCylinder } from '@react-three/cannon'
 import { useGLTF } from '@react-three/drei'
-import { useStore } from './Game'
+import { useStore } from './App'
 
 export default function Start({ position }) {
   const [ref] = useCylinder(() => ({ args: [3.78, 3.78, 0.267, 12], mass: 0, position: position, material: 'ground' }), useRef())
@@ -25,7 +25,7 @@ export default function Start({ position }) {
 
   return (
     <group dispose={null}>
-      <mesh ref={ref} position={position} geometry={nodes.Cylinder.geometry} material={materials['Material.001']} receiveShadow />
+      <mesh ref={ref} geometry={nodes.Cylinder.geometry} material={materials['Material.001']} receiveShadow />
     </group>
   )
 }

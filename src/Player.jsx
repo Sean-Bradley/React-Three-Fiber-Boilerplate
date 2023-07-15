@@ -6,7 +6,7 @@ import useKeyboard from './useKeyboard'
 import { useFrame } from '@react-three/fiber'
 import { Vec3 } from 'cannon-es'
 import useFollowCam from './useFollowCam'
-import { useStore } from './Game'
+import { useStore } from './App'
 
 export default function Player({ position }) {
   //console.log("creating Player")
@@ -58,7 +58,7 @@ export default function Player({ position }) {
         }
       },
       material: 'slippery',
-      linearDamping: 1.0,
+      linearDamping: 0,
       position: position
     }),
     useRef()
@@ -82,7 +82,7 @@ export default function Player({ position }) {
     raycaster.set(raycasterOffset, down)
     raycaster.intersectObjects(Object.values(groundObjects), false).forEach((i) => {
       //console.log(i.distance)
-      if (i.distance < 0.011) {
+      if (i.distance < 0.028) {
         playerGrounded.current = true
       }
     })
@@ -143,7 +143,7 @@ export default function Player({ position }) {
 
       if (keyboard['Space']) {
         if (playerGrounded.current && !inJumpAction.current) {
-          console.log('jump')
+          //console.log('jump')
           activeAction = 2
           inJumpAction.current = true
           actions['walk'].fadeOut(0.1)

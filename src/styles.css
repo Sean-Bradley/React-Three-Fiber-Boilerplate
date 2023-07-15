@@ -12,10 +12,10 @@ body,
   background-color: rgba(0, 0, 0, 0.5);
   top: 50%;
   left: 50%;
-  height: 200px;
-  width: 400px;
-  margin-top: -100px;
-  margin-left: -200px;
+  height: 500px;
+  width: 600px;
+  margin-top: -250px;
+  margin-left: -300px;
   position: absolute;
   font-size: 24px;
   font-family: monospace;
@@ -41,4 +41,26 @@ body,
 .hide {
   transition: opacity 0.25s linear;
   opacity: 0;
+}
+
+kbd {
+  padding: 0px 4px;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 4px;
+  background: grey;
+  font-size: 19px;
+  color: white;
+  font-family: monospace;
+  font-style: normal;
+}
+
+#time {
+  font-family: monospace;
+  font-size: 16vh;
+  color: white;
+  text-shadow: -4px -4px 0 #000, 4px -4px 0 #000, -4px 4px 0 #000, 4px 4px 0 #000;
+  width: 16vw;
+  margin-left: -8vw;
+  margin-top: -50vh;
+  text-align: center;
 }
