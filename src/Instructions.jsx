@@ -39,7 +39,7 @@ export default function Instructions() {
         Click To Play
       </button>
       <p>
-        Eve model and animations from{' '}
+        'Eve' model and animations from{' '}
         <a href="https://www.mixamo.com" target="_blank" rel="nofollow noreferrer">
           Mixamo
         </a>

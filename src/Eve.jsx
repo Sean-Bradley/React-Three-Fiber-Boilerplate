@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
-import { LoopOnce, LoopRepeat } from 'three'
 import { useStore } from './App'
 
 export default function Eve() {
@@ -17,13 +16,8 @@ export default function Eve() {
   useEffect(() => {
     actions['default'] = mixer.clipAction(animations[0], ref.current)
     actions['idle'] = mixer.clipAction(idleAnimation[0], ref.current)
-    actions['idle'].loop = LoopOnce
-    actions['idle'].clampWhenFinished = true
     actions['walk'] = mixer.clipAction(walkAnimation[0], ref.current)
-    actions['walk'].loop = LoopRepeat
     actions['jump'] = mixer.clipAction(jumpAnimation[0], ref.current)
-    actions['jump'].loop = LoopOnce
-    actions['jump'].clampWhenFinished = true
 
     actions['idle'].play()
   }, [mixer, actions, animations, idleAnimation, walkAnimation, jumpAnimation])
