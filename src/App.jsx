@@ -36,7 +36,7 @@ export default function App() {
     <>
       <Canvas shadows>
         <Suspense fallback={<Loader />}>
-          <Environment files="./img/rustig_koppie_puresky_1k.hdr" background />
+          <Environment files="./img/digital_painting_water-1mb.hdr" background />
           <Physics>
             <Game />
           </Physics>
