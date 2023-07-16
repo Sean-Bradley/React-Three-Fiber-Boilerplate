@@ -6,11 +6,23 @@ import { useStore } from './App'
 import { TextureLoader, DoubleSide, RepeatWrapping } from 'three'
 
 export default function Finish({ position }) {
-  const [ref] = useCylinder(() => ({ args: [3.4, 3.4, 0.37, 12], mass: 0, position: position, material: 'ground' }), useRef())
   const { nodes, materials } = useGLTF('./models/finish.glb')
-  const groundObjects = useStore((state) => state.groundObjects)
-
+  const { groundObjects, setFinished } = useStore((state) => state)
   const texture = useLoader(TextureLoader, './img/finish.png')
+
+  const [ref] = useCylinder(
+    () => ({
+      args: [3.4, 3.4, 0.37, 12],
+      mass: 0,
+      onCollide: () => {
+        console.log('finished')
+        setFinished(true)
+      },
+      position: position,
+      material: 'ground'
+    }),
+    useRef()
+  )
 
   useEffect(() => {
     const id = ref.current.id

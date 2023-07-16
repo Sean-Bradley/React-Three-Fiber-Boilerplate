@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useStore } from './App'
 
 export default function Instructions() {
-  const [showInstructions, setShowInstructions] = useState(true)
-  const setGameStarted = useStore((state) => state.setGameStarted)
+  const { gameStarted, setGameStarted } = useStore((state) => state)
 
   function pointerlockchange() {
-    setShowInstructions(!showInstructions)
-    //if(!showInstructions){
-    setGameStarted(showInstructions)
-    //}
+    setGameStarted(!gameStarted)
+    // disabling and enabling button after 2 seconds prevents pointerlock error if re-entered to quickly
+    if (!gameStarted) {
+      document.getElementById('button').style.visibility = 'hidden'
+      setTimeout(() => {
+        document.getElementById('button').style.visibility = 'visible'
+      }, 2000)
+    }
   }
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export default function Instructions() {
   })
 
   return (
-    <div id="instructions" className={showInstructions ? 'show' : 'hide'}>
+    <div id="instructions" className={gameStarted ? 'hide' : 'show'}>
       <h1>Obstacle Course</h1>
       <p>Get to the end and be the best</p>
       <kbd>W</kbd>&nbsp;<kbd>A</kbd>&nbsp;<kbd>S</kbd>&nbsp;<kbd>D</kbd> to move
@@ -31,9 +34,9 @@ export default function Instructions() {
       <button
         id="button"
         onClick={async (e) => {
-          showInstructions && (await e.target.requestPointerLock())
+          !gameStarted && (await e.target.requestPointerLock())
         }}>
-        Click To Enter
+        Click To Play
       </button>
       <p>
         Eve model and animations from{' '}

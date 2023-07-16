@@ -8,17 +8,26 @@ import { create } from 'zustand'
 import { AnimationMixer } from 'three'
 
 export const useStore = create((set) => ({
-  groundObjects: [],
+  groundObjects: {},
   actions: {},
   mixer: new AnimationMixer(),
   gameStarted: false,
-  setGameStarted: (v) => set({ gameStarted: v })
+  setGameStarted: (v) => set({ gameStarted: v }),
+  time: 0,
+  setTime: (v) => set({ time: v }),
+  finished: false,
+  setFinished: (v) => set({ finished: v }),
 }))
 
 function Loader() {
-  const { progress } = useProgress()
-  //console.log('progress', progress)
-  return <Html center>{progress} % loaded</Html>
+  const { progress, item, loaded, total } = useProgress()
+  console.log(progress, item, loaded, total)
+  document.getElementById('instructions').style.display = 'block'
+  return (
+    <Html center>
+      <div id="progress">{Math.floor(progress)} % loaded</div>
+    </Html>
+  )
 }
 
 export default function App() {

@@ -1,6 +1,5 @@
 import { useSphere, useDistanceConstraint } from '@react-three/cannon'
 import { useEffect } from 'react'
-import { Vector3 } from 'three'
 
 //https://pmndrs.github.io/cannon-es/examples/constraints
 

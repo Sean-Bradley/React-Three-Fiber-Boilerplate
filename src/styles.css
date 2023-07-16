@@ -22,6 +22,7 @@ body,
   color: white;
   text-align: center;
   pointer-events: none;
+  user-select: none;
 }
 
 #instructions a {
@@ -58,9 +59,36 @@ kbd {
   font-family: monospace;
   font-size: 16vh;
   color: white;
-  text-shadow: -4px -4px 0 #000, 4px -4px 0 #000, -4px 4px 0 #000, 4px 4px 0 #000;
+  text-shadow: 2px 2px 0 #000;
   width: 16vw;
   margin-left: -8vw;
   margin-top: -50vh;
   text-align: center;
+}
+
+#levelCompleted{
+  font-family: monospace;
+  font-size: 4vh;
+  color: white;
+  text-shadow: 2px 2px 0 #000;
+  width: 32vw;
+  margin-left: -16vw;
+  margin-top: -30vh;
+  text-align: center;
+}
+
+#progress {
+  background-color: black;
+  top: 50%;
+  left: 50%;
+  height: 500px;
+  width: 600px;
+  margin-top: -250px;
+  margin-left: -300px;
+  position: absolute;
+  font-size: 24px;
+  font-family: monospace;
+  color: white;
+  text-align: center;
+  pointer-events: none;
 }

@@ -9,7 +9,7 @@ import useFollowCam from './useFollowCam'
 import { useStore } from './App'
 
 export default function Player({ position }) {
-  //console.log("creating Player")
+  //console.log("in Player")
   const { pivot } = useFollowCam()
   const playerGrounded = useRef(false)
   const inJumpAction = useRef(false)
@@ -27,7 +27,7 @@ export default function Player({ position }) {
   const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
   const keyboard = useKeyboard()
 
-  const { groundObjects, actions, mixer } = useStore((state) => state)
+  const { groundObjects, actions, mixer, setTime, setFinished } = useStore((state) => state)
 
   useContactMaterial('ground', 'slippery', {
     friction: 0,
@@ -64,13 +64,8 @@ export default function Player({ position }) {
     useRef()
   )
 
-  // useEffect(() => {
-  //   console.log(body.at[1])
-  // }, [body])
-
   useFrame(({ raycaster }, delta) => {
     //console.log(Object.keys(actions).length)
-
     let activeAction = 0 // 0:idle, 1:walking, 2:jumping
     body.angularFactor.set(0, 0, 0)
 
@@ -173,6 +168,8 @@ export default function Player({ position }) {
       body.velocity.set(0, 0, 0)
       body.position.set(0, 1, 0)
       group.current.position.set(0, 1, 0)
+      setFinished(false)
+      setTime(0)
     }
 
     group.current.position.lerp(worldPosition, 0.3)

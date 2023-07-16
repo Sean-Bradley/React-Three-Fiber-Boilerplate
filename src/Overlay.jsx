@@ -1,25 +1,30 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Html, Hud, OrthographicCamera } from '@react-three/drei'
 import { useStore } from './App'
 
 export default function Overlay() {
-  //console.log('updating score')
-  const [time, setTime] = useState(0)
-  const gameStarted = useStore((state) => state.gameStarted)
+  const { gameStarted, finished, time, setTime } = useStore((state) => state)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      gameStarted && setTime(time + 1)
+      gameStarted && !finished && setTime(time + 1)
     }, 1000)
-    return () => clearInterval(interval)
-  }, [time, gameStarted])
+    return () => {
+      clearInterval(interval)
+    }
+  }, [gameStarted, time, setTime, finished])
 
   return (
-    <Hud>
-      <OrthographicCamera makeDefault position={[0, 0, 0]} />
-      <Html>
-        <div id="time">{time}</div>
-      </Html>
-    </Hud>
+    <>
+      <Hud>
+        <OrthographicCamera makeDefault />
+        <Html>
+          <div id="time">{gameStarted && time}</div>
+        </Html>
+        <Html>
+          <div id="levelCompleted">{finished && "Level Completed. Well Done!"}</div>
+        </Html>
+      </Hud>
+    </>
   )
 }

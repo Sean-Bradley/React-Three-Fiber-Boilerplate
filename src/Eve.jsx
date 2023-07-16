@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { LoopOnce, LoopRepeat } from 'three'
 import { useStore } from './App'
 
-export default function Eve() {  
-  //console.log('creating Eve')
+export default function Eve() {
+  // console.log('in Eve')
   const ref = useRef()
   const { nodes, materials, animations } = useGLTF('./models/eve.glb')
   const idleAnimation = useGLTF('./models/eve@idle.glb').animations
