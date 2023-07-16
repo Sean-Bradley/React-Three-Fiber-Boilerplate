@@ -62,10 +62,11 @@ export default function Game() {
 
         <Platform args={[1, 0.1, 2]} position={[-4.5, 4, 8]} />
 
-        <Finish position={[.5, 4.0, 10]} />
+        <Finish position={[0.5, 4.0, 10]} />
+        <Player position={[0, 1, 0]} />
       </ToggleDebug>
-      <Player position={[0, 1, 0]} />
-      <Overlay/>
+
+      <Overlay />
       <directionalLight
         ref={lightRef}
         position={[10, 7.5, 7.5]}

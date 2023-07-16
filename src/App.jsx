@@ -6,6 +6,7 @@ import { Suspense } from 'react'
 import Instructions from './Instructions'
 import { create } from 'zustand'
 import { AnimationMixer } from 'three'
+import { Leva } from 'leva'
 
 export const useStore = create((set) => ({
   groundObjects: {},
@@ -16,7 +17,7 @@ export const useStore = create((set) => ({
   time: 0,
   setTime: (v) => set({ time: v }),
   finished: false,
-  setFinished: (v) => set({ finished: v }),
+  setFinished: (v) => set({ finished: v })
 }))
 
 function Loader() {
@@ -43,6 +44,7 @@ export default function App() {
         </Suspense>
       </Canvas>
       <Instructions />
+      <Leva collapsed />
     </>
   )
 }

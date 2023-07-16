@@ -1,8 +1,6 @@
 import { useSphere, useDistanceConstraint } from '@react-three/cannon'
 import { useEffect } from 'react'
 
-//https://pmndrs.github.io/cannon-es/examples/constraints
-
 export default function Pendulum({ position, impulse }) {
   const [link0] = useSphere(() => ({
     args: [0.25],
@@ -59,18 +57,6 @@ export default function Pendulum({ position, impulse }) {
   useDistanceConstraint(link4, link5, {
     distance: 0.75
   })
-
-  // useHingeConstraint(link0, link1, { pivotA: [0, -0.5, 0], axisA: [0, 0, 0] }) //, pivotB: [0, -0.5, 0], axisB: [0, 0, 0] })
-  // useHingeConstraint(link1, link2, { pivotA: [0, -0.5, 0], axisA: [0, 0, 0] })
-  // useHingeConstraint(link2, link3, { pivotA: [0, -0.5, 0], axisA: [0, 0, 0] })
-  // useHingeConstraint(link3, link4, { pivotA: [0, -0.5, 0], axisA: [0, 0, 0] })
-  // useHingeConstraint(link4, link5, { pivotA: [0, -0.5, 0], axisA: [0, 0, 0] })
-
-  // usePointToPointConstraint(link0, link1, { pivotA: [0, -0.5, 0], pivotB: [0, 0, 0] })
-  // usePointToPointConstraint(link1, link2, { pivotA: [0, -0.5, 0], pivotB: [0, 0, 0] })
-  // usePointToPointConstraint(link2, link3, { pivotA: [0, -0.5, 0], pivotB: [0, 0, 0] })
-  // usePointToPointConstraint(link3, link4, { pivotA: [0, -0.5, 0], pivotB: [0, 0, 0] })
-  // usePointToPointConstraint(link4, link5, { pivotA: [0, -0.5, 0], pivotB: [0, 0, 0] })
 
   useEffect(() => {
     api.applyImpulse(impulse, [0, 0, 0]) //start it right away
