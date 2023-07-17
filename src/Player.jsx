@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from 'react'
+import { useRef, useEffect, useMemo, Suspense } from 'react'
 import { Capsule } from 'three/examples/jsm/math/Capsule.js'
 import { Vector3, AnimationMixer, Matrix4, Quaternion } from 'three'
 import { useFrame } from '@react-three/fiber'
@@ -72,7 +72,7 @@ export default function Player({ octree, colliders, ballCount }) {
     keyboard['KeyS'] && playerVelocity.add(getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta))
     if (playerOnFloor) {
       if (keyboard['Space']) {
-        playerVelocity.y = 5 
+        playerVelocity.y = 5
       }
     }
   }
@@ -104,9 +104,9 @@ export default function Player({ octree, colliders, ballCount }) {
 
     if (awaitingLanding.current && playerOnFloor) {
       console.log('just landed')
-      awaitingLanding.current = false 
-      actions['jump'].fadeOut(0.5)
-      actions['idle'].reset().fadeIn(0.5).play()
+      awaitingLanding.current = false
+      actions['jump'].fadeOut(0.1)
+      //actions['idle'].reset().fadeIn(0.5).play()
     }
     return playerOnFloor
   }
@@ -158,21 +158,21 @@ export default function Player({ octree, colliders, ballCount }) {
 
     if (activeAction !== prevActiveAction.current) {
       if (prevActiveAction.current === 0 && activeAction === 1) {
-        console.log('idle --> walking')
-        actions['idle'].fadeOut(0.5)
+        //console.log('idle --> walking')
         actions['walk'].reset().fadeIn(0.1).play()
+        actions['idle'].fadeOut(0.1)        
       }
       if (prevActiveAction.current === 1 && activeAction === 0) {
-        console.log('walking --> idle')
-        actions['walk'].fadeOut(0.5)
-        actions['idle'].reset().fadeIn(0.5).play()
+        //console.log('walking --> idle')
+        actions['walk'].fadeOut(0.1)
+        actions['idle'].reset().fadeIn(0.1).play()
       }
       if (prevActiveAction.current !== 2 && activeAction === 2) {
-        console.log('jumping')
+        //console.log('jumping')
         awaitingLanding.current = true
-        actions['walk'].fadeOut(0.5)
-        actions['idle'].fadeOut(0.5)
-        actions['jump'].reset().fadeIn(0.5).play()
+        //actions['walk'].fadeOut(0.5)
+        //actions['idle'].fadeOut(0.5)
+        actions['jump'].reset().fadeIn(0.1).play()
       }
       prevActiveAction.current = activeAction
     }
@@ -186,7 +186,9 @@ export default function Player({ octree, colliders, ballCount }) {
 
   return (
     <group ref={group}>
-      <Eve mixer={mixer} actions={actions} />
+      <Suspense fallback={null}>
+        <Eve mixer={mixer} actions={actions} />
+      </Suspense>
     </group>
   )
 }
