@@ -1,4 +1,4 @@
-import { Debug } from '@react-three/cannon'
+import { Debug, useContactMaterial } from '@react-three/cannon'
 import Start from './Start'
 import Finish from './Finish'
 import Platform from './Platform'
@@ -18,6 +18,13 @@ function ToggleDebug({ children }) {
 
 export default function Game() {
   const lightRef = useRef()
+
+  useContactMaterial('ground', 'slippery', {
+    friction: 0,
+    restitution: 0.01,
+    contactEquationStiffness: 1e8,
+    contactEquationRelaxation: 3
+  })
 
   useFrame((state) => {
     lightRef.current.position.set(state.camera.position.x + 10, state.camera.position.y + 7.5, state.camera.position.z + 7.5)
