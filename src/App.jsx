@@ -1,24 +1,31 @@
 import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useControls, button } from 'leva'
 import { Vector3 } from 'three'
 import annotations from './annotations.json'
+import { create } from 'zustand'
 
-function Arena({ controls, lerping, setLerping }) {
+export const useStore = create((set) => ({
+  to: new Vector3(10, 10, 10),
+  target: new Vector3(0, 1, 0),
+  lerping: false,
+  setLerping: (v) => set({ lerping: v })
+}))
+
+function Arena({ controls }) {
   const { nodes, materials } = useGLTF('./models/collision-world.glb')
-  const [to, setTo] = useState(new Vector3(10, 10, 10))
-  const [target, setTarget] = useState(new Vector3(0, 1, 0))
+  const { to, target, lerping, setLerping } = useStore((state) => state)
 
   useControls('Camera', () => {
     console.log('creating buttons')
 
     // using forEach
     // const _buttons = {}
-    // annotations.forEach((a) => {
-    //   _buttons[a.title] = button(() => {
-    //     setTo(a.position)
-    //     setTarget(a.lookAt)
+    // annotations.forEach(({ title, position, lookAt }) => {
+    //   _buttons[title] = button(() => {
+    //     to.copy(position)
+    //     target.copy(lookAt)
     //     setLerping(true)
     //   })
     // })
@@ -26,11 +33,11 @@ function Arena({ controls, lerping, setLerping }) {
 
     // using reduce
     const _buttons = annotations.reduce(
-      (acc, a) =>
+      (acc, { title, position, lookAt }) =>
         Object.assign(acc, {
-          [a.title]: button(() => {
-            setTo(a.position)
-            setTarget(a.lookAt)
+          [title]: button(() => {
+            to.copy(position)
+            target.copy(lookAt)
             setLerping(true)
           })
         }),
@@ -56,9 +63,9 @@ function Arena({ controls, lerping, setLerping }) {
         castShadow
         receiveShadow
         material-envMapIntensity={0.4}
-        onDoubleClick={(e) => {
-          setTo(e.camera.position.clone())
-          setTarget(e.intersections[0].point.clone())
+        onDoubleClick={({ camera, intersections }) => {
+          to.copy(camera.position)
+          target.copy(intersections[0].point)
           setLerping(true)
         }}
       />
@@ -68,7 +75,7 @@ function Arena({ controls, lerping, setLerping }) {
 
 export default function App() {
   const ref = useRef()
-  const [lerping, setLerping] = useState(false)
+  const { setLerping } = useStore((state) => state)
 
   return (
     <Canvas
@@ -89,7 +96,7 @@ export default function App() {
       />
       <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" background />
       <OrbitControls ref={ref} target={[0, 1, 0]} />
-      <Arena controls={ref} lerping={lerping} setLerping={setLerping} />
+      <Arena controls={ref} />
       <Stats />
     </Canvas>
   )
