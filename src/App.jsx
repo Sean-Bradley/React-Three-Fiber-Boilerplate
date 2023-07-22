@@ -3,8 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useControls, button } from 'leva'
 import { Vector3 } from 'three'
-import annotations from './annotations.json'
 import { create } from 'zustand'
+import annotations from './annotations.json'
 
 export const useStore = create((set) => ({
   to: new Vector3(10, 10, 10),
