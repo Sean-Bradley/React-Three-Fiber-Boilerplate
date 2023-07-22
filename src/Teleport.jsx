@@ -25,8 +25,8 @@ export default function Teleport() {
           pivotX.current.rotation.x -= e.movementY / 1000
           pivotY.current.rotation.y -= ((dragVector.x / 10) * Math.PI) / 180
         } else {
-          pivotX.current.rotation.x += ((dragVector.y / 15) * Math.PI) / 180
-          pivotY.current.rotation.y += ((dragVector.x / 15) * Math.PI) / 180
+          pivotX.current.rotation.x += ((dragVector.y / 10) * Math.PI) / 180
+          pivotY.current.rotation.y += ((dragVector.x / 10) * Math.PI) / 180
         }
       }
     }
@@ -51,7 +51,7 @@ export default function Teleport() {
 
   return (
     <>
-      <group ref={pivotY} position={[0, 1, 10]}>
+      <group ref={pivotY}>
         <group ref={pivotX}>
           <group ref={offset}>
             <PerspectiveCamera makeDefault />
@@ -69,11 +69,11 @@ export default function Teleport() {
         onPointerDown={() => {
           date.current = Date.now()
         }}
-        onPointerUp={(e) => {
+        onPointerUp={({point}) => {
           if (Date.now() - date.current < 200) {
             // a quick click
             setOrbitmode(false)
-            to.set(e.point.x, 2, e.point.z)
+            to.set(point.x, 1, point.z)
             circleEffectRef.current.position.copy(circleRef.current.position)
             circleEffectRef.current.material.opacity = 0.99
             circleEffectRef.current.visible = true
