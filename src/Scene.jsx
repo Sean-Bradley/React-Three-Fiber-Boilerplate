@@ -1,9 +1,12 @@
 import { useGLTF } from '@react-three/drei'
 import { Selection, Select, EffectComposer, Outline } from '@react-three/postprocessing'
 import { useState } from 'react'
+import { useStore } from './App'
 
 function Selectable({ geometry, material, position }) {
   const [hovered, hover] = useState(null)
+  const { setOrbitmode, setAutoRotate, to } = useStore((state) => state)
+
   return (
     <Select enabled={hovered}>
       <mesh
@@ -12,6 +15,12 @@ function Selectable({ geometry, material, position }) {
           hover(true)
         }}
         onPointerOut={() => hover(false)}
+        onClick={(e) => {
+          e.stopPropagation()
+          to.set(...position)
+          setOrbitmode(true)
+          setTimeout(() => setAutoRotate(true), 1000)
+        }}
         geometry={geometry}
         material={material}
         position={position}
@@ -20,7 +29,7 @@ function Selectable({ geometry, material, position }) {
   )
 }
 
-export default function Model() {
+export default function Scene() {
   const { nodes, materials } = useGLTF('./models/scene-transformed.glb')
 
   return (
