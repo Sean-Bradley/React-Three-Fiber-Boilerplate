@@ -1,4 +1,4 @@
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
 import { useRef, useMemo } from 'react'
 import { Vector2, MathUtils } from 'three'
@@ -38,7 +38,7 @@ export default function Teleport() {
   useFrame((_, delta) => {
     if (orbitmode) {
       offset.current.position.z = MathUtils.lerp(offset.current.position.z, 4, delta * 2)
-      autoRotate && (pivotY.current.rotation.y += delta / 5)
+      autoRotate && (pivotY.current.rotation.y += delta / 2)
     } else {
       offset.current.position.z = MathUtils.lerp(offset.current.position.z, 0, delta * 2)
     }
