@@ -1,15 +1,18 @@
-import { useMemo, useRef } from 'react'
-import { Vector3, Euler, Quaternion, Matrix4, AnimationMixer } from 'three'
+import { Suspense, useMemo, useRef } from 'react'
+import { Vector3, Euler, Quaternion, Matrix4 } from 'three'
 import Eve from './Eve'
 import { useCompoundBody } from '@react-three/cannon'
 import useKeyboard from './useKeyboard'
 import { useFrame } from '@react-three/fiber'
 import { Vec3 } from 'cannon-es'
 import useFollowCam from './useFollowCam'
+import { useStore } from './App'
 
-export default function PlayerCollider(props) {
+export default function Player({ position }) {
+  //console.log("in Player")
   const { pivot } = useFollowCam()
-  const canJump = useRef(false)
+  const playerGrounded = useRef(false)
+  const inJumpAction = useRef(false)
   const group = useRef()
   const velocity = useMemo(() => new Vector3(), [])
   const inputVelocity = useMemo(() => new Vector3(), [])
@@ -17,104 +20,151 @@ export default function PlayerCollider(props) {
   const quat = useMemo(() => new Quaternion(), [])
   const targetQuaternion = useMemo(() => new Quaternion(), [])
   const worldPosition = useMemo(() => new Vector3(), [])
+  const raycasterOffset = useMemo(() => new Vector3(), [])
   const contactNormal = useMemo(() => new Vec3(0, 0, 0), [])
-  const upAxis = useMemo(() => new Vec3(0, -1, 0), [])
-
-  const mixer = useMemo(() => new AnimationMixer(), [])
-  const actions = {}
-
+  const down = useMemo(() => new Vec3(0, -1, 0), [])
+  const rotationMatrix = useMemo(() => new Matrix4(), [])
+  const prevActiveAction = useRef(0) // 0:idle, 1:walking, 2:jumping
   const keyboard = useKeyboard()
 
-  const [ref, api] = useCompoundBody(
+  const { groundObjects, actions, mixer, setTime, setFinished } = useStore((state) => state)
+
+  const [ref, body] = useCompoundBody(
     () => ({
       mass: 1,
       shapes: [
-        { args: [0.4], position: [0, 0.4, 0], type: 'Sphere' },
-        { args: [0.4], position: [0, 1.1, 0], type: 'Sphere' }
+        { args: [0.25], position: [0, 0.25, 0], type: 'Sphere' },
+        { args: [0.25], position: [0, 0.75, 0], type: 'Sphere' },
+        { args: [0.25], position: [0, 1.25, 0], type: 'Sphere' }
       ],
       onCollide: (e) => {
-        if (e.contact.bi.id === e.body.id) {
-          e.contact.ni.reverse(contactNormal)
-        } else {
+        if (e.contact.bi.id !== e.body.id) {
           contactNormal.set(...e.contact.ni)
         }
-        if (contactNormal.dot(upAxis) > 0.5) {
-          if (!canJump.current) {
-            actions['jump'].fadeOut(0.5)
-            actions['walk'].reset().fadeIn(0.1).play()
-
-            canJump.current = true
+        if (contactNormal.dot(down) > 0.5) {
+          if (inJumpAction.current) {
+            // landed
+            inJumpAction.current = false
+            actions['jump'].fadeOut(0.1)
           }
         }
       },
-      ...props
+      material: 'slippery',
+      linearDamping: 0,
+      position: position
     }),
     useRef()
   )
 
-  useFrame((_, delta) => {
-    api.angularFactor.set(0, 0, 0)
+  useFrame(({ raycaster }, delta) => {
+    let activeAction = 0 // 0:idle, 1:walking, 2:jumping
+    body.angularFactor.set(0, 0, 0)
 
     ref.current.getWorldPosition(worldPosition)
-    const distance = worldPosition.distanceTo(group.current.position)
 
-    if (canJump.current) {
-      // walking
-      mixer.update(delta * distance * 5)
+    playerGrounded.current = false
+    raycasterOffset.copy(worldPosition)
+    raycasterOffset.y += 0.01
+    raycaster.set(raycasterOffset, down)
+    raycaster.intersectObjects(Object.values(groundObjects), false).forEach((i) => {
+      if (i.distance < 0.028) {
+        playerGrounded.current = true
+      }
+    })
+    if (!playerGrounded.current) {
+      body.linearDamping.set(0) // in the air
     } else {
-      // in the air
-      mixer.update(delta)
+      body.linearDamping.set(0.9999999)
     }
 
-    const rotationMatrix = new Matrix4()
+    const distance = worldPosition.distanceTo(group.current.position)
+
     rotationMatrix.lookAt(worldPosition, group.current.position, group.current.up)
     targetQuaternion.setFromRotationMatrix(rotationMatrix)
-    if (!group.current.quaternion.equals(targetQuaternion)) {
+    if (distance > 0.0001 && !group.current.quaternion.equals(targetQuaternion)) {
       targetQuaternion.z = 0
       targetQuaternion.x = 0
       targetQuaternion.normalize()
-      group.current.quaternion.rotateTowards(targetQuaternion, delta * 10)
+      group.current.quaternion.rotateTowards(targetQuaternion, delta * 20)
     }
     if (document.pointerLockElement) {
       inputVelocity.set(0, 0, 0)
-      if (keyboard['KeyW']) {
-        inputVelocity.z = -10 * delta
+      if (playerGrounded.current) {
+        // if grounded I can walk
+        if (keyboard['KeyW']) {
+          activeAction = 1
+          inputVelocity.z = -40 * delta
+        }
+        if (keyboard['KeyS']) {
+          activeAction = 1
+          inputVelocity.z = 40 * delta
+        }
+        if (keyboard['KeyA']) {
+          activeAction = 1
+          inputVelocity.x = -40 * delta
+        }
+        if (keyboard['KeyD']) {
+          activeAction = 1
+          inputVelocity.x = 40 * delta
+        }
       }
-      if (keyboard['KeyS']) {
-        inputVelocity.z = 10 * delta
+      inputVelocity.setLength(0.7) // clamps walking speed
+
+      if (activeAction !== prevActiveAction.current) {
+        if (prevActiveAction.current !== 1 && activeAction === 1) {
+          actions['walk'].reset().fadeIn(0.1).play()
+          actions['idle'].fadeOut(0.1)
+        }
+        if (prevActiveAction.current !== 0 && activeAction === 0) {
+          actions['idle'].reset().fadeIn(0.1).play()
+          actions['walk'].fadeOut(0.1)
+        }
+        prevActiveAction.current = activeAction
       }
-      if (keyboard['KeyA']) {
-        inputVelocity.x = -10 * delta
-      }
-      if (keyboard['KeyD']) {
-        inputVelocity.x = 10 * delta
-      }
+
       if (keyboard['Space']) {
-        if (canJump.current) {
-          canJump.current = false
-          inputVelocity.y = 3
-          actions['walk'].fadeOut(0.1).stop()
+        if (playerGrounded.current && !inJumpAction.current) {
+          activeAction = 2
+          inJumpAction.current = true
           actions['jump'].reset().fadeIn(0.1).play()
+          inputVelocity.y = 6
         }
       }
 
       euler.y = pivot.rotation.y
-      euler.order = 'XYZ'
+      euler.order = 'YZX'
       quat.setFromEuler(euler)
       inputVelocity.applyQuaternion(quat)
       velocity.set(inputVelocity.x, inputVelocity.y, inputVelocity.z)
 
-      api.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
+      body.applyImpulse([velocity.x, velocity.y, velocity.z], [0, 0, 0])
     }
-    group.current.position.lerp(worldPosition, 0.1)
 
-    pivot.position.lerp(worldPosition, 0.2)
+    if (activeAction === 1) {
+      mixer.update(delta * distance * 22.5)
+    } else {
+      mixer.update(delta)
+    }
+
+    if (worldPosition.y < -3) {
+      body.velocity.set(0, 0, 0)
+      body.position.set(0, 1, 0)
+      group.current.position.set(0, 1, 0)
+      setFinished(false)
+      setTime(0)
+    }
+
+    group.current.position.lerp(worldPosition, 0.3)
+
+    pivot.position.lerp(worldPosition, 0.1)
   })
 
   return (
     <>
-      <group ref={group}>
-        <Eve mixer={mixer} actions={actions} />
+      <group ref={group} position={position}>
+        <Suspense fallback={null}>
+          <Eve />
+        </Suspense>
       </group>
     </>
   )

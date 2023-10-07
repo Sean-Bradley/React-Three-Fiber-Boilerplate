@@ -5,7 +5,7 @@ import Player from './Player'
 import { useControls } from 'leva'
 
 function ToggleDebug({ children }) {
-  const debugRendererVisible = useControls('Debug Renderer', { visible: true })
+  const debugRendererVisible = useControls('Debug Renderer', { visible: false })
 
   return <>{debugRendererVisible.visible ? <Debug color={0x008800}>{children}</Debug> : <>{children}</>}</>
 }
@@ -21,9 +21,9 @@ export default function Game() {
   return (
     <>
       <ToggleDebug>
-        <Floor rotation={[-Math.PI / 2, 0, 0]} material={'ground'} />
+        <Floor />
         <Obstacles />
-        <Player position={[0, 1, 0]} linearDamping={0.95} material={'slippery'} />
+        <Player position={[0, 1, 0]} />
       </ToggleDebug>
     </>
   )
