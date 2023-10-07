@@ -1,152 +1,43 @@
-# React-Three-Fiber-Boilerplate
+# React-Three-Fiber-Boilerplate (Webpack Version)
 
-This boilerplate is supplemental to my React Three Fiber course documentation hosted at [https://sbcode.net/react-three-fiber/](https://sbcode.net/react-three-fiber/)
+The Create React App / React Scripts / CRA is no longer maintained.
 
-![React Three Fiber Course Image](./docs/react-three-fiber-course-image-small.jpg)
+If using them, when running `npm install`, you will get a warning indicating many vulnerabilities.
+
+It is debatable whether this is a real issue or not since you are only developing locally.
+
+However, this `webpack` branch is set up similar to how Create React App does it.
+
+- It serves the dev version on port 3000
+- It auto opens the browser at address http://localhost:3000
+- It enables Hot Module Reloading (HMR)
+- It serves from the `public` folder
+- It indicates 0 vulnerabilities when running `npm install`, at time when I developed this branch.
 
 ## Install
 
-```bash
+```
 git clone https://github.com/Sean-Bradley/React-Three-Fiber-Boilerplate.git
 cd React-Three-Fiber-Boilerplate
+git checkout webpack
 npm install
 npm start
 ```
 
-Your default browser should open `http://localhost:3000/` automatically for you.
+Your default browser should open http://localhost:3000/ automatically for you.
 
-## Branches
+You should see a green wireframe cube.
 
-There are many branches in this boilerplate demonstrating various aspects.
+You can use this boilerplate branch for the React Three Fiber Course at [https://sbcode.net/react-three-fiber/](https://sbcode.net/react-three-fiber/)
 
-To list all branches type,
+Course Coupons : [https://sbcode.net/coupons](https://sbcode.net/coupons)
 
-```bash
-git branch
+## Build Production
+
+```
+npm run build
 ```
 
-To install a specific branch, for example `orbitControls` type,
+Copy all files in the `public` folder to your web server.
 
-```bash
-git checkout orbitControls
-npm install
-npm run start
-```
-
-and, you will get a quite interactive demo of some green wireframe cubes/spheres/dodecahedrons.
-
-There are many branches.
-
-Some other examples are,
-
-### Leva Branch
-
-```bash
-git checkout leva
-npm install
-npm run start
-```
-
-![leva branch](./docs/leva.jpg)
-
-### Shadows Branch
-
-```bash
-git checkout shadows
-npm install
-npm run start
-```
-
-![shadows branch](./docs/shadows.jpg)
-
-### Environment Branch
-
-```bash
-git checkout environment
-npm install
-npm run start
-```
-
-![environment branch](./docs/environment.jpg)
-
-### glTFAdvanced Branch
-
-```bash
-git checkout glTFAdvanced
-npm install
-npm run start
-```
-
-![glTFAdvanced branch](./docs/glTFAdvanced.jpg)
-
-### Annotations Branch
-
-```bash
-git checkout annotations
-npm install
-npm run start
-```
-
-![annotations branch](./docs/annotations.jpg)
-
-### GLTFJSX Branch
-
-```bash
-git checkout gltfjsx
-npm install
-npm run start
-```
-
-![gltfjsx branch](./docs/gltfjsx.jpg)
-
-### House Branch
-
-```bash
-git checkout house
-npm install
-npm run start
-```
-
-![house branch](./docs/house.jpg)
-
-### Follow Cam Branch
-
-```bash
-git checkout followCam
-npm install
-npm run start
-```
-
-![followCam branch](./docs/followCam.jpg)
-
-## Other Branches
-
-There are many branches in this boilerplate.
-
-To list all branches type,
-
-```bash
-git branch
-```
-
-If you change to another branch, remember to first run
-
-```bash
-npm install
-```
-
-and then run.
-
-```bash
-npm start
-```
-
-## React Three Fiber Course
-
-To allow me to continue to release free MIT code, please check out my React Three Fiber course on [Udemy](https://www.udemy.com/course/react-three-fiber/?referralCode=338F7F03D9775AD115A7) and [YouTube (Channel membership required)](https://www.youtube.com/playlist?list=PLKWUX7aMnlEK9DrrY1yXdiUBro1CryZaX).
-
-[![React Three Fiber Course Introduction](./docs/react-three-fiber-course-image.jpg)](https://youtu.be/p_8rW0c4ASk)
-
-Thanks
-
-Sean Bradley
+See this page [https://sbcode.net/react-three-fiber/host-github-pages/](https://sbcode.net/react-three-fiber/host-github-pages/) for a how to serve your generated site on GitHub pages
