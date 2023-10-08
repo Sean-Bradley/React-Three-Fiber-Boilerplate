@@ -5,7 +5,7 @@
   "keywords": [],
   "scripts": {
     "start": "webpack serve --config ./src/webpack.dev.js",
-    "build": "webpack --config ./src/webpack.prod.js"
+    "build": "cpx \"public/**\" build && webpack --config ./src/webpack.prod.js"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -13,6 +13,7 @@
     "@babel/preset-react": "^7.18.6",
     "@react-three/fiber": "^8.14.5",
     "babel-loader": "^9.1.2",
+    "cpx": "^1.5.0",
     "css-loader": "^6.7.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
