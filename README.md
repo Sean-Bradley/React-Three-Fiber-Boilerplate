@@ -39,6 +39,6 @@ Course Coupons : [https://sbcode.net/coupons](https://sbcode.net/coupons)
 npm run build
 ```
 
-Copy all files in the `public` folder to your web server.
+Copy all files and folders under the `./build` folder to your web server.
 
 See this page [https://sbcode.net/react-three-fiber/host-github-pages/](https://sbcode.net/react-three-fiber/host-github-pages/) for a how to serve your generated site on GitHub pages
