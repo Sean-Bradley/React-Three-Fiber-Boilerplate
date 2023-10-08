@@ -12,8 +12,8 @@ However, this `webpack` branch is set up similar to how Create React App does it
 - It auto opens the browser at address http://localhost:3000
 - It enables Hot Module Reloading (HMR)
 - It serves from the `public` folder
-- `npm run build` copies all static files & folders to ./build folder ready for deployment
-- It indicates 0 vulnerabilities when running `npm install`, at time when I developed this branch.
+- `npm run build` also copies all static files & folders to `./build` folder ready for deployment
+- It indicates 0 vulnerabilities when running `npm install`, at time when I developed this branch
 
 ## Install
 
