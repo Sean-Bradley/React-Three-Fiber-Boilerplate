@@ -15,6 +15,9 @@ npm start
 
 Your default browser should open `http://localhost:3000/` automatically for you.
 
+> [!NOTE]  
+> This [main](https://github.com/Sean-Bradley/React-Three-Fiber-Boilerplate/tree/main) branch uses `react-scripts` to generate the bundle. `react-scripts` is deprecated, however it still does a good job when developing. If you would rather not use `react-scripts`, then I have created an [alternative branch that uses webpack directly](https://github.com/Sean-Bradley/React-Three-Fiber-Boilerplate/tree/webpack), that works the same and results in 0 vulnerability warnings at the time of writing this note.
+
 ## Branches
 
 There are many branches in this boilerplate demonstrating various aspects.
