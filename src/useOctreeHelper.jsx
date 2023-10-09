@@ -22,7 +22,7 @@ export default function useOctreeHelper(octree) {
       value: false,
       onChange: (v) => {
         scene.getObjectByName('octreeHelper').visible = v
-        if (document.getElementById('Octree Helper.visible')) document.getElementById('Octree Helper.visible').blur()
+        //if (document.getElementById('Octree Helper.visible')) document.getElementById('Octree Helper.visible').blur()
       }
     }
   })
