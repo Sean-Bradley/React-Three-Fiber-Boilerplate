@@ -1,14 +1,8 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import {
-  useGLTF,
-  OrbitControls,
-  Environment,
-  Stats,
-  Html
-} from '@react-three/drei'
+import { useGLTF, OrbitControls, Environment, Stats, Html } from '@react-three/drei'
 import { useControls } from 'leva'
-import Models from './models'
+import Models from './models.json'
 
 function Model({ url }) {
   const { scene } = useGLTF(url)
@@ -20,10 +14,7 @@ function Model({ url }) {
     scene.traverse((o) => {
       if (o.userData.prop) {
         annotations.push(
-          <Html
-            key={o.uuid}
-            position={[o.position.x, o.position.y, o.position.z]}
-            distanceFactor={0.25}>
+          <Html key={o.uuid} position={[o.position.x, o.position.y, o.position.z]} distanceFactor={0.25}>
             <div className="annotation">{o.userData.prop}</div>
           </Html>
         )
@@ -57,12 +48,10 @@ export default function App() {
         <group>
           <Model url={Models[model]} />
         </group>
-        <OrbitControls  />
+        <OrbitControls />
         <Stats />
       </Canvas>
-      <span id="info">
-        The {model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.
-      </span>
+      <span id="info">The {model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
     </>
   )
 }
