@@ -16,6 +16,6 @@
     "build": "r3f-pack build"
   },
   "devDependencies": {
-    "r3f-pack": "^2.0.1"
+    "r3f-pack": "^2.0.3"
   }
 }
