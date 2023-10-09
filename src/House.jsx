@@ -5,7 +5,7 @@ import { useGLTF } from '@react-three/drei'
 export function Model(props) {
   const { nodes, materials } = useGLTF('./models/house-water-transformed.glb')
   Object.keys(materials).forEach((m) => {
-    if (!['sink_faiance','white_409','Ceramic'].includes(m)) {
+    if (!['sink_faiance', 'white_409', 'Ceramic'].includes(m)) {
       materials[m].flatShading = true
     }
   })
@@ -15,21 +15,21 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_1'].geometry}
           material={materials.ground_1}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_2'].geometry}
           material={materials.wall_1_2}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_3'].geometry}
           material={materials.room_58_344}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -46,14 +46,14 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_14'].geometry}
           material={materials.grey}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_15'].geometry}
           material={materials.flltgrey}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -63,14 +63,14 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_19'].geometry}
           material={materials.flltgrey_sweethome3d_window_pane_420}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_20'].geometry}
           material={materials['default']}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -79,14 +79,14 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_23'].geometry}
           material={materials.Glass}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_24'].geometry}
           material={materials.Glass_458}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -98,14 +98,14 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_30'].geometry}
           material={materials.flltgrey_sweethome3d_window_pane_479}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_31'].geometry}
           material={materials.white_Fenetre_480}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -113,21 +113,21 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_33'].geometry}
           material={materials.white_13_526}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_34'].geometry}
           material={materials.flltgrey_14_527}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
         <mesh
           geometry={nodes['house_water-2_35'].geometry}
           material={materials.wall_1_4}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -141,7 +141,7 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_43'].geometry}
           material={materials.glassblutint}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -168,7 +168,7 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_64'].geometry}
           material={materials.Aluminium_652}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -205,7 +205,7 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_95'].geometry}
           material={materials.Default_Texture}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -215,7 +215,7 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_99'].geometry}
           material={materials.GLASS}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -262,7 +262,7 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_140'].geometry}
           material={materials.Glass_sweethome3d_window_mirror_985}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
@@ -301,7 +301,7 @@ export function Model(props) {
         <mesh
           geometry={nodes['house_water-2_173'].geometry}
           material={materials.cylinder_cylinder_1302}
-          material-transparent={true}
+          material-transparent
           material-opacity={0.2}
           material-depthWrite={false}
         />
