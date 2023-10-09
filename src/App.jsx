@@ -105,8 +105,8 @@ export default function App() {
   })
   return (
     <Canvas shadows camera={{ position: [0, 2, 4] }}>
-      <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow />
-      <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow />
+      <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
+      <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
       <Physics gravity={[gravity.x, gravity.y, gravity.z]}>
         <Debug>
           <Plane rotation={[-Math.PI / 2, 0, 0]} />
