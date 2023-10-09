@@ -18,7 +18,7 @@ export default function App() {
 
   return (
     <Canvas camera={{ position: [1, 2, 3] }}>
-      <directionalLight position={(1, 1, 1)} />
+      <directionalLight position={(1, 1, 1)} intensity={Math.PI} />
       <mesh position-x={redBall.positionX} rotation-x={redBall.rotationX} scale={redBall.scaleX}>
         <icosahedronGeometry args={[1, 1]} />
         <meshStandardMaterial color={'red'} flatShading />
