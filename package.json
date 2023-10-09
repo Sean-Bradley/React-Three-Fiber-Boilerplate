@@ -4,32 +4,18 @@
   "description": "",
   "keywords": [],
   "main": "src/index.jsx",
-  "dependencies": {
-    "@react-three/drei": "^9.79.3",
-    "@react-three/fiber": "^8.13.5",
-    "@react-three/postprocessing": "^2.15.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-scripts": "5.0.1",
-    "three": "^0.154.0",
-    "zustand": "^4.3.9"
+  "devDependencies": {
+    "@react-three/drei": "^9.87.0",
+    "@react-three/fiber": "^8.14.5",
+    "@react-three/postprocessing": "^2.15.1",
+    "r3f-pack": "^2.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.157.0",
+    "zustand": "^4.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "r3f-pack start",
+    "build": "r3f-pack build"
   }
 }
