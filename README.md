@@ -6,13 +6,14 @@ If using them, when running `npm install`, you will get a warning indicating man
 
 It is debatable whether this is a real issue or not since you are only developing locally.
 
-However, this `webpack` branch is set up similar to how Create React App does it.
+However, this `webpack` branch is set up similar to how `react-scripts` does it.
 
 - It serves the dev version on port 3000
 - It auto opens the browser at address http://localhost:3000
 - It enables Hot Module Reloading (HMR)
 - It serves the development version from the ./public folder
 - `npm run build` builds a production quality version of your app, and will copy all static files & folders under `./public` to the `./build` folder ready for deployment
+- Production `bundle.js` contains a hash in its name to prevent caching
 - It indicates 0 vulnerabilities when running `npm install`, at time of writing this message
 
 ## Install
