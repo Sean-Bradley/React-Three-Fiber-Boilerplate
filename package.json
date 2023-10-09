@@ -4,18 +4,16 @@
   "description": "",
   "keywords": [],
   "main": "src/index.jsx",
-  "dependencies": {
-    "@react-three/drei": "^9.32.3",
-    "@react-three/fiber": "8.8.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "three": "0.144.0"
-  },
   "scripts": {
     "start": "r3f-pack start",
     "build": "r3f-pack build"
   },
   "devDependencies": {
-    "r3f-pack": "^2.0.1"
+    "@react-three/drei": "^9.87.0",
+    "@react-three/fiber": "^8.14.5",
+    "r3f-pack": "^2.0.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "three": "0.144.0"
   }
 }
