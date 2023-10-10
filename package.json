@@ -4,18 +4,8 @@
   "description": "",
   "keywords": [],
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "r3f-pack start",
+    "build": "r3f-pack build"
   },
   "dependencies": {
     "@react-three/drei": "9.74.15",
@@ -30,7 +20,7 @@
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
     "@types/three": "^0.152.1",
-    "react-scripts": "^5.0.1",
+    "r3f-pack": "^2.0.8",
     "typescript": "^5.1.3"
   }
 }
