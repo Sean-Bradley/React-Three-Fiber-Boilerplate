@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@react-three/fiber": "8.8.10",
-    "r3f-pack": "^2.0.3",
+    "r3f-pack": "^2.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "0.145.0"
