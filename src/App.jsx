@@ -29,7 +29,7 @@ function TargetCamera() {
   useFrame((_, delta) => {
     lerping && ref.current.target.lerp(target, delta * 10)
   })
-  return <OrbitControls ref={ref} />
+  return <OrbitControls ref={ref} target={[4, 0, 0]} />
 }
 
 export default function App() {
@@ -39,7 +39,7 @@ export default function App() {
     <>
       <Canvas
         shadows
-        camera={{ position: [0, 0, 1.66] }}
+        camera={{ position: [4, 0, 3] }}
         onPointerDown={() => setLerping(false)}>
         <Suspense fallback={<Loader />}>
           <Environment preset="forest" />
@@ -48,7 +48,7 @@ export default function App() {
           <TargetCamera />
         </Suspense>
       </Canvas>
-      <div id="instructions">Doubleclick to change target</div>
+      <div id="instructions">Doubleclick to change OrbitControls target</div>
     </>
   )
 }
