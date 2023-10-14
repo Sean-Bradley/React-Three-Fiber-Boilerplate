@@ -11,7 +11,8 @@
     "r3f-pack": "^2.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.157.0"
+    "three": "^0.157.0",
+    "zustand": "^4.4.3"
   },
   "scripts": {
     "start": "r3f-pack start",
