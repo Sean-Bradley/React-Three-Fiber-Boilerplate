@@ -11,7 +11,7 @@ export function Model(props) {
   })
   return (
     <group {...props} dispose={null}>
-      <group rotation={[Math.PI / 2, 0, 0]} scale={0.01} onPointerDown={(e) => console.log(e.object.material.name)}>
+      <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
         <mesh
           geometry={nodes['house_water-2_1'].geometry}
           material={materials.ground_1}
