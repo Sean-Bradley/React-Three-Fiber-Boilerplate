@@ -1,56 +1,53 @@
 import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useControls, button } from 'leva'
-import { Vector3 } from 'three'
-import { create } from 'zustand'
 import annotations from './annotations.json'
-
-export const useStore = create((set) => ({
-  to: new Vector3(10, 10, 10),
-  target: new Vector3(0, 1, 0),
-  lerping: false,
-  setLerping: (v) => set({ lerping: v })
-}))
+import TWEEN from '@tweenjs/tween.js'
 
 function Arena({ controls }) {
   const { nodes, materials } = useGLTF('./models/collision-world.glb')
-  const { to, target, lerping, setLerping } = useStore((state) => state)
+  const { camera } = useThree()
 
   useControls('Camera', () => {
     console.log('creating buttons')
-
-    // using forEach
-    // const _buttons = {}
-    // annotations.forEach(({ title, position, lookAt }) => {
-    //   _buttons[title] = button(() => {
-    //     to.copy(position)
-    //     target.copy(lookAt)
-    //     setLerping(true)
-    //   })
-    // })
-    // return _buttons
 
     // using reduce
     const _buttons = annotations.reduce(
       (acc, { title, position, lookAt }) =>
         Object.assign(acc, {
           [title]: button(() => {
-            to.copy(position)
-            target.copy(lookAt)
-            setLerping(true)
+
+            // change target
+            new TWEEN.Tween(controls.current.target)
+              .to(
+                {
+                  x: lookAt.x,
+                  y: lookAt.y,
+                  z: lookAt.z
+                },
+                2100
+              )
+              .easing(TWEEN.Easing.Cubic.Out)
+              .start()
+
+            // change camera position
+            new TWEEN.Tween(camera.position)
+              .to(
+                {
+                  x: position.x,
+                  y: position.y,
+                  z: position.z
+                },
+                2000
+              )
+              .easing(TWEEN.Easing.Cubic.Out)
+              .start()
           })
         }),
       {}
     )
     return _buttons
-  })
-
-  useFrame(({ camera }, delta) => {
-    if (lerping) {
-      camera.position.lerp(to, delta)
-      controls.current.target.lerp(target, delta)
-    }
   })
 
   return (
@@ -63,26 +60,35 @@ function Arena({ controls }) {
         castShadow
         receiveShadow
         material-envMapIntensity={0.4}
-        onDoubleClick={({ camera, intersections }) => {
-          to.copy(camera.position)
-          target.copy(intersections[0].point)
-          setLerping(true)
+        onDoubleClick={({ point }) => {
+          new TWEEN.Tween(controls.current.target)
+            .to(
+              {
+                x: point.x,
+                y: point.y,
+                z: point.z
+              },
+              1000
+            )
+            .easing(TWEEN.Easing.Cubic.Out)
+            .start()
         }}
       />
     </group>
   )
 }
 
+function Tween() {
+  useFrame(() => {
+    TWEEN.update()
+  })
+}
+
 export default function App() {
   const ref = useRef()
-  const { setLerping } = useStore((state) => state)
 
   return (
-    <Canvas
-      camera={{ position: [10, 10, 10] }}
-      onPointerDown={() => setLerping(false)}
-      onWheel={() => setLerping(false)}
-      shadows>
+    <Canvas camera={{ position: [10, 10, 10] }} shadows>
       <directionalLight
         intensity={1}
         castShadow={true}
@@ -97,6 +103,7 @@ export default function App() {
       <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" background />
       <OrbitControls ref={ref} target={[0, 1, 0]} />
       <Arena controls={ref} />
+      <Tween />
       <Stats />
     </Canvas>
   )
