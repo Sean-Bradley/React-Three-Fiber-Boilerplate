@@ -22,7 +22,7 @@ function Annotations({ controls }) {
                 stroke="white"
                 strokeWidth="2"
                 fill="rgba(0,0,0,.66)"
-                onPointerUp={() => {
+                onPointerDown={() => {
                   setSelected(i)
                   // change target
                   new TWEEN.Tween(controls.current.target)
