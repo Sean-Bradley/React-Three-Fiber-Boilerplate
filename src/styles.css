@@ -26,6 +26,7 @@ svg text {
   background: rgba(0, 0, 0, 0.66);
   border-radius: 0.5em;
   display: block;
+  user-select: none;
 }
 
 #annotationsPanel {
