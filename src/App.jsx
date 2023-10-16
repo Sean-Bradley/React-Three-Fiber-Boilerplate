@@ -14,7 +14,8 @@ export default function App() {
         <MyCameraReactsToStateChanges />
         <gridHelper />
       </Canvas>
-      <button id="button" onClick={() => setPosition([0, 7, 0])}>click me</button>
+      <button id="button0" onClick={() => setPosition([0, 7, 0])}>click me</button>
+      <button id="button1" onClick={() => setPosition([0, 1, 10])}>click me</button>
     </>
   )
 }

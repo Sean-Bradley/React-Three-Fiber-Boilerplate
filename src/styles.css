@@ -5,10 +5,8 @@ body,
   margin: 0;
   background: #000000;
 }
-#button {
+button {
   background-color: rgba(201, 191, 112, 0.5);
-  top: 66%;
-  left: 50%;
   height: 70px;
   width: 200px;
   margin-top: -35px;
@@ -19,4 +17,12 @@ body,
   color: white;
   text-align: center;
   pointer-events: auto;
+}
+#button0 {
+  top: 66%;
+  left: 40%;
+}
+#button1 {
+  top: 66%;
+  left: 60%;
 }
