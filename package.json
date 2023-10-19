@@ -7,7 +7,7 @@
   "devDependencies": {
     "@react-three/drei": "^9.87.0",
     "@react-three/fiber": "^8.14.5",
-    "r3f-pack": "^2.0.4",
+    "r3f-pack": "^2.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.157.0"
