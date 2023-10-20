@@ -1,6 +1,6 @@
 import { useThree } from '@react-three/fiber'
 import { useEffect, useMemo } from 'react'
-import { Object3D, Vector3 } from 'three'
+import { Object3D } from 'three'
 
 export default function useFollowCam(offset) {
   const { scene, camera } = useThree()
