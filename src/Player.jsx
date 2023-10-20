@@ -9,7 +9,7 @@ import useFollowCam from './useFollowCam'
 import { useStore } from './Game'
 
 export default function PlayerCollider({ position }) {
-  const { pivot } = useFollowCam()
+  const { pivot } = useFollowCam([0, 1, 1.5])
   const playerGrounded = useRef(false)
   const inJumpAction = useRef(false)
   const group = useRef()
@@ -146,7 +146,6 @@ export default function PlayerCollider({ position }) {
       }
 
       euler.y = pivot.rotation.y
-      euler.order = 'YZX'
       quat.setFromEuler(euler)
       inputVelocity.applyQuaternion(quat)
       velocity.set(inputVelocity.x, inputVelocity.y, inputVelocity.z)
