@@ -47,7 +47,7 @@ export default function useFollowCam(ref, offset) {
       document.removeEventListener('mousemove', onDocumentMouseMove)
       document.removeEventListener('mousewheel', onDocumentMouseWheel)
     }
-  })
+  }, [camera])
 
   useFrame((_, delta) => {
     ref.current.getWorldPosition(worldPosition)
