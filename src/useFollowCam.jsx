@@ -42,7 +42,7 @@ export default function useFollowCam(ref, offset) {
     camera.position.set(offset[0], 0, offset[2])
 
     document.addEventListener('mousemove', onDocumentMouseMove)
-    document.addEventListener('mousewheel', onDocumentMouseWheel)
+    document.addEventListener('mousewheel', onDocumentMouseWheel, { passive: false })
     return () => {
       document.removeEventListener('mousemove', onDocumentMouseMove)
       document.removeEventListener('mousewheel', onDocumentMouseWheel)
