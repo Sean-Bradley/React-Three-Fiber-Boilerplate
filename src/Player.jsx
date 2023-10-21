@@ -10,10 +10,10 @@ import { useStore } from './App'
 
 export default function Player({ position }) {
   //console.log("in Player")
-  const { pivot } = useFollowCam()
   const playerGrounded = useRef(false)
   const inJumpAction = useRef(false)
   const group = useRef()
+  const { yaw } = useFollowCam(group, [0, 1, 1.5])
   const velocity = useMemo(() => new Vector3(), [])
   const inputVelocity = useMemo(() => new Vector3(), [])
   const euler = useMemo(() => new Euler(), [])
@@ -131,8 +131,7 @@ export default function Player({ position }) {
         }
       }
 
-      euler.y = pivot.rotation.y
-      euler.order = 'YZX'
+      euler.y = yaw.rotation.y
       quat.setFromEuler(euler)
       inputVelocity.applyQuaternion(quat)
       velocity.set(inputVelocity.x, inputVelocity.y, inputVelocity.z)
@@ -155,8 +154,6 @@ export default function Player({ position }) {
     }
 
     group.current.position.lerp(worldPosition, 0.3)
-
-    pivot.position.lerp(worldPosition, 0.1)
   })
 
   return (
