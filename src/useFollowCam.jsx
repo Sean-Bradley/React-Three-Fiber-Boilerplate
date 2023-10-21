@@ -1,29 +1,22 @@
-import { useThree } from '@react-three/fiber'
+import { useThree, useFrame } from '@react-three/fiber'
 import { useEffect, useMemo } from 'react'
-import { Object3D } from 'three'
+import { Object3D, Vector3 } from 'three'
 
-export default function useFollowCam() {
+export default function useFollowCam(ref, offset) {
   const { scene, camera } = useThree()
 
-  const pivot = useMemo(() => {
-    const p = new Object3D()
-    p.rotation.y = Math.PI
-    return p
-  }, [])
-  
-  const followCam = useMemo(() => {
-    const o = new Object3D()
-    o.position.set(0, 1, 1.5)
-    return o
-  }, [])
+  const pivot = useMemo(() => new Object3D(), [])
+  const alt = useMemo(() => new Object3D(), [])
+  const yaw = useMemo(() => new Object3D(), [])
+  const pitch = useMemo(() => new Object3D(), [])
+  const worldPosition = useMemo(() => new Vector3(), [])
 
   const onDocumentMouseMove = (e) => {
     if (document.pointerLockElement) {
-      pivot.rotation.y -= e.movementX * 0.002
-      const v = followCam.rotation.x - e.movementY * 0.002
-      if (v >= -1.0 && v <= 0.2) {
-        followCam.rotation.x = v
-        followCam.position.y = -v * followCam.position.z + 1
+      yaw.rotation.y -= e.movementX * 0.002
+      const v = pitch.rotation.x - e.movementY * 0.002
+      if (v > -1 && v < 0.1) {
+        pitch.rotation.x = v
       }
     }
     return false
@@ -31,28 +24,35 @@ export default function useFollowCam() {
 
   const onDocumentMouseWheel = (e) => {
     if (document.pointerLockElement) {
-      const v = followCam.position.z + e.deltaY * 0.002
-      if (v >= 0.5 && v <= 4) {
-        followCam.position.z = v
+      const v = camera.position.z + e.deltaY * 0.005
+      if (v >= 0.5 && v <= 5) {
+        camera.position.z = v
       }
     }
     return false
   }
 
   useEffect(() => {
-    camera.position.set(0, 0, 0)
-    followCam.add(camera)
-    pivot.add(followCam)
     scene.add(pivot)
-    //console.log('attach followCam listeners')
+    pivot.add(alt)
+    alt.position.y = offset[1]
+    alt.add(yaw)
+    yaw.add(pitch)
+    pitch.add(camera)
+    camera.position.set(offset[0], 0, offset[2])
+
     document.addEventListener('mousemove', onDocumentMouseMove)
     document.addEventListener('mousewheel', onDocumentMouseWheel)
     return () => {
-      //console.log('remove followCam listeners')
       document.removeEventListener('mousemove', onDocumentMouseMove)
       document.removeEventListener('mousewheel', onDocumentMouseWheel)
     }
   })
 
-  return { pivot }
+  useFrame((_, delta) => {
+    ref.current.getWorldPosition(worldPosition)
+    pivot.position.lerp(worldPosition, delta * 5)
+  })
+
+  return { pivot, alt, yaw, pitch }
 }
