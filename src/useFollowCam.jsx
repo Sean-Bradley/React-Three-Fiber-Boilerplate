@@ -1,15 +1,15 @@
-import { useThree } from '@react-three/fiber'
+import { useThree, useFrame } from '@react-three/fiber'
 import { useEffect, useMemo } from 'react'
-import { Object3D } from 'three'
+import { Object3D, Vector3 } from 'three'
 
-export default function useFollowCam(offset) {
+export default function useFollowCam(ref, offset) {
   const { scene, camera } = useThree()
 
   const pivot = useMemo(() => new Object3D(), [])
   const alt = useMemo(() => new Object3D(), [])
   const yaw = useMemo(() => new Object3D(), [])
   const pitch = useMemo(() => new Object3D(), [])
-  const roll = useMemo(() => new Object3D(), [])
+  const worldPosition = useMemo(() => new Vector3(), [])
 
   const onDocumentMouseMove = (e) => {
     if (document.pointerLockElement) {
@@ -38,8 +38,7 @@ export default function useFollowCam(offset) {
     alt.position.y = offset[1]
     alt.add(yaw)
     yaw.add(pitch)
-    pitch.add(roll)
-    roll.add(camera)
+    pitch.add(camera)
     camera.position.set(offset[0], 0, offset[2])
 
     document.addEventListener('mousemove', onDocumentMouseMove)
@@ -50,5 +49,10 @@ export default function useFollowCam(offset) {
     }
   })
 
-  return { pivot, alt, yaw, pitch, roll }
+  useFrame((_, delta) => {
+    ref.current.getWorldPosition(worldPosition)
+    pivot.position.lerp(worldPosition, delta * 5)
+  })
+
+  return { pivot, alt, yaw, pitch }
 }

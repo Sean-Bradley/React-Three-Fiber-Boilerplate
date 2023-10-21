@@ -9,10 +9,10 @@ import useFollowCam from './useFollowCam'
 import { useStore } from './Game'
 
 export default function PlayerCollider({ position }) {
-  const { pivot, yaw } = useFollowCam([0, 1, 1.5])
   const playerGrounded = useRef(false)
   const inJumpAction = useRef(false)
   const group = useRef()
+  const { yaw } = useFollowCam(group, [0, 1, 1.5])
   const velocity = useMemo(() => new Vector3(), [])
   const inputVelocity = useMemo(() => new Vector3(), [])
   const euler = useMemo(() => new Euler(), [])
@@ -74,13 +74,11 @@ export default function PlayerCollider({ position }) {
     raycasterOffset.y += 0.01
     raycaster.set(raycasterOffset, down)
     raycaster.intersectObjects(Object.values(groundObjects), false).forEach((i) => {
-      //console.log(i.distance)
       if (i.distance < 0.021) {
         playerGrounded.current = true
       }
     })
     if (!playerGrounded.current) {
-      //console.log('in air')
       body.linearDamping.set(0)
     } else {
       body.linearDamping.set(0.9999999)
@@ -119,14 +117,11 @@ export default function PlayerCollider({ position }) {
       inputVelocity.setLength(0.7) // clamps walking speed
 
       if (activeAction !== prevActiveAction.current) {
-        //console.log('active action changed')
         if (prevActiveAction.current !== 1 && activeAction === 1) {
-          //console.log('idle --> walking')
           actions['idle'].fadeOut(0.1)
           actions['walk'].reset().fadeIn(0.1).play()
         }
         if (prevActiveAction.current !== 0 && activeAction === 0) {
-          //console.log('walking --> idle')
           actions['walk'].fadeOut(0.1)
           actions['idle'].reset().fadeIn(0.1).play()
         }
@@ -160,8 +155,6 @@ export default function PlayerCollider({ position }) {
     }
 
     group.current.position.lerp(worldPosition, 0.3)
-
-    pivot.position.lerp(worldPosition, 0.1)
   })
 
   return (
