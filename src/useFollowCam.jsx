@@ -11,25 +11,25 @@ export default function useFollowCam(ref, offset) {
   const pitch = useMemo(() => new Object3D(), [])
   const worldPosition = useMemo(() => new Vector3(), [])
 
-  const onDocumentMouseMove = (e) => {
+  function onDocumentMouseMove(e) {
     if (document.pointerLockElement) {
+      e.preventDefault()
       yaw.rotation.y -= e.movementX * 0.002
       const v = pitch.rotation.x - e.movementY * 0.002
       if (v > -1 && v < 0.1) {
         pitch.rotation.x = v
       }
     }
-    return false
   }
 
-  const onDocumentMouseWheel = (e) => {
+  function onDocumentMouseWheel(e) {
     if (document.pointerLockElement) {
+      e.preventDefault()
       const v = camera.position.z + e.deltaY * 0.005
       if (v >= 0.5 && v <= 5) {
         camera.position.z = v
       }
     }
-    return false
   }
 
   useEffect(() => {
