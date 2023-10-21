@@ -5,12 +5,15 @@ import { Object3D } from 'three'
 export default function useFollowCam(offset) {
   const { scene, camera } = useThree()
 
-  const pivot = useMemo(() => new Object3D(), []) // rotate left/right circle
-  const pitch = useMemo(() => new Object3D(), []) // looking from up/down
+  const pivot = useMemo(() => new Object3D(), [])
+  const alt = useMemo(() => new Object3D(), [])
+  const yaw = useMemo(() => new Object3D(), [])
+  const pitch = useMemo(() => new Object3D(), [])
+  const roll = useMemo(() => new Object3D(), [])
 
   const onDocumentMouseMove = (e) => {
     if (document.pointerLockElement) {
-      pivot.rotation.y -= e.movementX * 0.002
+      yaw.rotation.y -= e.movementX * 0.002
       const v = pitch.rotation.x - e.movementY * 0.002
       if (v > -1 && v < 0.1) {
         pitch.rotation.x = v
@@ -31,9 +34,13 @@ export default function useFollowCam(offset) {
 
   useEffect(() => {
     scene.add(pivot)
-    pivot.add(pitch)
-    pitch.add(camera)
-    camera.position.set(...offset)
+    pivot.add(alt)
+    alt.position.y = offset[1]
+    alt.add(yaw)
+    yaw.add(pitch)
+    pitch.add(roll)
+    roll.add(camera)
+    camera.position.set(offset[0], 0, offset[2])
 
     document.addEventListener('mousemove', onDocumentMouseMove)
     document.addEventListener('mousewheel', onDocumentMouseWheel)
@@ -43,5 +50,5 @@ export default function useFollowCam(offset) {
     }
   })
 
-  return { pivot }
+  return { pivot, alt, yaw, pitch, roll }
 }
