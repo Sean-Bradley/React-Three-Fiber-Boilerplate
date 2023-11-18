@@ -1,13 +1,16 @@
-import { Stats, OrbitControls, useGLTF } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
-import { useRef, useMemo } from 'react'
-import { Debug, Physics, useBox, usePlane, useSphere, useTrimesh, useCylinder, useConvexPolyhedron } from '@react-three/cannon'
-import { MeshNormalMaterial, IcosahedronGeometry, TorusKnotGeometry } from 'three'
-import { useControls } from 'leva'
-import CannonUtils from './CannonUtils'
+import { Stats, OrbitControls } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { useRef, useEffect } from 'react'
+import { Debug, Physics, useCompoundBody, usePlane, useBox, useSphere, useContactMaterial } from '@react-three/cannon'
+import useKeyboard from './useKeyboard'
+
+function lerp(from, to, speed) {
+  const r = (1 - speed) * from + speed * to
+  return Math.abs(from - to) < 0.001 ? to : r
+}
 
 function Plane(props) {
-  const [ref] = usePlane(() => ({ mass: 0, ...props }), useRef())
+  const [ref] = usePlane(() => ({ mass: 0, material: 'object', ...props }), useRef())
   return (
     <mesh ref={ref} receiveShadow>
       <planeGeometry args={[25, 25]} />
@@ -16,109 +19,274 @@ function Plane(props) {
   )
 }
 
-function Box(props) {
-  const [ref, api] = useBox(() => ({ args: [1, 1, 1], mass: 1, ...props }), useRef())
-
-  return (
-    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshNormalMaterial />
-    </mesh>
-  )
-}
-
-function Sphere(props) {
-  const [ref, api] = useSphere(() => ({ args: [0.75], mass: 1, ...props }), useRef())
-
-  return (
-    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
-      <sphereGeometry args={[0.75]} />
-      <meshNormalMaterial />
-    </mesh>
-  )
-}
-
-function Cylinder(props) {
-  const [ref, api] = useCylinder(() => ({ args: [1, 1, 2, 8], mass: 1, ...props }), useRef())
-
-  return (
-    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
-      <cylinderGeometry args={[1, 1, 2, 8]} />
-      <meshNormalMaterial />
-    </mesh>
-  )
-}
-
-function Icosahedron(props) {
-  const geometry = useMemo(() => new IcosahedronGeometry(1, 0), [])
-  const args = useMemo(() => CannonUtils.toConvexPolyhedronProps(geometry), [geometry])
-  const [ref, api] = useConvexPolyhedron(() => ({ args, mass: 1, ...props }), useRef())
-
-  return (
-    <mesh ref={ref} castShadow geometry={geometry} onPointerDown={() => api.velocity.set(0, 5, 0)}>
-      <meshNormalMaterial />
-    </mesh>
-  )
-}
-
-function TorusKnot(props) {
-  const geometry = useMemo(() => new TorusKnotGeometry(), [])
-  const [ref, api] = useTrimesh(
+function FlipperLeft({ position, keyboard }) {
+  const cylinderArgs = [0.25, 0.25, 1]
+  const boxArgs = [2, 0.5, 0.25]
+  const [ref, api] = useCompoundBody(
     () => ({
-      args: [geometry.attributes.position.array, geometry.index.array],
-      mass: 1,
-      ...props
+      mass: 0,
+      position: position,
+      shapes: [
+        { args: cylinderArgs, type: 'Cylinder' },
+        { args: boxArgs, position: [1, 0, 0], type: 'Box' }
+      ]
     }),
     useRef()
   )
+  const targetRotation = useRef()
+  useEffect(() => {
+    api.rotation.subscribe((v) => {
+      api.rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
+    })
+  }, [])
+
+  useFrame(() => {
+    if (keyboard['ArrowLeft']) {
+      targetRotation.current = 0.2
+    } else {
+      targetRotation.current = -0.2
+    }
+  })
 
   return (
-    <mesh ref={ref} castShadow onPointerDown={() => api.velocity.set(0, 5, 0)}>
-      <torusKnotGeometry />
+    <mesh ref={ref} castShadow>
+      <cylinderGeometry args={cylinderArgs} />
+      <meshNormalMaterial />
+      <mesh position={[1, 0, 0]} castShadow>
+        <boxGeometry args={boxArgs} />
+        <meshNormalMaterial />
+      </mesh>
+    </mesh>
+  )
+}
+
+function FlipperRight({ position, keyboard }) {
+  const cylinderArgs = [0.25, 0.25, 1]
+  const boxArgs = [2, 0.5, 0.25]
+  const [ref, api] = useCompoundBody(
+    () => ({
+      mass: 0,
+      position: position,
+      shapes: [
+        { args: cylinderArgs, type: 'Cylinder' },
+        { args: boxArgs, position: [-1, 0, 0], type: 'Box' }
+      ]
+    }),
+    useRef()
+  )
+  const targetRotation = useRef()
+  useEffect(() => {
+    api.rotation.subscribe((v) => {
+      api.rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
+    })
+  }, [])
+
+  useFrame((_, delta) => {
+    if (keyboard['ArrowRight']) {
+      targetRotation.current = -0.2
+    } else {
+      targetRotation.current = 0.2
+    }
+  })
+
+  return (
+    <mesh ref={ref} position={position} castShadow>
+      <cylinderGeometry args={cylinderArgs} />
+      <meshNormalMaterial />
+      <mesh position={[-1, 0, 0]} castShadow>
+        <boxGeometry args={boxArgs} />
+        <meshNormalMaterial />
+      </mesh>
+    </mesh>
+  )
+}
+
+function Spring({ position, keyboard }) {
+  const boxArgs = [1.4, 1, 0.3]
+  const cylinderArgs = [0.1, 0.1, 2]
+  const [ref, api] = useCompoundBody(
+    () => ({
+      mass: 0,
+      position: position,
+      shapes: [
+        { args: boxArgs, type: 'Box', material: 'object' },
+        { args: cylinderArgs, position: [0, 0, 1], rotation: [-Math.PI / 2, 0, 0], type: 'Cylinder' }
+      ]
+    }),
+    useRef()
+  )
+  const targetPosition = useRef()
+  const speed = useRef()
+  useEffect(() => {
+    api.position.subscribe((v) => {
+      api.position.set(v[0], v[1], lerp(v[2], targetPosition.current, speed.current))
+    })
+  }, [])
+
+  useFrame((_, delta) => {
+    if (keyboard['Space']) {
+      targetPosition.current = 3
+      speed.current = delta * 5
+    } else {
+      targetPosition.current = 1
+      speed.current = delta * 10
+    }
+  })
+
+  return (
+    <mesh ref={ref} position={position} castShadow>
+      <boxGeometry args={boxArgs} />
+      <meshNormalMaterial />
+      <mesh position={[0, 0, 1]} rotation={[-Math.PI / 2, 0, 0]} castShadow>
+        <cylinderGeometry args={cylinderArgs} />
+        <meshNormalMaterial />
+      </mesh>
+    </mesh>
+  )
+}
+
+function Controllers() {
+  const keyboard = useKeyboard()
+
+  return (
+    <>
+      <Debug>
+        <FlipperLeft position={[-2.5, 0.5, 2]} rotation={[0.1, 0, 0]} keyboard={keyboard} />
+        <FlipperRight position={[2.5, 0.5, 2]} keyboard={keyboard} />
+        <Spring position={[5.04, 0.5, 0]} keyboard={keyboard} />
+      </Debug>
+    </>
+  )
+}
+
+function Ball(props) {
+  useContactMaterial('object', 'slippery', {
+    friction: 0,
+    restitution: 0.5,
+    contactEquationStiffness: 1e8,
+    contactEquationRelaxation: 1
+  })
+  const [ref, { position, velocity, angularVelocity }] = useSphere(() => ({
+    args: [0.5],
+    mass: 1,
+    material: 'slippery',
+    onCollide: (c) => {
+      if (c.body.name === 'bumber') {
+        const cn = c.contact.contactNormal
+        velocity.set(cn[0] * 10, cn[1] * 10, cn[2] * 10)
+      }
+    },
+    ...props
+  }))
+
+  useEffect(() => {
+    const unsubscribe = position.subscribe((v) => {
+      if (v[2] > 6) {
+        velocity.set(0, 0, 0)
+        angularVelocity.set(0, 0, 0)
+        position.set(5.04, 2, -1)
+      }
+    })
+    return unsubscribe
+  }, [position, velocity])
+
+  return (
+    <mesh ref={ref} castShadow>
+      <sphereGeometry args={[0.5]} />
+      <meshStandardMaterial />
+    </mesh>
+  )
+}
+
+function Wall({ args, ...props }) {
+  const [ref] = useBox(() => ({ args: args, mass: 0, material: 'object', ...props }))
+
+  return (
+    <mesh ref={ref} castShadow>
+      <boxGeometry args={args} />
       <meshNormalMaterial />
     </mesh>
   )
 }
 
-export function Monkey(props) {
-  const { nodes } = useGLTF('/models/monkey.glb')
-  const [ref, api] = useTrimesh(
-    () => ({
-      args: [nodes.Suzanne.geometry.attributes.position.array, nodes.Suzanne.geometry.index.array],
-      mass: 1,
-      ...props
-    }),
-    useRef()
-  )
+function Bumber(props) {
+  const targetScale = useRef(1)
+  const [ref] = useSphere(() => ({
+    args: [0.5],
+    mass: 0,
+    onCollide: () => {
+      targetScale.current = 1.2
+    },
+    ...props
+  }))
+
+  useFrame((_, delta) => {
+    ref.current.scale.x = ref.current.scale.z = targetScale.current
+    targetScale.current = lerp(targetScale.current, 1, delta * 10)
+  })
+
   return (
-    <group ref={ref} {...props} dispose={null} onPointerDown={() => api.velocity.set(0, 5, 0)}>
-      <mesh castShadow geometry={nodes.Suzanne.geometry} material={useMemo(() => new MeshNormalMaterial(), [])} />
-    </group>
+    <mesh ref={ref} name={'bumber'} castShadow>
+      <cylinderGeometry args={[0.5, 0.5, 0.25]} />
+      <meshNormalMaterial />
+    </mesh>
+  )
+}
+
+function SlidingBox({ args, ...props }) {
+  const [ref, { position }] = useBox(() => ({ args: args, mass: 0, material: 'object', ...props }), useRef())
+
+  const targetPosition = useRef(1)
+  const direction = useRef(1)
+
+  useEffect(() => {
+    position.subscribe((v) => {
+      position.set(lerp(v[0], targetPosition.current, 0.1), v[1], v[2])
+    })
+  }, [])
+
+  useFrame((_, delta) => {
+    targetPosition.current += direction.current * delta
+    if (targetPosition.current > 2) direction.current = -1
+    if (targetPosition.current < -2) direction.current = 1
+  })
+
+  return (
+    <mesh ref={ref} castShadow>
+      <boxGeometry args={args} />
+      <meshNormalMaterial />
+    </mesh>
+  )
+}
+
+function Game() {
+  return (
+    <Physics gravity={[0, -9.8, 3]}>
+      <Plane rotation={[-Math.PI / 2, 0, 0]} />
+      <Wall args={[0.25, 1, 4]} position={[-3.4, 0.5, -0.1]} rotation={[0, Math.PI / 8, 0]} />
+      <Wall args={[0.25, 1, 4]} position={[3.4, 0.5, -0.1]} rotation={[0, -Math.PI / 8, 0]} />
+      <Wall args={[0.25, 1, 8]} position={[-4.17, 0.5, -6]} />
+      <Wall args={[0.25, 1, 11]} position={[4.17, 0.5, -2.5]} />
+      <Wall args={[0.25, 1, 12]} position={[5.9, 0.5, -3]} />
+      <Wall args={[0.25, 1, 4]} position={[-2.4, 0.5, -11.1]} rotation={[0, -Math.PI / 3, 0]} />
+      <Wall args={[0.25, 1, 6]} position={[3.25, 0.5, -10.6]} rotation={[0, Math.PI / 3, 0]} />
+      <Wall args={[0.25, 1, 1.2]} position={[0, 0.5, -12.1]} rotation={[0, Math.PI / 2, 0]} />
+      <Bumber position={[-2, 0.5, -4]} />
+      <Bumber position={[2, 0.5, -4]} />
+      <SlidingBox args={[1, 0.5, 0.1]} position={[0, 0.5, -1]} />
+      <Controllers />
+      <Ball position={[5.04, 2, -1]} />
+    </Physics>
   )
 }
 
 export default function App() {
-  const gravity = useControls('Gravity', {
-    x: { value: 0, min: -10, max: 10, step: 0.1 },
-    y: { value: -9.8, min: -10, max: 10, step: 0.1 },
-    z: { value: 0, min: -10, max: 10, step: 0.1 }
-  })
   return (
-    <Canvas shadows camera={{ position: [0, 2, 4] }}>
+    <Canvas shadows camera={{ position: [1, 6, 3] }}>
       <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
       <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
-      <Physics gravity={[gravity.x, gravity.y, gravity.z]}>
-        <Debug>
-          <Plane rotation={[-Math.PI / 2, 0, 0]} />
-          <Box position={[-4, 3, 0]} />
-          <Sphere position={[-2, 3, 0]} />
-          <Cylinder position={[0, 3, 0]} />
-          <Icosahedron position={[2, 3, 0]} />
-          <TorusKnot position={[4, 3, 0]} />
-          <Monkey position={[-2, 20, 0]} />
-        </Debug>
-      </Physics>
-      <OrbitControls target-y={0.5} />
+      <Game />
+      <OrbitControls target={[1, 0, -2]} />
       <Stats />
     </Canvas>
   )
