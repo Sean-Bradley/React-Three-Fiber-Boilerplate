@@ -22,7 +22,7 @@ function Plane(props) {
 function FlipperLeft({ position, keyboard }) {
   const cylinderArgs = [0.25, 0.25, 1]
   const boxArgs = [2, 0.5, 0.25]
-  const [ref, api] = useCompoundBody(
+  const [ref, { rotation }] = useCompoundBody(
     () => ({
       mass: 0,
       position: position,
@@ -35,8 +35,8 @@ function FlipperLeft({ position, keyboard }) {
   )
   const targetRotation = useRef()
   useEffect(() => {
-    api.rotation.subscribe((v) => {
-      api.rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
+    rotation.subscribe((v) => {
+      rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
     })
   }, [])
 
@@ -63,7 +63,7 @@ function FlipperLeft({ position, keyboard }) {
 function FlipperRight({ position, keyboard }) {
   const cylinderArgs = [0.25, 0.25, 1]
   const boxArgs = [2, 0.5, 0.25]
-  const [ref, api] = useCompoundBody(
+  const [ref, { rotation }] = useCompoundBody(
     () => ({
       mass: 0,
       position: position,
@@ -76,12 +76,12 @@ function FlipperRight({ position, keyboard }) {
   )
   const targetRotation = useRef()
   useEffect(() => {
-    api.rotation.subscribe((v) => {
-      api.rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
+    rotation.subscribe((v) => {
+      rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
     })
   }, [])
 
-  useFrame((_, delta) => {
+  useFrame(() => {
     if (keyboard['ArrowRight']) {
       targetRotation.current = -0.2
     } else {
@@ -236,7 +236,7 @@ function Bumber(props) {
 function SlidingBox({ args, ...props }) {
   const [ref, { position }] = useBox(() => ({ args: args, mass: 0, material: 'object', ...props }), useRef())
 
-  const targetPosition = useRef(1)
+  const targetPosition = useRef(0)
   const direction = useRef(1)
 
   useEffect(() => {
