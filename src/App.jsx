@@ -25,7 +25,7 @@ function FlipperLeft({ position, keyboard }) {
   const [ref, { rotation }] = useCompoundBody(
     () => ({
       mass: 0,
-      position: position,
+      position,
       shapes: [
         { args: cylinderArgs, type: 'Cylinder' },
         { args: boxArgs, position: [1, 0, 0], type: 'Box' }
@@ -35,17 +35,14 @@ function FlipperLeft({ position, keyboard }) {
   )
   const targetRotation = useRef()
   useEffect(() => {
-    rotation.subscribe((v) => {
+    const unsubscribe = rotation.subscribe((v) => {
       rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
     })
+    return unsubscribe
   }, [])
 
   useFrame(() => {
-    if (keyboard['ArrowLeft']) {
-      targetRotation.current = 0.2
-    } else {
-      targetRotation.current = -0.2
-    }
+    keyboard['ArrowLeft'] ? (targetRotation.current = 0.2) : (targetRotation.current = -0.2)
   })
 
   return (
@@ -66,7 +63,7 @@ function FlipperRight({ position, keyboard }) {
   const [ref, { rotation }] = useCompoundBody(
     () => ({
       mass: 0,
-      position: position,
+      position,
       shapes: [
         { args: cylinderArgs, type: 'Cylinder' },
         { args: boxArgs, position: [-1, 0, 0], type: 'Box' }
@@ -76,17 +73,14 @@ function FlipperRight({ position, keyboard }) {
   )
   const targetRotation = useRef()
   useEffect(() => {
-    rotation.subscribe((v) => {
+    const unsubscribe = rotation.subscribe((v) => {
       rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
     })
+    return unsubscribe
   }, [])
 
   useFrame(() => {
-    if (keyboard['ArrowRight']) {
-      targetRotation.current = -0.2
-    } else {
-      targetRotation.current = 0.2
-    }
+    keyboard['ArrowRight'] ? (targetRotation.current = -0.2) : (targetRotation.current = 0.2)
   })
 
   return (
@@ -107,7 +101,7 @@ function Spring({ position, keyboard }) {
   const [ref, api] = useCompoundBody(
     () => ({
       mass: 0,
-      position: position,
+      position,
       shapes: [
         { args: boxArgs, type: 'Box', material: 'object' },
         { args: cylinderArgs, position: [0, 0, 1], rotation: [-Math.PI / 2, 0, 0], type: 'Cylinder' }
@@ -118,9 +112,10 @@ function Spring({ position, keyboard }) {
   const targetPosition = useRef()
   const speed = useRef()
   useEffect(() => {
-    api.position.subscribe((v) => {
+    const unsubscribe = api.position.subscribe((v) => {
       api.position.set(v[0], v[1], lerp(v[2], targetPosition.current, speed.current))
     })
+    return unsubscribe
   }, [])
 
   useFrame((_, delta) => {
@@ -240,9 +235,10 @@ function SlidingBox({ args, ...props }) {
   const direction = useRef(1)
 
   useEffect(() => {
-    position.subscribe((v) => {
+    const unsubscribe = position.subscribe((v) => {
       position.set(lerp(v[0], targetPosition.current, 0.1), v[1], v[2])
     })
+    return unsubscribe
   }, [])
 
   useFrame((_, delta) => {
