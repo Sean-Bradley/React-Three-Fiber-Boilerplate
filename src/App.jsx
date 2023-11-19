@@ -194,7 +194,7 @@ function Ball(props) {
 }
 
 function Wall({ args, ...props }) {
-  const [ref] = useBox(() => ({ args: args, mass: 0, material: 'object', ...props }))
+  const [ref] = useBox(() => ({ args, mass: 0, material: 'object', ...props }))
 
   return (
     <mesh ref={ref} castShadow>
@@ -229,7 +229,7 @@ function Bumber(props) {
 }
 
 function SlidingBox({ args, ...props }) {
-  const [ref, { position }] = useBox(() => ({ args: args, mass: 0, material: 'object', ...props }), useRef())
+  const [ref, { position }] = useBox(() => ({ args, mass: 0, material: 'object', ...props }), useRef())
 
   const targetPosition = useRef(0)
   const direction = useRef(1)
