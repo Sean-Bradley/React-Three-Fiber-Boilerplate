@@ -5,12 +5,12 @@ import { useStore } from './App'
 
 export default function Eve() {
   const ref = useRef()
-  const { nodes, materials } = useGLTF('./models/eve.glb')
-  const idleAnimation = useGLTF('./models/eve@idle.glb').animations
-  const walkAnimation = useGLTF('./models/eve@walking.glb').animations
-  const runningAnimation = useGLTF('./models/eve@running.glb').animations
-  const jumpAnimation = useGLTF('./models/eve@jump.glb').animations
-  const poseAnimation = useGLTF('./models/eve@pose.glb').animations
+  const { nodes, materials } = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve.glb')
+  const idleAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@idle.glb').animations
+  const walkAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@walking.glb').animations
+  const runningAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@running.glb').animations
+  const jumpAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@jump.glb').animations
+  const poseAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@pose.glb').animations
 
   const { actions, mixer } = useStore((state) => state)
 
@@ -36,4 +36,11 @@ export default function Eve() {
   )
 }
 
-useGLTF.preload(['./models/eve.glb', './models/eve@idle.glb', './models/eve@running.glb', './models/eve@walking.glb', './models/eve@jump.glb', './models/eve@pose.glb'])
+useGLTF.preload([
+  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve.glb',
+  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@idle.glb',
+  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@running.glb',
+  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@walking.glb',
+  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@jump.glb',
+  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@pose.glb'
+])
