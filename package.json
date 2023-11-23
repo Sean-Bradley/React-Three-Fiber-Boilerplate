@@ -9,8 +9,6 @@
     "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.88.17",
     "@react-three/fiber": "^8.15.11",
-    "gh-pages": "^6.1.0",
-    "leva": "^0.9.35",
     "r3f-pack": "^2.2.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -19,7 +17,6 @@
   },
   "scripts": {
     "start": "r3f-pack start",
-    "build": "r3f-pack build",
-    "deploy": "gh-pages -d build"
+    "build": "r3f-pack build"
   }
 }
