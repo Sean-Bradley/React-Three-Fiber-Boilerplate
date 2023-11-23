@@ -1,30 +1,28 @@
 import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
-import { LoopOnce, LoopRepeat } from 'three'
-import { useStore } from './Game'
+import { useStore } from './App'
 
 export default function Eve() {
   const ref = useRef()
   const { nodes, materials } = useGLTF('./models/eve.glb')
   const idleAnimation = useGLTF('./models/eve@idle.glb').animations
   const walkAnimation = useGLTF('./models/eve@walking.glb').animations
+  const runningAnimation = useGLTF('./models/eve@running.glb').animations
   const jumpAnimation = useGLTF('./models/eve@jump.glb').animations
+  const poseAnimation = useGLTF('./models/eve@pose.glb').animations
 
   const { actions, mixer } = useStore((state) => state)
 
   useEffect(() => {
     actions['idle'] = mixer.clipAction(idleAnimation[0], ref.current)
-    actions['idle'].loop = LoopOnce
-    actions['idle'].clampWhenFinished = true
     actions['walk'] = mixer.clipAction(walkAnimation[0], ref.current)
-    actions['walk'].loop = LoopRepeat
+    actions['running'] = mixer.clipAction(runningAnimation[0], ref.current)
     actions['jump'] = mixer.clipAction(jumpAnimation[0], ref.current)
-    actions['jump'].loop = LoopOnce
-    actions['jump'].clampWhenFinished = true
+    actions['pose'] = mixer.clipAction(poseAnimation[0], ref.current)
 
     actions['idle'].play()
-  }, [actions, mixer, idleAnimation, walkAnimation, jumpAnimation])
+  }, [actions, mixer, idleAnimation, walkAnimation, runningAnimation, jumpAnimation, poseAnimation])
 
   return (
     <group ref={ref} dispose={null}>
@@ -38,4 +36,4 @@ export default function Eve() {
   )
 }
 
-useGLTF.preload(['./models/eve.glb', './models/eve@idle.glb', './models/eve@walking.glb', './models/eve@jump.glb'])
+useGLTF.preload(['./models/eve.glb', './models/eve@idle.glb', './models/eve@running.glb', './models/eve@walking.glb', './models/eve@jump.glb', './models/eve@pose.glb'])
