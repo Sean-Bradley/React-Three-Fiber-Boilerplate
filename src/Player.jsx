@@ -15,9 +15,9 @@ export default function Player() {
   const [action, setAction] = useState()
 
   useEffect(() => {
-    action && action.reset().fadeIn(0.1).play()
+    action?.reset().fadeIn(0.1).play()
     return () => {
-      action && action.fadeOut(0.1)
+      action?.fadeOut(0.1)
     }
   }, [action])
 
