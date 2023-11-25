@@ -20,7 +20,7 @@ export default function Eve() {
     actions['jump'] = mixer.clipAction(jumpAnimation[0], ref.current)
 
     actions['idle'].play()
-  }, [mixer, actions, animations, idleAnimation, walkAnimation, jumpAnimation])
+  }, [])
 
   return (
     <group ref={ref} dispose={null} rotation={[Math.PI / 2, 0, 0]} scale={0.01}>

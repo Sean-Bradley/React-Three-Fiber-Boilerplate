@@ -22,7 +22,7 @@ export const useStore = create((set) => ({
 
 function Loader() {
   const { progress, item, loaded, total } = useProgress()
-  console.log(progress, item, loaded, total)
+  //console.log(progress, item, loaded, total)
   document.getElementById('instructions').style.display = 'block'
   return (
     <Html center>
