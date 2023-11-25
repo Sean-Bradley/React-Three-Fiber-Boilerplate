@@ -21,7 +21,7 @@ export const useStore = create((set) => ({
 }))
 
 function Loader() {
-  const { progress, item, loaded, total } = useProgress()
+  const { progress } = useProgress()
   //console.log(progress, item, loaded, total)
   document.getElementById('instructions').style.display = 'block'
   return (
