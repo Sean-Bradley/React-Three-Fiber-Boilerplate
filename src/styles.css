@@ -29,7 +29,6 @@ kbd {
   font-weight: lighter
 }
 #progress {
-  background-color: black;
   top: 50%;
   left: 50%;
   height: 500px;

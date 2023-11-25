@@ -1,18 +1,23 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
-import { useEffect } from 'react'
-import { useStore } from './App'
+import useKeyboard from './useKeyboard'
+import { useFrame } from '@react-three/fiber'
+import { AnimationMixer } from 'three'
 
 export default function Eve() {
   const ref = useRef()
-  const { nodes, materials } = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve.glb')
-  const idleAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@idle.glb').animations
-  const walkAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@walking.glb').animations
-  const runningAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@running.glb').animations
-  const jumpAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@jump.glb').animations
-  const poseAnimation = useGLTF('https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@pose.glb').animations
-
-  const { actions, mixer } = useStore((state) => state)
+  const { nodes, materials } = useGLTF('./models/eve.glb')
+  const idleAnimation = useGLTF('./models/eve@idle.glb').animations
+  const walkAnimation = useGLTF('./models/eve@walking.glb').animations
+  const runningAnimation = useGLTF('./models/eve@running.glb').animations
+  const jumpAnimation = useGLTF('./models/eve@jump.glb').animations
+  const poseAnimation = useGLTF('./models/eve@pose.glb').animations
+  const actions = useMemo(() => [], [])
+  const mixer = useMemo(() => new AnimationMixer(), [])
+  const keyboard = useKeyboard()
+  const [action, setAction] = useState()
+  let [wait, setWait] = useState(false)
+  let actionAssigned
 
   useEffect(() => {
     actions['idle'] = mixer.clipAction(idleAnimation[0], ref.current)
@@ -22,7 +27,46 @@ export default function Eve() {
     actions['pose'] = mixer.clipAction(poseAnimation[0], ref.current)
 
     actions['idle'].play()
-  }, [actions, mixer, idleAnimation, walkAnimation, runningAnimation, jumpAnimation, poseAnimation])
+  }, [])
+
+  useEffect(() => {
+    action?.reset().fadeIn(0.1).play()
+    return () => {
+      action?.fadeOut(0.1)
+    }
+  }, [action])
+
+  useFrame((_, delta) => {
+    if (!wait) {
+      actionAssigned = false
+
+      if (keyboard['KeyW']) {
+        setAction(actions['walk'])
+        actionAssigned = true
+      }
+
+      if (keyboard['KeyW'] && keyboard['ShiftLeft']) {
+        setAction(actions['running'])
+        actionAssigned = true
+      }
+
+      if (keyboard['Space']) {
+        setAction(actions['jump'])
+        actionAssigned = true
+        setWait(true) // wait for jump to finish
+        setTimeout(() => setWait(false), 1000)
+      }
+
+      if (keyboard['KeyQ']) {
+        setAction(actions['pose'])
+        actionAssigned = true
+      }
+
+      !actionAssigned && setAction(actions['idle'])
+    }
+
+    mixer.update(delta)
+  })
 
   return (
     <group ref={ref} dispose={null}>
@@ -36,11 +80,4 @@ export default function Eve() {
   )
 }
 
-useGLTF.preload([
-  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve.glb',
-  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@idle.glb',
-  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@running.glb',
-  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@walking.glb',
-  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@jump.glb',
-  'https://cdn.jsdelivr.net/gh/Sean-Bradley/React-Three-Fiber-Boilerplate@animationController/public/models/eve@pose.glb'
-])
+useGLTF.preload(['./models/eve.glb', './models/eve@idle.glb', './models/eve@running.glb', './models/eve@walking.glb', './models/eve@jump.glb', './models/eve@pose.glb'])
