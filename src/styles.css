@@ -20,9 +20,11 @@ body,
 kbd {
   padding: 0px 2px;
   line-height: 28px;
+  border: 1px solid rgb(255, 255, 255);
   border-radius: 4px;
   background: grey;
   font-size: 17px;
+  color: white;
   font-family: monospace;
   font-weight: lighter;
 }
