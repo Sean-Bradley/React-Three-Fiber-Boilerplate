@@ -18,15 +18,16 @@ body,
   color: white;
 }
 kbd {
-  padding: 0px 2px;
   line-height: 28px;
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 4px;
-  background: grey;
-  font-size: 17px;
-  color: white;
-  font-family: monospace;
-  font-weight: lighter;
+  border: 1px solid #aaa;
+  border-radius: 0.2em;
+  box-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  background-image: linear-gradient(to bottom, #eee, #f9f9f9, #eee);
+  color: #000;
+  padding: 0.1em 0.3em;
+  font-family: inherit;
+  font-size: 0.85em;
 }
 .loader {
   left: 50%;

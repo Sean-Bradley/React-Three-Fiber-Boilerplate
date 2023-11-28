@@ -10,18 +10,22 @@ function Loader() {
 export default function App() {
   return (
     <>
-      <div id="instructions">
-        <kbd>w</kbd> to walk
+       <div id="instructions">
+        <kbd>W</kbd> to walk
         <br />
-        <kbd>w</kbd> & <kbd>left shift</kbd> to run.
+        <kbd>W</kbd> & <kbd>⇧ Shift</kbd> to run.
         <br />
-        <kbd>space</kbd> to jump
+        <kbd>Space</kbd> to jump
         <br />
-        <kbd>q</kbd> to fancy pose
+        <kbd>Q</kbd> to fancy pose
         <br />
         <br />
-        Model from{' '}
-        <a href="https://www.mixamo.com" target="_blank" rel="nofollow noreferrer">
+        Model from{" "}
+        <a
+          href="https://www.mixamo.com"
+          target="_blank"
+          rel="nofollow noreferrer"
+        >
           Mixamo
         </a>
       </div>
