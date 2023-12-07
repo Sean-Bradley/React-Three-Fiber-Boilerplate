@@ -7,8 +7,8 @@ import { TextureLoader } from 'three'
 function Earth() {
   const ref = useRef()
   const { gl } = useThree()
-  const texture = useLoader(TextureLoader, './img/worldColour.5400x2700.jpg')
-  const displacementMap = useLoader(TextureLoader, './img/gebco_bathy_2700x1350.jpg')
+  const texture = useLoader(TextureLoader, '/img/worldColour.5400x2700.jpg')
+  const displacementMap = useLoader(TextureLoader, '/img/gebco_bathy_2700x1350.jpg')
 
   const material = useControls({
     wireframe: false,
@@ -38,7 +38,7 @@ function Earth() {
 export default function App() {
   return (
     <Canvas shadows camera={{ position: [0, 0, 1.75] }}>
-      <Environment files="./img/venice_sunset_1k.hdr" />
+      <Environment files="/img/venice_sunset_1k.hdr" />
       <directionalLight
         intensity={2}
         position={[4, 0, 2]}
