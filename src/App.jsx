@@ -2,11 +2,54 @@ import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useControls, button } from 'leva'
-import annotations from './annotations.json'
 import TWEEN from '@tweenjs/tween.js'
 
+const annotations = [
+  {
+    "title": "View A",
+    "description": "<p>Looking Down from Above</p>",
+    "position": {
+      "x": 0,
+      "y": 25,
+      "z": 0
+    },
+    "lookAt": {
+      "x": 1,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "title": "View B",
+    "position": {
+      "x": 8,
+      "y": -1.5,
+      "z": 2
+    },
+    "lookAt": {
+      "x": 8.1,
+      "y": -1.5,
+      "z": 2
+    }
+  },
+  {
+    "title": "View C",
+    "position": {
+      "x": 5,
+      "y": 5.11,
+      "z": 12
+    },
+    "lookAt": {
+      "x": 5.1,
+      "y": 0,
+      "z": 12
+    }
+  }
+]
+
 function Arena({ controls }) {
-  const { nodes, materials } = useGLTF('./models/collision-world.glb')
+  const { nodes, materials } = useGLTF('/models/collision-world.glb')
+
   const { camera } = useThree()
 
   useControls('Camera', () => {
@@ -17,7 +60,6 @@ function Arena({ controls }) {
       (acc, { title, position, lookAt }) =>
         Object.assign(acc, {
           [title]: button(() => {
-
             // change target
             new TWEEN.Tween(controls.current.target)
               .to(
@@ -100,7 +142,7 @@ export default function App() {
         shadow-camera-top={30}
         shadow-camera-bottom={-30}
       />
-      <Environment files="./img/drakensberg_solitary_mountain_1k.hdr" background />
+      <Environment files="/img/drakensberg_solitary_mountain_1k.hdr" background />
       <OrbitControls ref={ref} target={[0, 1, 0]} />
       <Arena controls={ref} />
       <Tween />
