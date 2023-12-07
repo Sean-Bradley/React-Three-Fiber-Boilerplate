@@ -4,11 +4,11 @@ import { Stats } from '@react-three/drei'
 import { Vector3 } from 'three'
 
 function Rig() {
-  const { camera, mouse } = useThree()
+  const { camera, pointer } = useThree()
   const vec = new Vector3()
 
   return useFrame(() => {
-    camera.position.lerp(vec.set(mouse.x, mouse.y, camera.position.z), 0.05)
+    camera.position.lerp(vec.set(pointer.x, pointer.y, camera.position.z), 0.05)
     camera.lookAt(0, 0, 0)
   })
 }
