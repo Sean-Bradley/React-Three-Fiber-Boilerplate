@@ -1,58 +1,87 @@
 import { Stats, OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { useRef } from "react";
-import { Debug, Physics, useBox, usePlane } from "@react-three/cannon";
-import { useControls } from "leva";
+import { Canvas, useThree } from "@react-three/fiber";
+import { useEffect } from "react";
+import { Physics, useBox, useSphere } from "@react-three/cannon";
 
-function Plane(props) {
-  usePlane(() => ({ ...props }));
+const numCubes = 100;
+
+function Sphere(props) {
+  const [ref, { position, velocity }] = useSphere(() => ({
+    args: [0.75],
+    mass: 1,
+    ...props,
+  }));
+
+  useEffect(() => {
+    const unsubscribe = position.subscribe((v) => {
+      if (v[1] < -10) {
+        velocity.set(0, 0, 0);
+        position.set(0, 5, 0);
+      }
+    });
+    return unsubscribe;
+  }, [position, velocity]);
+
+  return (
+    <mesh ref={ref} castShadow>
+      <sphereGeometry args={[0.75]} />
+      <meshStandardMaterial />
+    </mesh>
+  );
 }
 
 function InstancedBoxes() {
-  const [ref, { at }] = useBox(
-    (i) => ({
-      args: [1, 1, 1],
-      type: "Dynamic",
-      position: [
-        Math.floor(i % 8) * 1.01 - 4,
-        Math.floor((i / 64) % 64) * 1.01 + 4,
-        Math.floor((i / 8) % 8) * 1.01 - 4,
-      ],
-    }),
-    useRef(),
-  );
+  const { clock } = useThree();
+
+  const [ref, { at }] = useBox((i) => {
+    return {
+      args: [0.99, 0.99, 0.99],
+      position: [Math.floor(i % 10) - 4.5, 1, Math.floor((i / 10) % 10) - 4.5],
+    };
+  });
+
+  useEffect(() => {
+    for (let i = 0; i < numCubes; i++) {
+      at(i).position.subscribe((v) => {
+        at(i).position.set(
+          v[0],
+          Math.sin(clock.getElapsedTime() + i / 10),
+          v[2],
+        );
+      });
+    }
+  }, [at, clock]);
 
   return (
     <instancedMesh
+      receiveShadow
+      castShadow
       ref={ref}
-      args={[undefined, undefined, 512]}
-      onPointerDown={(e) => {
-        e.stopPropagation();
-        at(e.instanceId).mass.set(1);
-      }}
+      args={[undefined, undefined, numCubes]}
     >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshNormalMaterial />
+      <boxGeometry args={[0.99, 0.99, 0.99]} />
+      <meshStandardMaterial />
     </instancedMesh>
   );
 }
 
 export default function App() {
-  const gravity = useControls("Gravity", {
-    x: { value: 0, min: -10, max: 10, step: 0.1 },
-    y: { value: -9.8, min: -10, max: 10, step: 0.1 },
-    z: { value: 0, min: -10, max: 10, step: 0.1 },
-  });
-
   return (
-    <Canvas camera={{ position: [6, 9, 9] }}>
-      <Physics gravity={[gravity.x, gravity.y, gravity.z]}>
-        <Debug color={0x004400}>
-          <Plane rotation={[-Math.PI / 2, 0, 0]} />
-        </Debug>
+    <Canvas shadows camera={{ position: [4, 3, 2] }}>
+      <spotLight
+        position={[2.5, 5, 5]}
+        angle={Math.PI / 3}
+        penumbra={0.5}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        intensity={Math.PI * 20}
+      />
+      <Physics>
         <InstancedBoxes />
+        <Sphere position={[0, 5, 0]} />
       </Physics>
-      <OrbitControls target-y={5} />
+      <OrbitControls />
       <Stats />
     </Canvas>
   );
