@@ -9,7 +9,7 @@
     "@react-three/fiber": "^8.15.12",
     "@tweenjs/tween.js": "^21.0.0",
     "leva": "^0.9.35",
-    "r3f-pack": "^2.6.0",
+    "r3f-pack": "^2.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.157.0"

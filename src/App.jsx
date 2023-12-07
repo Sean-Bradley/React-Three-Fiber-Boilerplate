@@ -3,49 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useControls, button } from 'leva'
 import TWEEN from '@tweenjs/tween.js'
-
-const annotations = [
-  {
-    "title": "View A",
-    "description": "<p>Looking Down from Above</p>",
-    "position": {
-      "x": 0,
-      "y": 25,
-      "z": 0
-    },
-    "lookAt": {
-      "x": 1,
-      "y": 0,
-      "z": 0
-    }
-  },
-  {
-    "title": "View B",
-    "position": {
-      "x": 8,
-      "y": -1.5,
-      "z": 2
-    },
-    "lookAt": {
-      "x": 8.1,
-      "y": -1.5,
-      "z": 2
-    }
-  },
-  {
-    "title": "View C",
-    "position": {
-      "x": 5,
-      "y": 5.11,
-      "z": 12
-    },
-    "lookAt": {
-      "x": 5.1,
-      "y": 0,
-      "z": 12
-    }
-  }
-]
+import annotations from './annotations.json'
 
 function Arena({ controls }) {
   const { nodes, materials } = useGLTF('/models/collision-world.glb')
