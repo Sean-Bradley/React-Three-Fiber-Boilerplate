@@ -5,11 +5,11 @@ import Button from './Button'
 
 export default function MaterialMenu({ setSelected }) {
   const texture = useLoader(TextureLoader, [
-    './img/fabric_pattern_05.jpg',
-    './img/leather_red.jpg',
-    './img/fabric_pattern_07.jpg',
-    './img/book_pattern.jpg',
-    './img/denim_fabric_02.jpg'
+    '/img/fabric_pattern_05.jpg',
+    '/img/leather_red.jpg',
+    '/img/fabric_pattern_07.jpg',
+    '/img/book_pattern.jpg',
+    '/img/denim_fabric_02.jpg'
   ])
 
   return (

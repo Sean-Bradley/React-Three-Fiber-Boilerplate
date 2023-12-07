@@ -6,7 +6,7 @@ export default function ArmChair() {
   const [selected, setSelected] = useState(0)
 
   const ref = useRef()
-  const { nodes, materials } = useGLTF('./models/armchair-transformed.glb')
+  const { nodes, materials } = useGLTF('/models/armchair-transformed.glb')
 
   const materialOverrides = useMemo(() => {
     return {
@@ -31,4 +31,4 @@ export default function ArmChair() {
   )
 }
 
-useGLTF.preload('./models/armchair-transformed.glb')
+useGLTF.preload('/models/armchair-transformed.glb')

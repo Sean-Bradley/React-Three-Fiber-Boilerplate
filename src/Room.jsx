@@ -1,7 +1,7 @@
 import { useGLTF } from '@react-three/drei'
 
 export default function Room() {
-  const { nodes, materials } = useGLTF('./models/room-transformed.glb')
+  const { nodes, materials } = useGLTF('/models/room-transformed.glb')
 
   return (
     <>
@@ -22,4 +22,4 @@ export default function Room() {
   )
 }
 
-useGLTF.preload('./models/room-transformed.glb')
+useGLTF.preload('/models/room-transformed.glb')
