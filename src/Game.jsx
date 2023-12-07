@@ -8,7 +8,7 @@ import Ball from './Ball'
 import * as Constants from './Constants'
 
 export default function Physics() {
-  const { nodes, scene } = useGLTF('./models/scene-transformed.glb')
+  const { nodes, scene } = useGLTF('/models/scene-transformed.glb')
   const octree = useOctree(scene)
   useOctreeHelper(octree)
 

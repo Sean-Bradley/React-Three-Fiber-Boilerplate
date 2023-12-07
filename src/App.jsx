@@ -20,7 +20,7 @@ export default function App() {
           shadow-camera-top={30}
           shadow-camera-bottom={-30}
         />
-        <Environment files="./img/rustig_koppie_puresky_1k.hdr" background />
+        <Environment files="/img/rustig_koppie_puresky_1k.hdr" background />
         <Game />
         <PointerLockControls />
         <Stats />
