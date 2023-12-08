@@ -4,7 +4,7 @@ import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 export default function App() {
-  const gltf = useLoader(GLTFLoader, './models/suzanne.glb')
+  const gltf = useLoader(GLTFLoader, '/models/suzanne.glb')
 
   return (
     <>
