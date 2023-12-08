@@ -6,10 +6,10 @@ import { useStore } from './App'
 export default function Eve() {
   // console.log('in Eve')
   const ref = useRef()
-  const { nodes, materials, animations } = useGLTF('./models/eve.glb')
-  const idleAnimation = useGLTF('./models/eve@idle.glb').animations
-  const walkAnimation = useGLTF('./models/eve@walking.glb').animations
-  const jumpAnimation = useGLTF('./models/eve@jump.glb').animations
+  const { nodes, materials, animations } = useGLTF('/models/eve.glb')
+  const idleAnimation = useGLTF('/models/eve@idle.glb').animations
+  const walkAnimation = useGLTF('/models/eve@walking.glb').animations
+  const jumpAnimation = useGLTF('/models/eve@jump.glb').animations
 
   const { actions, mixer } = useStore((state) => state)
 
@@ -30,4 +30,4 @@ export default function Eve() {
   )
 }
 
-useGLTF.preload(['./models/eve.glb', './models/eve@idle.glb', './models/eve@walking.glb', './models/eve@jump.glb'])
+useGLTF.preload(['/models/eve.glb', '/models/eve@idle.glb', '/models/eve@walking.glb', '/models/eve@jump.glb'])

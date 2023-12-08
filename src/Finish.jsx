@@ -6,9 +6,9 @@ import { useStore } from './App'
 import { TextureLoader, DoubleSide, RepeatWrapping } from 'three'
 
 export default function Finish({ position }) {
-  const { nodes, materials } = useGLTF('./models/finish.glb')
+  const { nodes, materials } = useGLTF('/models/finish.glb')
   const { groundObjects, setFinished } = useStore((state) => state)
-  const texture = useLoader(TextureLoader, './img/finish.png')
+  const texture = useLoader(TextureLoader, '/img/finish.png')
 
   const [ref] = useCylinder(
     () => ({
@@ -61,4 +61,4 @@ export default function Finish({ position }) {
   )
 }
 
-useGLTF.preload('./models/finish.glb')
+useGLTF.preload('/models/finish.glb')

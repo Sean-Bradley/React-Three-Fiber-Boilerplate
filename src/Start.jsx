@@ -5,7 +5,7 @@ import { useStore } from './App'
 
 export default function Start({ position }) {
   const [ref] = useCylinder(() => ({ args: [3.78, 3.78, 0.267, 12], mass: 0, position: position, material: 'ground' }), useRef())
-  const { nodes, materials } = useGLTF('./models/start.glb')
+  const { nodes, materials } = useGLTF('/models/start.glb')
   const groundObjects = useStore((state) => state.groundObjects)
 
   useEffect(() => {
@@ -30,4 +30,4 @@ export default function Start({ position }) {
   )
 }
 
-useGLTF.preload('./models/start.glb')
+useGLTF.preload('/models/start.glb')
