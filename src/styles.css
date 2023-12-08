@@ -7,13 +7,3 @@ body,
   font-family: monospace;
   color: white;
 }
-#instructions {
-  position: absolute;
-  left: 50%;
-  top: 10px;
-  margin-left: -200px;
-  filter: drop-shadow(1px 1px 1px #000000);
-}
-#instructions a {
-  color: white;
-}
