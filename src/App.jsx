@@ -1,288 +1,161 @@
-import { Stats, OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useRef, useEffect } from 'react'
-import { Debug, Physics, useCompoundBody, usePlane, useBox, useSphere, useContactMaterial } from '@react-three/cannon'
-import useKeyboard from './useKeyboard'
+import { Stats, OrbitControls, Environment } from '@react-three/drei'
+import { useControls, button } from 'leva'
+import { Suspense, useMemo, useRef } from 'react'
+import TWEEN from '@tweenjs/tween.js'
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 
-function lerp(from, to, speed) {
-  const r = (1 - speed) * from + speed * to
-  return Math.abs(from - to) < 0.001 ? to : r
-}
+function Buttons({ cubeGroup }) {
+  const rotationGroup = useRef()
 
-function Plane(props) {
-  const [ref] = usePlane(() => ({ mass: 0, material: 'object', ...props }), useRef())
-  return (
-    <mesh ref={ref} receiveShadow>
-      <planeGeometry args={[25, 25]} />
-      <meshStandardMaterial />
-    </mesh>
-  )
-}
-
-function FlipperLeft({ position, keyboard }) {
-  const cylinderArgs = [0.25, 0.25, 1]
-  const boxArgs = [2, 0.5, 0.25]
-  const [ref, { rotation }] = useCompoundBody(
-    () => ({
-      mass: 0,
-      position,
-      shapes: [
-        { args: cylinderArgs, type: 'Cylinder' },
-        { args: boxArgs, position: [1, 0, 0], type: 'Box' }
-      ]
+  useControls('Cube', {
+    'Left CW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'x', -0.5, 1)
     }),
-    useRef()
-  )
-  const targetRotation = useRef()
-  useEffect(() => {
-    const unsubscribe = rotation.subscribe((v) => {
-      rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
-    })
-    return unsubscribe
-  }, [])
-
-  useFrame(() => {
-    keyboard['ArrowLeft'] ? (targetRotation.current = 0.2) : (targetRotation.current = -0.2)
-  })
-
-  return (
-    <mesh ref={ref} castShadow>
-      <cylinderGeometry args={cylinderArgs} />
-      <meshNormalMaterial />
-      <mesh position={[1, 0, 0]} castShadow>
-        <boxGeometry args={boxArgs} />
-        <meshNormalMaterial />
-      </mesh>
-    </mesh>
-  )
-}
-
-function FlipperRight({ position, keyboard }) {
-  const cylinderArgs = [0.25, 0.25, 1]
-  const boxArgs = [2, 0.5, 0.25]
-  const [ref, { rotation }] = useCompoundBody(
-    () => ({
-      mass: 0,
-      position,
-      shapes: [
-        { args: cylinderArgs, type: 'Cylinder' },
-        { args: boxArgs, position: [-1, 0, 0], type: 'Box' }
-      ]
+    'Left CCW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'x', -0.5, -1)
     }),
-    useRef()
-  )
-  const targetRotation = useRef()
-  useEffect(() => {
-    const unsubscribe = rotation.subscribe((v) => {
-      rotation.set(v[0], lerp(v[1], targetRotation.current, 0.8), v[2])
-    })
-    return unsubscribe
-  }, [])
-
-  useFrame(() => {
-    keyboard['ArrowRight'] ? (targetRotation.current = -0.2) : (targetRotation.current = 0.2)
-  })
-
-  return (
-    <mesh ref={ref} position={position} castShadow>
-      <cylinderGeometry args={cylinderArgs} />
-      <meshNormalMaterial />
-      <mesh position={[-1, 0, 0]} castShadow>
-        <boxGeometry args={boxArgs} />
-        <meshNormalMaterial />
-      </mesh>
-    </mesh>
-  )
-}
-
-function Spring({ position, keyboard }) {
-  const boxArgs = [1.4, 1, 0.3]
-  const cylinderArgs = [0.1, 0.1, 2]
-  const [ref, api] = useCompoundBody(
-    () => ({
-      mass: 0,
-      position,
-      shapes: [
-        { args: boxArgs, type: 'Box', material: 'object' },
-        { args: cylinderArgs, position: [0, 0, 1], rotation: [-Math.PI / 2, 0, 0], type: 'Cylinder' }
-      ]
+    'Right CW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'x', 0.5, -1)
     }),
-    useRef()
-  )
-  const targetPosition = useRef()
-  const speed = useRef()
-  useEffect(() => {
-    const unsubscribe = api.position.subscribe((v) => {
-      api.position.set(v[0], v[1], lerp(v[2], targetPosition.current, speed.current))
+    'Right CCW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'x', 0.5, 1)
+    }),
+    'Back CW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'z', -0.5, 1)
+    }),
+    'Back CCW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'z', -0.5, -1)
+    }),
+    'Front CW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'z', 0.5, -1)
+    }),
+    'Front CCW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'z', 0.5, 1)
+    }),
+    'Top CW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'y', 0.5, -1)
+    }),
+    'Top CCW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'y', 0.5, 1)
+    }),
+    'Bottom CW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'y', -0.5, 1)
+    }),
+    'Bottom CCW': button(() => {
+      rotate(cubeGroup.current, rotationGroup.current, 'y', -0.5, -1)
     })
-    return unsubscribe
-  }, [])
-
-  useFrame((_, delta) => {
-    if (keyboard['Space']) {
-      targetPosition.current = 3
-      speed.current = delta * 5
-    } else {
-      targetPosition.current = 1
-      speed.current = delta * 10
-    }
   })
-
-  return (
-    <mesh ref={ref} position={position} castShadow>
-      <boxGeometry args={boxArgs} />
-      <meshNormalMaterial />
-      <mesh position={[0, 0, 1]} rotation={[-Math.PI / 2, 0, 0]} castShadow>
-        <cylinderGeometry args={cylinderArgs} />
-        <meshNormalMaterial />
-      </mesh>
-    </mesh>
-  )
-}
-
-function Controllers() {
-  const keyboard = useKeyboard()
 
   return (
     <>
-      <Debug>
-        <FlipperLeft position={[-2.5, 0.5, 2]} rotation={[0.1, 0, 0]} keyboard={keyboard} />
-        <FlipperRight position={[2.5, 0.5, 2]} keyboard={keyboard} />
-        <Spring position={[5.04, 0.5, 0]} keyboard={keyboard} />
-      </Debug>
+      <group ref={rotationGroup} />
     </>
   )
 }
 
-function Ball(props) {
-  useContactMaterial('object', 'slippery', {
-    friction: 0,
-    restitution: 0.5,
-    contactEquationStiffness: 1e8,
-    contactEquationRelaxation: 1
-  })
-  const [ref, { position, velocity, angularVelocity }] = useSphere(() => ({
-    args: [0.5],
-    mass: 1,
-    material: 'slippery',
-    onCollide: (c) => {
-      if (c.body.name === 'bumber') {
-        const cn = c.contact.contactNormal
-        velocity.set(cn[0] * 10, cn[1] * 10, cn[2] * 10)
-      }
-    },
-    ...props
-  }))
+function Cube() {
+  const ref = useRef()
 
-  useEffect(() => {
-    const unsubscribe = position.subscribe((v) => {
-      if (v[2] > 6) {
-        velocity.set(0, 0, 0)
-        angularVelocity.set(0, 0, 0)
-        position.set(5.04, 2, -1)
-      }
-    })
-    return unsubscribe
-  }, [position, velocity])
-
-  return (
-    <mesh ref={ref} castShadow>
-      <sphereGeometry args={[0.5]} />
-      <meshStandardMaterial />
-    </mesh>
-  )
-}
-
-function Wall({ args, ...props }) {
-  const [ref] = useBox(() => ({ args, mass: 0, material: 'object', ...props }))
-
-  return (
-    <mesh ref={ref} castShadow>
-      <boxGeometry args={args} />
-      <meshNormalMaterial />
-    </mesh>
-  )
-}
-
-function Bumber(props) {
-  const targetScale = useRef(1)
-  const [ref] = useSphere(() => ({
-    args: [0.5],
-    mass: 0,
-    onCollide: () => {
-      targetScale.current = 1.2
-    },
-    ...props
-  }))
-
-  useFrame((_, delta) => {
-    ref.current.scale.x = ref.current.scale.z = targetScale.current
-    targetScale.current = lerp(targetScale.current, 1, delta * 10)
-  })
-
-  return (
-    <mesh ref={ref} name={'bumber'} castShadow>
-      <cylinderGeometry args={[0.5, 0.5, 0.25]} />
-      <meshNormalMaterial />
-    </mesh>
-  )
-}
-
-function SlidingBox({ args, ...props }) {
-  const [ref, { position }] = useBox(() => ({ args, mass: 0, material: 'object', ...props }), useRef())
-
-  const targetPosition = useRef(0)
-  const direction = useRef(1)
-
-  useEffect(() => {
-    const unsubscribe = position.subscribe((v) => {
-      position.set(lerp(v[0], targetPosition.current, 0.1), v[1], v[2])
-    })
-    return unsubscribe
+  const roundedBoxGeometry = useMemo(() => {
+    return new RoundedBoxGeometry(1, 1, 1, 3, 0.1)
   }, [])
 
-  useFrame((_, delta) => {
-    targetPosition.current += direction.current * delta
-    if (targetPosition.current > 2) direction.current = -1
-    if (targetPosition.current < -2) direction.current = 1
+  useFrame(() => {
+    TWEEN.update()
   })
 
   return (
-    <mesh ref={ref} castShadow>
-      <boxGeometry args={args} />
-      <meshNormalMaterial />
-    </mesh>
+    <>
+      <group ref={ref}>
+        {[...Array(3).keys()].map((x) =>
+          [...Array(3).keys()].map((y) =>
+            [...Array(3).keys()].map((z) => (
+              <Cubelet key={x + y * 3 + z * 9} position={[x - 1, y - 1, z - 1]} geometry={roundedBoxGeometry} />
+            ))
+          )
+        )}
+      </group>
+      <Buttons cubeGroup={ref} />
+    </>
   )
 }
 
-function Game() {
+const colorSides = [
+  [0, 1, 'darkorange'],
+  [0, -1, 'red'],
+  [1, 1, 'white'],
+  [1, -1, 'yellow'],
+  [2, 1, 'green'],
+  [2, -1, 'blue']
+]
+
+function Cubelet({ position, geometry }) {
   return (
-    <Physics gravity={[0, -9.8, 3]}>
-      <Plane rotation={[-Math.PI / 2, 0, 0]} />
-      <Wall args={[0.25, 1, 4]} position={[-3.4, 0.5, -0.1]} rotation={[0, Math.PI / 8, 0]} />
-      <Wall args={[0.25, 1, 4]} position={[3.4, 0.5, -0.1]} rotation={[0, -Math.PI / 8, 0]} />
-      <Wall args={[0.25, 1, 8]} position={[-4.17, 0.5, -6]} />
-      <Wall args={[0.25, 1, 11]} position={[4.17, 0.5, -2.5]} />
-      <Wall args={[0.25, 1, 12]} position={[5.9, 0.5, -3]} />
-      <Wall args={[0.25, 1, 4]} position={[-2.4, 0.5, -11.1]} rotation={[0, -Math.PI / 3, 0]} />
-      <Wall args={[0.25, 1, 6]} position={[3.25, 0.5, -10.6]} rotation={[0, Math.PI / 3, 0]} />
-      <Wall args={[0.25, 1, 1.2]} position={[0, 0.5, -12.1]} rotation={[0, Math.PI / 2, 0]} />
-      <Bumber position={[-2, 0.5, -4]} />
-      <Bumber position={[2, 0.5, -4]} />
-      <SlidingBox args={[1, 0.5, 0.1]} position={[0, 0.5, -1]} />
-      <Controllers />
-      <Ball position={[5.04, 2, -1]} />
-    </Physics>
+    <>
+      <mesh position={position} geometry={geometry}>
+        {[...Array(6).keys()].map((i) => (
+          <meshStandardMaterial
+            key={i}
+            attach={`material-${i}`}
+            color={position[colorSides[i][0]] === colorSides[i][1] ? colorSides[i][2] : `black`}
+          />
+        ))}
+      </mesh>
+    </>
   )
+}
+
+function resetCubeGroup(cubeGroup, rotationGroup) {
+  rotationGroup.children
+    .slice()
+    .reverse()
+    .forEach(function (c) {
+      cubeGroup.attach(c)
+    })
+  rotationGroup.quaternion.set(0, 0, 0, 1)
+}
+
+function attachToRotationGroup(cubeGroup, rotationGroup, axis, limit) {
+  cubeGroup.children
+    .slice()
+    .reverse()
+    .filter(function (c) {
+      return limit < 0 ? c.position[axis] < limit : c.position[axis] > limit
+    })
+    .forEach(function (c) {
+      rotationGroup.attach(c)
+    })
+}
+
+function animateRotationGroup(rotationGroup, axis, multiplier) {
+  new TWEEN.Tween(rotationGroup.rotation)
+    .to(
+      {
+        [axis]: rotationGroup.rotation[axis] + (Math.PI / 2) * multiplier
+      },
+      250
+    )
+    .easing(TWEEN.Easing.Cubic.InOut)
+    .start()
+}
+
+function rotate(cubeGroup, rotationGroup, axis, limit, multiplier) {
+  if (!TWEEN.getAll().length) {
+    resetCubeGroup(cubeGroup, rotationGroup)
+    attachToRotationGroup(cubeGroup, rotationGroup, axis, limit)
+    animateRotationGroup(rotationGroup, axis, multiplier)
+  }
 }
 
 export default function App() {
   return (
-    <Canvas shadows camera={{ position: [1, 6, 3] }}>
-      <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
-      <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
-      <Game />
-      <OrbitControls target={[1, 0, -2]} />
+    <Canvas camera={{ position: [3, 3, 3] }}>
+      <Suspense>
+        <Environment preset="forest" />
+      </Suspense>
+      <Cube />
+      <OrbitControls target={[0, 0, 0]} />
       <Stats />
     </Canvas>
   )

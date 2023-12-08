@@ -5,11 +5,6 @@ body,
   margin: 0;
   background: #000000;
 }
-#instructions {
-  color: white;
-  position: absolute;
-  left: 100px;
-  top: 10px;
-  font-family: monospace;
-  text-shadow: 1px 1px 2px black;
+#leva__root > * {
+  width: 140px !important;
 }
