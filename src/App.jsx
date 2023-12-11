@@ -5,6 +5,7 @@ import { Debug, Physics, useBox, usePlane, useSphere, useTrimesh, useCylinder, u
 import { MeshNormalMaterial, IcosahedronGeometry, TorusKnotGeometry } from 'three'
 import { useControls } from 'leva'
 import CannonUtils from './CannonUtils'
+import monkey from './models/monkey.glb'
 
 function Plane(props) {
   const [ref] = usePlane(() => ({ mass: 0, ...props }), useRef())
@@ -81,7 +82,7 @@ function TorusKnot(props) {
 }
 
 export function Monkey(props) {
-  const { nodes } = useGLTF('/models/monkey.glb')
+  const { nodes } = useGLTF(monkey)
   const [ref, api] = useTrimesh(
     () => ({
       args: [nodes.Suzanne.geometry.attributes.position.array, nodes.Suzanne.geometry.index.array],
