@@ -42,7 +42,7 @@ function FlipperLeft({ position, keyboard }) {
   }, [])
 
   useFrame(() => {
-    keyboard['ArrowLeft'] ? (targetRotation.current = 0.2) : (targetRotation.current = -0.2)
+    keyboard['ArrowLeft'] || keyboard['KeyA'] ? (targetRotation.current = 0.2) : (targetRotation.current = -0.2)
   })
 
   return (
@@ -80,7 +80,7 @@ function FlipperRight({ position, keyboard }) {
   }, [])
 
   useFrame(() => {
-    keyboard['ArrowRight'] ? (targetRotation.current = -0.2) : (targetRotation.current = 0.2)
+    keyboard['ArrowRight'] || keyboard['KeyD'] ? (targetRotation.current = -0.2) : (targetRotation.current = 0.2)
   })
 
   return (
@@ -278,12 +278,19 @@ function Game() {
 
 export default function App() {
   return (
-    <Canvas shadows camera={{ position: [1, 6, 3] }}>
-      <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
-      <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
-      <Game />
-      <OrbitControls target={[1, 0, -2]} />
-      <Stats />
-    </Canvas>
+    <>
+      <Canvas shadows camera={{ position: [1, 6, 3] }}>
+        <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
+        <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
+        <Game />
+        <OrbitControls target={[1, 0, -2]} />
+        <Stats />
+      </Canvas>
+      <div id="instructions">
+        <kbd>←</kbd> <kbd>→</kbd> for Flippers
+        <br />
+        <kbd>Space</kbd> to launch
+      </div>
+    </>
   )
 }

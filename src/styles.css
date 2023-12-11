@@ -4,12 +4,25 @@ body,
   height: 100%;
   margin: 0;
   background: #000000;
+  font-family: monospace;
+  color: white;
 }
 #instructions {
-  color: white;
   position: absolute;
-  left: 100px;
+  left: 50%;
   top: 10px;
-  font-family: monospace;
-  text-shadow: 1px 1px 2px black;
+  margin-left: -200px;
+  filter: drop-shadow(1px 1px 1px #000000);
+}
+kbd {
+  line-height: 28px;
+  border: 1px solid #aaa;
+  border-radius: 0.2em;
+  box-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  background-image: linear-gradient(to bottom, #eee, #f9f9f9, #eee);
+  color: #000;
+  padding: 0.1em 0.3em;
+  font-family: inherit;
+  font-size: 0.85em;
 }
