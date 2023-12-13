@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <Canvas camera={{ position: [-0.5, 1, 2] }} shadows>
-      <directionalLight position={[3.3, 1.0, 4.4]} castShadow />
+      <directionalLight position={[3.3, 1.0, 4.4]} intensity={Math.PI} castShadow />
       <primitive
         object={gltf.scene}
         position={[0, 1, 0]}
