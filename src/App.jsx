@@ -1,10 +1,11 @@
 import { Canvas } from '@react-three/fiber'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef } from 'react'
 import { Stats, OrbitControls, Environment, Bounds, useBounds } from '@react-three/drei'
 import { useControls } from 'leva'
 import { OctahedronGeometry, Vector3, MathUtils } from 'three'
 
 function Squircle() {
+  const ref = useRef()
   const [n, setN] = useState(2)
   const bounds = useBounds()
 
@@ -32,13 +33,13 @@ function Squircle() {
       step: 0.1,
       onChange: (v) => {
         setN(v)
-        bounds.refresh().fit()
+        bounds.refresh(ref.current).fit()
       }
     }
   })
 
   return (
-    <mesh geometry={geometry} position-y={1}>
+    <mesh ref={ref} geometry={geometry} position-y={1}>
       <meshPhysicalMaterial metalness={0} roughness={0.36} clearcoat={1} transmission={1} ior={1.53} thickness={5} />
     </mesh>
   )
