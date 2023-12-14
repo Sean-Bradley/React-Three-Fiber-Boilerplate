@@ -1,15 +1,15 @@
 import { Canvas } from '@react-three/fiber'
-import { useMemo, useState, useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { Stats, OrbitControls, Environment, Bounds, useBounds } from '@react-three/drei'
-import { useControls } from 'leva'
+import { GUI } from 'dat.gui'
 import { OctahedronGeometry, Vector3, MathUtils } from 'three'
 
 function Squircle() {
   const ref = useRef()
-  const [n, setN] = useState(2)
   const bounds = useBounds()
+  const data = { n: 2 }
 
-  const geometry = useMemo(() => {
+  function generateSquircle(n) {
     const g = new OctahedronGeometry(1, 16)
     const p = g.attributes.position.array
 
@@ -23,23 +23,21 @@ function Squircle() {
       p[i + 2] = MathUtils.lerp(p[i + 2], v.z, n)
     }
     return g
-  }, [n])
+  }
 
-  useControls('Squircle', {
-    segments: {
-      value: 2,
-      min: -64,
-      max: 64,
-      step: 0.1,
-      onChange: (v) => {
-        setN(v)
-        bounds.refresh(ref.current).fit()
-      }
+  useEffect(() => {
+    const gui = new GUI()
+    gui.add(data, 'n', -64, 64).onChange((v) => {
+      ref.current.geometry = generateSquircle(v)
+      bounds.refresh(ref.current).fit()
+    })
+    return () => {
+      gui.destroy()
     }
-  })
+  },[])
 
   return (
-    <mesh ref={ref} geometry={geometry} position-y={1}>
+    <mesh ref={ref} geometry={generateSquircle(2)} position-y={1}>
       <meshPhysicalMaterial metalness={0} roughness={0.36} clearcoat={1} transmission={1} ior={1.53} thickness={5} />
     </mesh>
   )
@@ -48,7 +46,7 @@ function Squircle() {
 export default function App() {
   return (
     <Canvas camera={{ position: [0, 2, -1.5] }}>
-      <Environment files="./img/rustig_koppie_puresky_1k.hdr" background />
+      <Environment files="/img/rustig_koppie_puresky_1k.hdr" background />
       <Bounds fit margin={1.8} damping={10}>
         <Squircle />
       </Bounds>
