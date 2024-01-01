@@ -5,14 +5,14 @@
   "keywords": [],
   "main": "src/index.jsx",
   "devDependencies": {
-    "@react-three/drei": "^9.90.0",
+    "@react-three/drei": "^9.92.7",
     "@react-three/fiber": "^8.15.12",
     "@react-three/postprocessing": "^2.15.11",
-    "r3f-pack": "^2.6.1",
+    "r3f-pack": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.159.0",
-    "zustand": "^4.4.3"
+    "three": "^0.160.0",
+    "zustand": "^4.4.7"
   },
   "scripts": {
     "start": "r3f-pack start",
