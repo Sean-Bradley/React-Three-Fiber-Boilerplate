@@ -3,7 +3,6 @@ import { Capsule } from 'three/examples/jsm/math/Capsule.js'
 import { Vector3 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import useKeyboard from './useKeyboard'
-//import CapsuleCollider from './CapsuleCollider'
 
 const GRAVITY = 30
 const STEPS_PER_FRAME = 5
@@ -110,10 +109,4 @@ export default function Player({ octree, clicked, colliders, ballCount }) {
     }
     teleportPlayerIfOob(camera, capsule, playerVelocity)
   })
-
-  // return (
-  //   <CapsuleCollider id={ballCount} radius={0.35} position={[0, 10, 0]} octree={octree} colliders={colliders}>
-  //     {children}
-  //   </CapsuleCollider>
-  // )
 }
