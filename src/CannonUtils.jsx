@@ -1,10 +1,9 @@
 // MIT License
-// Copyright (c) 2022 Sean Bradley
+// Copyright (c) 2022, 2023, 2024 Sean Bradley
 // Based on https://sbcode.net/threejs/physics-cannonDebugrenderer/#srcclientutilscannonutilsts
 // Re written for my React Three Fiber course.
 // Course Coupons @ https://sbcode.net/coupons
 import * as THREE from 'three'
-import * as CANNON from 'cannon-es'
 
 class CannonUtils {
   static toTrimeshProps(geometry) {
@@ -32,13 +31,13 @@ class CannonUtils {
           : [
               new THREE.Vector3().fromBufferAttribute(normal, i),
               new THREE.Vector3().fromBufferAttribute(normal, i + 1),
-              new THREE.Vector3().fromBufferAttribute(normal, i + 2)
+              new THREE.Vector3().fromBufferAttribute(normal, i + 2),
             ]
       const face = {
         a: i,
         b: i + 1,
         c: i + 2,
-        normals: vertexNormals
+        normals: vertexNormals,
       }
       faces.push(face)
     }
@@ -56,9 +55,7 @@ class CannonUtils {
         Math.round(v.z * 100)
       if (verticesMap[key] === undefined) {
         verticesMap[key] = i
-        points.push(
-          new CANNON.Vec3(vertices[i].x, vertices[i].y, vertices[i].z)
-        )
+        points.push({ x: vertices[i].x, y: vertices[i].y, z: vertices[i].z })
         changes[i] = points.length - 1
       } else {
         changes[i] = changes[verticesMap[key]]
@@ -100,7 +97,7 @@ class CannonUtils {
     body.shapeOffsets.forEach(function (offset) {
       offset.vsub(centreOfMass, offset)
     })
-    const worldCenterOfMass = new CANNON.Vec3()
+    const worldCenterOfMass = { x: 0, y: 0, z: 0 }
     body.vectorToWorldFrame(centreOfMass, worldCenterOfMass)
     body.position.vadd(worldCenterOfMass, body.position)
   }
