@@ -92,22 +92,22 @@ export default function Player({ position }) {
         // if grounded I can walk
         if (keyboard['KeyW']) {
           activeAction = 1
-          inputVelocity.z = -40 * delta
+          inputVelocity.z = -1
         }
         if (keyboard['KeyS']) {
           activeAction = 1
-          inputVelocity.z = 40 * delta
+          inputVelocity.z = 1
         }
         if (keyboard['KeyA']) {
           activeAction = 1
-          inputVelocity.x = -40 * delta
+          inputVelocity.x = -1
         }
         if (keyboard['KeyD']) {
           activeAction = 1
-          inputVelocity.x = 40 * delta
+          inputVelocity.x = 1
         }
       }
-      inputVelocity.setLength(0.7) // clamps walking speed
+      inputVelocity.setLength(delta * 40)
 
       if (activeAction !== prevActiveAction.current) {
         if (prevActiveAction.current !== 1 && activeAction === 1) {
@@ -139,7 +139,7 @@ export default function Player({ position }) {
     }
 
     if (activeAction === 1) {
-      mixer.update(delta * distance * 22.5)
+      mixer.update(distance / 3)
     } else {
       mixer.update(delta)
     }
