@@ -99,22 +99,22 @@ export default function PlayerCollider({ position }) {
       if (playerGrounded.current) {
         if (keyboard['KeyW']) {
           activeAction = 1
-          inputVelocity.z = -10 * delta
+          inputVelocity.z = -delta
         }
         if (keyboard['KeyS']) {
           activeAction = 1
-          inputVelocity.z = 10 * delta
+          inputVelocity.z = delta
         }
         if (keyboard['KeyA']) {
           activeAction = 1
-          inputVelocity.x = -10 * delta
+          inputVelocity.x = -delta
         }
         if (keyboard['KeyD']) {
           activeAction = 1
-          inputVelocity.x = 10 * delta
+          inputVelocity.x = delta
         }
       }
-      inputVelocity.setLength(0.7) // clamps walking speed
+      inputVelocity.setLength(delta * 40) // clamps walking speed
 
       if (activeAction !== prevActiveAction.current) {
         if (prevActiveAction.current !== 1 && activeAction === 1) {
@@ -149,7 +149,7 @@ export default function PlayerCollider({ position }) {
     }
 
     if (activeAction === 1) {
-      mixer.update(delta * distance * 22.5)
+      mixer.update(distance / 3)
     } else {
       mixer.update(delta)
     }
