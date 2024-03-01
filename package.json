@@ -10,7 +10,7 @@
     "@react-three/drei": "^9.95.0",
     "@react-three/fiber": "^8.15.14",
     "leva": "^0.9.35",
-    "r3f-pack": "^2.7.0",
+    "r3f-pack": "^2.7.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.159.0",
