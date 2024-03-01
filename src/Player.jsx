@@ -99,22 +99,22 @@ export default function PlayerCollider({ position }) {
       if (playerGrounded.current) {
         if (keyboard['KeyW']) {
           activeAction = 1
-          inputVelocity.z = -delta
+          inputVelocity.z = -1
         }
         if (keyboard['KeyS']) {
           activeAction = 1
-          inputVelocity.z = delta
+          inputVelocity.z = 1
         }
         if (keyboard['KeyA']) {
           activeAction = 1
-          inputVelocity.x = -delta
+          inputVelocity.x = -1
         }
         if (keyboard['KeyD']) {
           activeAction = 1
-          inputVelocity.x = delta
+          inputVelocity.x = 1
         }
       }
-      inputVelocity.setLength(delta * 40) // clamps walking speed
+      inputVelocity.setLength(delta * 40)
 
       if (activeAction !== prevActiveAction.current) {
         if (prevActiveAction.current !== 1 && activeAction === 1) {
