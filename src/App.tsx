@@ -11,6 +11,19 @@ export default function App() {
     []
   )
 
+  const options = useMemo(() => {
+    return {
+      x: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
+      y: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
+      z: { value: 0, min: 0, max: Math.PI * 2, step: 0.01 },
+      visible: true,
+      color: { value: 'lime' }
+    }
+  }, [])
+
+  const pA = useControls('Polyhedron A', options)
+  const pB = useControls('Polyhedron B', options)
+
   return (
     <Canvas camera={{ position: [1, 2, 3] }}>
       <Polyhedron
