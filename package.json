@@ -8,14 +8,14 @@
     "build": "r3f-pack build"
   },
   "devDependencies": {
-    "@react-three/drei": "^9.99.6",
-    "@react-three/fiber": "^8.15.19",
+    "@react-three/drei": "^9.102.6",
+    "@react-three/fiber": "^8.16.0",
     "@types/node": "^20.3.1",
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
     "@types/three": "^0.152.1",
     "leva": "0.9.35",
-    "r3f-pack": "^2.7.4",
+    "r3f-pack": "^2.8.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "^0.162.0",
