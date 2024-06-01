@@ -1,17 +1,22 @@
+import React from 'react';
 import {useEffect, useState} from 'react';
+import {ObjectMap, ThreeEvent} from '@react-three/fiber';
 import {useGLTF} from '@react-three/drei';
 import {useControls} from 'leva';
 import {Color, Mesh, Material, MeshStandardMaterial} from 'three';
-import {GLTF} from 'three/examples/jsm/loaders/GLTFLoader';
-interface IGLTF extends GLTF {
+import {GLTF} from 'three/examples/jsm/Addons.js';
+//import {GLTF} from '@types/three/examples/jsm/loaders/GLTFLoader';
+//import {GLTF} from '@types/three/addons/loaders/GLTFLoader';
+
+interface IGLTF extends GLTF, ObjectMap {
   nodes: {[key: string]: Mesh};
   materials: {[key: string]: MeshStandardMaterial};
 }
 
-export function Model() {
+const Shoe = () => {
   const [hovered, setHovered] = useState(false);
 
-  const {nodes, materials} = useGLTF('./models/shoe-draco.glb'); // as GLTF & ObjectMap;
+  const {nodes, materials} = useGLTF('./models/shoe-draco.glb') as unknown as IGLTF;
 
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
@@ -38,16 +43,16 @@ export function Model() {
   // JSX of glTF created using the command
   // npx gltfjsx .\public\models\shoe-draco.glb
 
+  const onClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    (document.getElementById('Shoe.' + ((e.object as Mesh).material as Material).name) as HTMLElement).focus();
+  };
+
+  const onPointerOver = () => setHovered(true);
+  const onPointerOut = () => setHovered(false);
+
   return (
-    <group
-      dispose={null}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-      onClick={(e) => {
-        e.stopPropagation();
-        (document.getElementById('Shoe.' + ((e.object as Mesh).material as Material).name) as HTMLElement).focus();
-      }}
-    >
+    <group dispose={null} onPointerOver={onPointerOver} onPointerOut={onPointerOut} onClick={onClick}>
       <mesh geometry={nodes.shoe.geometry} material={materials.laces} />
       <mesh geometry={nodes.shoe_1.geometry} material={materials.mesh} />
       <mesh geometry={nodes.shoe_2.geometry} material={materials.caps} />
@@ -58,6 +63,8 @@ export function Model() {
       <mesh geometry={nodes.shoe_7.geometry} material={materials.patch} />
     </group>
   );
-}
+};
 
-useGLTF.preload('./models/shoe-draco.glb');
+export default Shoe;
+
+//useGLTF.preload('./models/shoe-draco.glb');

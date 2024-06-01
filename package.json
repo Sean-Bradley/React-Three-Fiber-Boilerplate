@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "keywords": [ ],
-  "main": "src/index.jsx",
+  "main": "src/index.tsx",
   "scripts": {
     "start": "r3f-pack start",
     "build": "r3f-pack build",
