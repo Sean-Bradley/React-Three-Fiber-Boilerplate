@@ -1,10 +1,29 @@
 {
-  "printWidth": 79,
+  "printWidth": 400,
   "tabWidth": 2,
   "useTabs": false,
-  "semi": false,
+  "semi": true,
   "singleQuote": true,
-  "trailingComma": "none",
-  "bracketSpacing": true,
-  "jsxBracketSameLine": true
+  "trailingComma": "all",
+  "bracketSpacing": false,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "htmlWhitespaceSensitivity": "css",
+  "insertPragma": false,
+  "jsxSingleQuote": false,
+  "proseWrap": "always",
+  "requirePragma": false,
+  "jsonRecursiveSort": false,
+  "jsonSortOrder": "none",
+  "multilineArraysWrapThreshold": 10,
+  "jsdocCommentLineStrategy": "singleLine",
+  "tsdoc": true,
+  "plugins": [
+    "prettier-plugin-toml",
+    "prettier-plugin-sort-json",
+    "prettier-plugin-packagejson",
+    "prettier-plugin-multiline-arrays",
+    "prettier-plugin-jsdoc",
+    "prettier-plugin-interpolated-html-tags"
+  ]
 }

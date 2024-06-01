@@ -1,24 +1,35 @@
 {
-  "name": "react-three-fiber-boilerplate",
+  "name": "r3f-boilerplate",
   "version": "1.0.0",
   "description": "",
-  "keywords": [],
+  "keywords": [ ],
+  "main": "src/index.jsx",
   "scripts": {
     "start": "r3f-pack start",
-    "build": "r3f-pack build"
+    "build": "r3f-pack build",
+    "fix": "prettier -w \"src/**/*.{ts,tsx,json,js,jsx}\""
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.106.0",
+    "@react-three/fiber": "^8.16.7",
+    "@types/node": "^20.13.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.165.0",
+    "leva": "0.9.35",
+    "r3f-pack": "latest",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "^0.165.0",
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@react-three/drei": "^9.102.6",
-    "@react-three/fiber": "^8.16.0",
-    "@types/node": "^20.3.1",
-    "@types/react": "^18.2.12",
-    "@types/react-dom": "^18.2.5",
-    "@types/three": "^0.152.1",
-    "leva": "0.9.35",
-    "r3f-pack": "^2.8.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "three": "^0.162.0",
-    "typescript": "^5.1.3"
+    "prettier": "^3.2.5",
+    "prettier-plugin-interpolated-html-tags": "^1.0.5",
+    "prettier-plugin-jsdoc": "^1.3.0",
+    "prettier-plugin-multiline-arrays": "^3.0.4",
+    "prettier-plugin-packagejson": "^2.5.0",
+    "prettier-plugin-sort-json": "^4.0.0",
+    "prettier-plugin-toml": "^2.0.1"
   }
 }
