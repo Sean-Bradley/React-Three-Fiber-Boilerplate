@@ -5,11 +5,11 @@
   "keywords": [],
   "main": "src/index.jsx",
   "devDependencies": {
-    "@react-three/fiber": "^8.16.0",
-    "r3f-pack": "latest",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "three": "^0.162.0"
+    "@react-three/fiber": "^8.16.7",
+    "r3f-pack": "^2.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.165.0"
   },
   "scripts": {
     "start": "r3f-pack start",
