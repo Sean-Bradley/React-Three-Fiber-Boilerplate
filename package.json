@@ -5,8 +5,8 @@
   "keywords": [],
   "main": "src/index.jsx",
   "devDependencies": {
-    "@react-three/fiber": "^8.16.7",
-    "r3f-pack": "^2.8.1",
+    "@react-three/fiber": "^8.16.8",
+    "r3f-pack": "^2.8.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.165.0"
