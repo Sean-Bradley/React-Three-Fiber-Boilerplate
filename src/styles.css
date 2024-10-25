@@ -4,4 +4,29 @@ body,
   height: 100%;
   margin: 0;
   background: #000000;
+  color: white;
+}
+button {
+  position: absolute;
+  color: #ffffff;
+  font-size: 24px;
+  font-family: monospace;
+  user-select: none;
+  padding: 10px 20px;
+  background: rgba(0, 208, 255, 0.7);
+  border: none;
+  border-radius: 5px;
+  transition: opacity 0.3s;
+}
+button:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+#button0 {
+  top: 10%;
+  left: 25%;
+}
+#button1 {
+  top: 10%;
+  right: 25%;
 }
