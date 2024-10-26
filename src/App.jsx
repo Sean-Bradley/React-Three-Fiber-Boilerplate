@@ -2,7 +2,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Stats, OrbitControls, Environment } from '@react-three/drei'
 import { useControls, button } from 'leva'
 import { Suspense, useMemo, useRef } from 'react'
-import TWEEN from '@tweenjs/tween.js'
+import JEASINGS, { JEasing } from 'jeasings'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 
 function Buttons({ cubeGroup }) {
@@ -62,18 +62,14 @@ function Cube() {
   }, [])
 
   useFrame(() => {
-    TWEEN.update()
+    JEASINGS.update()
   })
 
   return (
     <>
       <group ref={ref}>
         {[...Array(3).keys()].map((x) =>
-          [...Array(3).keys()].map((y) =>
-            [...Array(3).keys()].map((z) => (
-              <Cubelet key={x + y * 3 + z * 9} position={[x - 1, y - 1, z - 1]} geometry={roundedBoxGeometry} />
-            ))
-          )
+          [...Array(3).keys()].map((y) => [...Array(3).keys()].map((z) => <Cubelet key={x + y * 3 + z * 9} position={[x - 1, y - 1, z - 1]} geometry={roundedBoxGeometry} />))
         )}
       </group>
       <Buttons cubeGroup={ref} />
@@ -95,11 +91,7 @@ function Cubelet({ position, geometry }) {
     <>
       <mesh position={position} geometry={geometry}>
         {[...Array(6).keys()].map((i) => (
-          <meshStandardMaterial
-            key={i}
-            attach={`material-${i}`}
-            color={position[colorSides[i][0]] === colorSides[i][1] ? colorSides[i][2] : `black`}
-          />
+          <meshStandardMaterial key={i} attach={`material-${i}`} color={position[colorSides[i][0]] === colorSides[i][1] ? colorSides[i][2] : `black`} />
         ))}
       </mesh>
     </>
@@ -129,19 +121,19 @@ function attachToRotationGroup(cubeGroup, rotationGroup, axis, limit) {
 }
 
 function animateRotationGroup(rotationGroup, axis, multiplier) {
-  new TWEEN.Tween(rotationGroup.rotation)
+  new JEasing(rotationGroup.rotation)
     .to(
       {
         [axis]: rotationGroup.rotation[axis] + (Math.PI / 2) * multiplier
       },
       250
     )
-    .easing(TWEEN.Easing.Cubic.InOut)
+    .easing(JEASINGS.Cubic.InOut)
     .start()
 }
 
 function rotate(cubeGroup, rotationGroup, axis, limit, multiplier) {
-  if (!TWEEN.getAll().length) {
+  if (!JEASINGS.getLength()) {
     resetCubeGroup(cubeGroup, rotationGroup)
     attachToRotationGroup(cubeGroup, rotationGroup, axis, limit)
     animateRotationGroup(rotationGroup, axis, multiplier)
