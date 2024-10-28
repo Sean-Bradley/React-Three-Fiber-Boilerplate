@@ -56,7 +56,7 @@ function Monkey({ position, controls }) {
   )
 }
 
-function Jeasings() {
+function JEasings() {
   useFrame(() => {
     JEASINGS.update()
   })
@@ -72,7 +72,7 @@ export default function App() {
         <OrbitControls ref={ref} />
         <Plane controls={ref} />
         <Monkey controls={ref} />
-        <Jeasings />
+        <JEasings />
         <Stats />
       </Canvas>
       <div id="instructions">Doubleclick anywhere on the monkey or plane to animate the OrbitControls target</div>
