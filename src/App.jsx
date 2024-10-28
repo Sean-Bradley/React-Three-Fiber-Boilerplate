@@ -2,7 +2,7 @@ import { useRef, forwardRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Stats, OrbitControls, Environment, useGLTF } from '@react-three/drei'
 import { MeshStandardMaterial } from 'three'
-import TWEEN from '@tweenjs/tween.js'
+import JEASINGS, { JEasing } from 'jeasings'
 
 function Plane({ controls }) {
   return (
@@ -11,7 +11,7 @@ function Plane({ controls }) {
       rotation-x={-Math.PI / 2}
       receiveShadow
       onDoubleClick={({ point }) => {
-        new TWEEN.Tween(controls.current.target)
+        new JEasing(controls.current.target)
           .to(
             {
               x: point.x,
@@ -20,7 +20,7 @@ function Plane({ controls }) {
             },
             500
           )
-          .easing(TWEEN.Easing.Cubic.Out)
+          .easing(JEASINGS.Cubic.Out)
           .start()
       }}>
       <planeGeometry args={[10, 10]} />
@@ -39,7 +39,7 @@ function Monkey({ position, controls }) {
     <group
       position={position}
       onDoubleClick={({ point }) => {
-        new TWEEN.Tween(controls.current.target)
+        new JEasing(controls.current.target)
           .to(
             {
               x: point.x,
@@ -48,7 +48,7 @@ function Monkey({ position, controls }) {
             },
             500
           )
-          .easing(TWEEN.Easing.Cubic.Out)
+          .easing(JEASINGS.Cubic.Out)
           .start()
       }}>
       <primitive object={scene} />
@@ -56,9 +56,9 @@ function Monkey({ position, controls }) {
   )
 }
 
-function Tween() {
+function Jeasings() {
   useFrame(() => {
-    TWEEN.update()
+    JEASINGS.update()
   })
 }
 
@@ -72,7 +72,7 @@ export default function App() {
         <OrbitControls ref={ref} />
         <Plane controls={ref} />
         <Monkey controls={ref} />
-        <Tween />
+        <Jeasings />
         <Stats />
       </Canvas>
       <div id="instructions">Doubleclick anywhere on the monkey or plane to animate the OrbitControls target</div>
