@@ -2,6 +2,7 @@ import { Stats, Environment, PointerLockControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Game from './Game'
 import Overlay from './Overlay'
+import { Leva } from 'leva'
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Stats />
       </Canvas>
       <Overlay />
+      <Leva />
     </>
   )
 }
