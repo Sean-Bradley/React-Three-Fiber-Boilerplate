@@ -2,7 +2,7 @@ import { Suspense, useState, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, Environment, Html, useProgress, Stats } from '@react-three/drei'
 import { Model } from './House'
-import TWEEN from '@tweenjs/tween.js'
+import JEASINGS from 'jeasings'
 import annotations from './annotations.json'
 
 function Annotations({ controls }) {
@@ -25,7 +25,7 @@ function Annotations({ controls }) {
                 onPointerDown={() => {
                   setSelected(i)
                   // change target
-                  new TWEEN.Tween(controls.current.target)
+                  new JEASINGS.JEasing(controls.current.target)
                     .to(
                       {
                         x: a.lookAt.x,
@@ -34,11 +34,11 @@ function Annotations({ controls }) {
                       },
                       1000
                     )
-                    .easing(TWEEN.Easing.Cubic.Out)
+                    .easing(JEASINGS.Cubic.Out)
                     .start()
 
                   // change camera position
-                  new TWEEN.Tween(camera.position)
+                  new JEASINGS.JEasing(camera.position)
                     .to(
                       {
                         x: a.camPos.x,
@@ -47,7 +47,7 @@ function Annotations({ controls }) {
                       },
                       1000
                     )
-                    .easing(TWEEN.Easing.Cubic.Out)
+                    .easing(JEASINGS.Cubic.Out)
                     .start()
                 }}
               />
@@ -69,9 +69,9 @@ function Annotations({ controls }) {
   )
 }
 
-function Tween() {
+function JEasings() {
   useFrame(() => {
-    TWEEN.update()
+    JEASINGS.update()
   })
 }
 
@@ -90,7 +90,7 @@ export default function App() {
         <Environment preset="forest" background blur={0.75} />
         <Model />
         <Annotations controls={ref} />
-        <Tween />
+        <JEasings />
       </Suspense>
       <Stats />
     </Canvas>
