@@ -7,14 +7,14 @@
   "homepage": ".",
   "devDependencies": {
     "@react-three/cannon": "^6.6.0",
-    "@react-three/drei": "^9.114.3",
-    "@react-three/fiber": "^8.17.10",
-    "leva": "^0.9.35",
-    "r3f-pack": "^3.0.9",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "three": "^0.169.0",
-    "zustand": "^5.0.0-rc.2"
+    "@react-three/drei": "^10.0.5",
+    "@react-three/fiber": "^9.1.0",
+    "leva": "^0.9.36",
+    "r3f-pack": "^3.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.174.0",
+    "zustand": "^5.0.3"
   },
   "scripts": {
     "start": "r3f-pack start",
