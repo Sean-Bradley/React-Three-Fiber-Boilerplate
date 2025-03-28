@@ -1,36 +1,43 @@
 import { Stats, OrbitControls, Environment } from '@react-three/drei'
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber'
-import { useControls } from 'leva'
 import { useEffect, useRef } from 'react'
 import { TextureLoader } from 'three'
+import { GUI } from 'dat.gui'
 
 function Earth() {
-  const ref = useRef()
+  const meshRef = useRef()
+  const materialRef = useRef()
   const { gl } = useThree()
+
   const texture = useLoader(TextureLoader, '/img/worldColour.5400x2700.jpg')
   const displacementMap = useLoader(TextureLoader, '/img/gebco_bathy_2700x1350.jpg')
 
-  const material = useControls({
-    wireframe: false,
-    displacementScale: { value: 0.5, min: 0, max: 1.0, step: 0.01 }
-  })
+  useEffect(() => {
+    const gui = new GUI()
+    gui.add(materialRef.current, 'wireframe', 0, Math.PI * 2)
+    gui.add(materialRef.current, 'displacementScale', 0, 1.0, 0.1)
+    return () => {
+      gui.destroy()
+    }
+  }, [])
 
   useEffect(() => {
     texture.anisotropy = gl.capabilities.getMaxAnisotropy()
   }, [texture, gl])
 
   useFrame((_, delta) => {
-    ref.current.rotation.y += delta / 4
+    meshRef.current.rotation.y += delta / 4
   })
 
   return (
-    <mesh ref={ref} castShadow={true} receiveShadow={true}>
+    <mesh ref={meshRef} castShadow={true} receiveShadow={true}>
       <icosahedronGeometry args={[1, 128]} />
       <meshStandardMaterial
-        wireframe={material.wireframe}
+        ref={materialRef}
+        wireframe={false}
         map={texture}
         displacementMap={displacementMap}
-        displacementScale={material.displacementScale}
+        displacementScale={0.5}
       />
     </mesh>
   )
