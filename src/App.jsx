@@ -1,8 +1,8 @@
 import { Stats, OrbitControls, useGLTF, Environment } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
-import { useControls, button } from 'leva'
-import TWEEN from '@tweenjs/tween.js'
+import { Leva, useControls, button } from 'leva'
+import JEASINGS from 'jeasings'
 import annotations from './annotations.json'
 
 function Arena({ controls }) {
@@ -19,7 +19,7 @@ function Arena({ controls }) {
         Object.assign(acc, {
           [title]: button(() => {
             // change target
-            new TWEEN.Tween(controls.current.target)
+            new JEASINGS.JEasing(controls.current.target)
               .to(
                 {
                   x: lookAt.x,
@@ -28,11 +28,11 @@ function Arena({ controls }) {
                 },
                 2100
               )
-              .easing(TWEEN.Easing.Cubic.Out)
+              .easing(JEASINGS.Cubic.Out)
               .start()
 
             // change camera position
-            new TWEEN.Tween(camera.position)
+            new JEASINGS.JEasing(camera.position)
               .to(
                 {
                   x: position.x,
@@ -41,7 +41,7 @@ function Arena({ controls }) {
                 },
                 2000
               )
-              .easing(TWEEN.Easing.Cubic.Out)
+              .easing(JEASINGS.Cubic.Out)
               .start()
           })
         }),
@@ -61,7 +61,7 @@ function Arena({ controls }) {
         receiveShadow
         material-envMapIntensity={0.4}
         onDoubleClick={({ point }) => {
-          new TWEEN.Tween(controls.current.target)
+          new JEASINGS.JEasing(controls.current.target)
             .to(
               {
                 x: point.x,
@@ -70,7 +70,7 @@ function Arena({ controls }) {
               },
               1000
             )
-            .easing(TWEEN.Easing.Cubic.Out)
+            .easing(JEASINGS.Cubic.Out)
             .start()
         }}
       />
@@ -78,9 +78,9 @@ function Arena({ controls }) {
   )
 }
 
-function Tween() {
+function JEasings() {
   useFrame(() => {
-    TWEEN.update()
+    JEASINGS.update()
   })
 }
 
@@ -88,23 +88,26 @@ export default function App() {
   const ref = useRef()
 
   return (
-    <Canvas camera={{ position: [10, 10, 10] }} shadows>
-      <directionalLight
-        intensity={1}
-        castShadow={true}
-        shadow-bias={-0.0002}
-        shadow-mapSize={[2048, 2048]}
-        position={[85.0, 80.0, 70.0]}
-        shadow-camera-left={-30}
-        shadow-camera-right={30}
-        shadow-camera-top={30}
-        shadow-camera-bottom={-30}
-      />
-      <Environment files="/img/drakensberg_solitary_mountain_1k.hdr" background />
-      <OrbitControls ref={ref} target={[0, 1, 0]} />
-      <Arena controls={ref} />
-      <Tween />
-      <Stats />
-    </Canvas>
+    <>
+      <Canvas camera={{ position: [10, 10, 10] }} shadows>
+        <directionalLight
+          intensity={1}
+          castShadow={true}
+          shadow-bias={-0.0002}
+          shadow-mapSize={[2048, 2048]}
+          position={[85.0, 80.0, 70.0]}
+          shadow-camera-left={-30}
+          shadow-camera-right={30}
+          shadow-camera-top={30}
+          shadow-camera-bottom={-30}
+        />
+        <Environment files="/img/drakensberg_solitary_mountain_1k.hdr" background />
+        <OrbitControls ref={ref} target={[0, 1, 0]} />
+        <Arena controls={ref} />
+        <JEasings />
+        <Stats />
+      </Canvas>
+      <Leva />
+    </>
   )
 }
