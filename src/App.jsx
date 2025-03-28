@@ -16,7 +16,7 @@ function Rig() {
 export default function App() {
   return (
     <Canvas camera={{ position: [0, 0, 4] }}>
-      <directionalLight position={[1, 1, 1]} />
+      <directionalLight position={[1, 1, 1]} intensity={Math.PI} />
       <Box position={[0, 1.5, 0]} name="A0">
         <Box position={[-0.66, -1, 0]} name="B0">
           <Box position={[-0.66, -1, 0]} name="C0">

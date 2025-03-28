@@ -29,7 +29,7 @@ export default function Box(props) {
       }}>
       <boxGeometry />
       <meshStandardMaterial />
-      <Text fontSize={0.5} font="monospace" position-z={0.501}>
+      <Text fontSize={0.5} position-z={0.501}>
         {count}
       </Text>
       {props.children}
