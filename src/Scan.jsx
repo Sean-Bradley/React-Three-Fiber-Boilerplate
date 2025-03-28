@@ -1,6 +1,6 @@
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
-import TWEEN from '@tweenjs/tween.js'
+import JEASINGS from 'jeasings'
 
 export function Model({ controls }) {
   const { nodes, materials } = useGLTF('./models/scan-transformed.glb')
@@ -14,7 +14,7 @@ export function Model({ controls }) {
         position={[0, -0.25, -0.6]}
         rotation-y={-Math.PI / 64}
         onDoubleClick={({ point }) => {
-          new TWEEN.Tween(controls.current.target)
+          new JEASINGS.JEasing(controls.current.target)
             .to(
               {
                 x: point.x,
@@ -23,7 +23,7 @@ export function Model({ controls }) {
               },
               500
             )
-            .easing(TWEEN.Easing.Cubic.Out)
+            .easing(JEASINGS.Cubic.Out)
             .start()
         }}>
         <boxGeometry args={[30, 3, 0.1]} />

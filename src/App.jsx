@@ -7,16 +7,16 @@ import {
 } from '@react-three/drei'
 import { Model } from './Scan'
 import { Suspense, useRef } from 'react'
-import TWEEN from '@tweenjs/tween.js'
+import JEASINGS from 'jeasings'
 
 function Loader() {
   const { progress } = useProgress()
   return <Html center>{progress} % loaded</Html>
 }
 
-function Tween() {
+function JEasings() {
   useFrame(() => {
-    TWEEN.update()
+    JEASINGS.update()
   })
 }
 
@@ -29,7 +29,7 @@ export default function App() {
           <Environment preset="forest" />
           <OrbitControls ref={ref} target={[4, 0, 0]} />
           <Model controls={ref} />
-          <Tween />
+          <JEasings />
         </Suspense>
       </Canvas>
       <div id="instructions">Doubleclick to change OrbitControls target</div>
