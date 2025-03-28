@@ -51,58 +51,64 @@ export default function NeuralNetwork() {
     colorpos = 0
     numConnected = 0
 
-    for (let i = 0; i < particleCount; i++) particlesData[i].numConnections = 0
+    for (let i = 0; i < particleCount; i++) {
+      if (particlesData[i] !== undefined) {
+        particlesData[i].numConnections = 0
+      }
+    }
 
     for (let i = 0; i < particleCount; i++) {
-      const particleData = particlesData[i]
+      if (particlesData[i] !== undefined) {
+        const particleData = particlesData[i]
 
-      v.set(particlePositions[i * 3], particlePositions[i * 3 + 1], particlePositions[i * 3 + 2])
-        .add(particleData.velocity)
-        .setLength(10)
-      particlePositions[i * 3] = v.x
-      particlePositions[i * 3 + 1] = v.y
-      particlePositions[i * 3 + 2] = v.z
+        v.set(particlePositions[i * 3], particlePositions[i * 3 + 1], particlePositions[i * 3 + 2])
+          .add(particleData.velocity)
+          .setLength(10)
+        particlePositions[i * 3] = v.x
+        particlePositions[i * 3 + 1] = v.y
+        particlePositions[i * 3 + 2] = v.z
 
-      if (particlePositions[i * 3 + 1] < -rHalf || particlePositions[i * 3 + 1] > rHalf) particleData.velocity.y = -particleData.velocity.y
+        if (particlePositions[i * 3 + 1] < -rHalf || particlePositions[i * 3 + 1] > rHalf) particleData.velocity.y = -particleData.velocity.y
 
-      if (particlePositions[i * 3] < -rHalf || particlePositions[i * 3] > rHalf) particleData.velocity.x = -particleData.velocity.x
+        if (particlePositions[i * 3] < -rHalf || particlePositions[i * 3] > rHalf) particleData.velocity.x = -particleData.velocity.x
 
-      if (particlePositions[i * 3 + 2] < -rHalf || particlePositions[i * 3 + 2] > rHalf) particleData.velocity.z = -particleData.velocity.z
+        if (particlePositions[i * 3 + 2] < -rHalf || particlePositions[i * 3 + 2] > rHalf) particleData.velocity.z = -particleData.velocity.z
 
-      if (particleData.numConnections >= maxConnections) continue
+        if (particleData.numConnections >= maxConnections) continue
 
-      for (let j = i + 1; j < particleCount; j++) {
-        const particleDataB = particlesData[j]
-        if (particleDataB.numConnections >= maxConnections) continue
+        for (let j = i + 1; j < particleCount; j++) {
+          const particleDataB = particlesData[j]
+          if (particleDataB.numConnections >= maxConnections) continue
 
-        const dx = particlePositions[i * 3] - particlePositions[j * 3]
-        const dy = particlePositions[i * 3 + 1] - particlePositions[j * 3 + 1]
-        const dz = particlePositions[i * 3 + 2] - particlePositions[j * 3 + 2]
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
+          const dx = particlePositions[i * 3] - particlePositions[j * 3]
+          const dy = particlePositions[i * 3 + 1] - particlePositions[j * 3 + 1]
+          const dz = particlePositions[i * 3 + 2] - particlePositions[j * 3 + 2]
+          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
 
-        if (dist < minDistance) {
-          particleData.numConnections++
-          particleDataB.numConnections++
+          if (dist < minDistance) {
+            particleData.numConnections++
+            particleDataB.numConnections++
 
-          const alpha = 1.0 - dist / minDistance
+            const alpha = 1.0 - dist / minDistance
 
-          positions[vertexpos++] = particlePositions[i * 3]
-          positions[vertexpos++] = particlePositions[i * 3 + 1]
-          positions[vertexpos++] = particlePositions[i * 3 + 2]
+            positions[vertexpos++] = particlePositions[i * 3]
+            positions[vertexpos++] = particlePositions[i * 3 + 1]
+            positions[vertexpos++] = particlePositions[i * 3 + 2]
 
-          positions[vertexpos++] = particlePositions[j * 3]
-          positions[vertexpos++] = particlePositions[j * 3 + 1]
-          positions[vertexpos++] = particlePositions[j * 3 + 2]
+            positions[vertexpos++] = particlePositions[j * 3]
+            positions[vertexpos++] = particlePositions[j * 3 + 1]
+            positions[vertexpos++] = particlePositions[j * 3 + 2]
 
-          colors[colorpos++] = alpha
-          colors[colorpos++] = alpha
-          colors[colorpos++] = alpha
+            colors[colorpos++] = alpha
+            colors[colorpos++] = alpha
+            colors[colorpos++] = alpha
 
-          colors[colorpos++] = alpha
-          colors[colorpos++] = alpha
-          colors[colorpos++] = alpha
+            colors[colorpos++] = alpha
+            colors[colorpos++] = alpha
+            colors[colorpos++] = alpha
 
-          numConnected++
+            numConnected++
+          }
         }
       }
     }
