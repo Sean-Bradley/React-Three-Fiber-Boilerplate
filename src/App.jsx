@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useGLTF, OrbitControls, Environment, Stats, Html } from '@react-three/drei'
-import { useControls } from 'leva'
+import { Leva, useControls } from 'leva'
 import Models from './models.json'
 
 function Model({ url }) {
@@ -51,6 +51,7 @@ export default function App() {
         <OrbitControls />
         <Stats />
       </Canvas>
+      <Leva />
       <span id="info">The {model.replace(/([A-Z])/g, ' $1').toLowerCase()} is selected.</span>
     </>
   )
