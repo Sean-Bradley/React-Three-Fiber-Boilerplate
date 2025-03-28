@@ -1,9 +1,9 @@
 import { useRef } from 'react'
 import { useControls } from 'leva'
 import * as THREE from 'three'
-import { MeshProps, useFrame } from '@react-three/fiber'
+import { ThreeElements, useFrame } from '@react-three/fiber'
 
-export default function Polyhedron(props: MeshProps) {
+export default function Polyhedron(props: ThreeElements['mesh']) {
   const ref = useRef<THREE.Mesh>(null!)
 
   useFrame((_, delta) => {
@@ -15,34 +15,42 @@ export default function Polyhedron(props: MeshProps) {
     wireframe: {
       value: false,
       onChange: (v: boolean) => {
-        ;(ref.current.material as
-          | THREE.MeshBasicMaterial
-          | THREE.MeshPhongMaterial
-          | THREE.MeshNormalMaterial
-          | THREE.MeshStandardMaterial).wireframe = v
+        ;(
+          ref.current.material as
+            | THREE.MeshBasicMaterial
+            | THREE.MeshPhongMaterial
+            | THREE.MeshNormalMaterial
+            | THREE.MeshStandardMaterial
+        ).wireframe = v
       }
     },
     flatShading: {
       value: true,
       onChange: (v: boolean) => {
-        ;(ref.current.material as
-          | THREE.MeshPhongMaterial
-          | THREE.MeshNormalMaterial
-          | THREE.MeshStandardMaterial).flatShading = v
-        ;(ref.current.material as
-          | THREE.MeshBasicMaterial
-          | THREE.MeshPhongMaterial
-          | THREE.MeshNormalMaterial
-          | THREE.MeshStandardMaterial).needsUpdate = true
+        ;(
+          ref.current.material as
+            | THREE.MeshPhongMaterial
+            | THREE.MeshNormalMaterial
+            | THREE.MeshStandardMaterial
+        ).flatShading = v
+        ;(
+          ref.current.material as
+            | THREE.MeshBasicMaterial
+            | THREE.MeshPhongMaterial
+            | THREE.MeshNormalMaterial
+            | THREE.MeshStandardMaterial
+        ).needsUpdate = true
       }
     },
     color: {
       value: 'lime',
       onChange: (v: THREE.ColorRepresentation) => {
-        ;(ref.current.material as
-          | THREE.MeshBasicMaterial
-          | THREE.MeshPhongMaterial
-          | THREE.MeshStandardMaterial).color = new THREE.Color(v)
+        ;(
+          ref.current.material as
+            | THREE.MeshBasicMaterial
+            | THREE.MeshPhongMaterial
+            | THREE.MeshStandardMaterial
+        ).color = new THREE.Color(v)
       }
     }
   })
