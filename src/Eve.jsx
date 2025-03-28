@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
 import { useStore } from './App'
+import { useContactMaterial } from '@react-three/cannon'
 
 export default function Eve() {
   const ref = useRef()
@@ -11,6 +12,13 @@ export default function Eve() {
   const jumpAnimation = useGLTF('/models/eve@jump.glb').animations
 
   const { actions, mixer } = useStore((state) => state)
+
+  useContactMaterial('ground', 'slippery', {
+    friction: 0,
+    restitution: 0.3,
+    contactEquationStiffness: 1e8,
+    contactEquationRelaxation: 3
+  })
 
   useEffect(() => {
     actions['idle'] = mixer.clipAction(idleAnimation[0], ref.current)
@@ -33,5 +41,3 @@ export default function Eve() {
 }
 
 useGLTF.preload(['/models/eve.glb', '/models/eve@idle.glb', '/models/eve@walking.glb', '/models/eve@jump.glb'])
-
-

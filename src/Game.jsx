@@ -11,13 +11,7 @@ function ToggleDebug({ children }) {
 }
 
 export default function Game() {
-  useContactMaterial('ground', 'slippery', {
-    friction: 0,
-    restitution: 0.3,
-    contactEquationStiffness: 1e8,
-    contactEquationRelaxation: 3
-  })
-
+ 
   return (
     <>
       <Floor />
