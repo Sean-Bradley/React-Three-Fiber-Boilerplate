@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Stats, OrbitControls, Environment, useGLTF, Clone } from '@react-three/drei'
-import { useControls } from 'leva'
+import { Leva, useControls } from 'leva'
 
 const Models = [
   { title: 'Hammer', url: './models/hammer.glb' },
@@ -31,6 +31,7 @@ export default function App() {
         <OrbitControls autoRotate />
         <Stats />
       </Canvas>
+      <Leva />
       <span id="info">The {title} is selected.</span>
     </>
   )
