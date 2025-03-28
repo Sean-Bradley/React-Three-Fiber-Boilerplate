@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
 import { useStore } from './App'
+import { useContactMaterial } from '@react-three/cannon'
 
 export default function Eve() {
   // console.log('in Eve')
@@ -12,6 +13,13 @@ export default function Eve() {
   const jumpAnimation = useGLTF('/models/eve@jump.glb').animations
 
   const { actions, mixer } = useStore((state) => state)
+
+  useContactMaterial('ground', 'slippery', {
+    friction: 0,
+    restitution: 0.01,
+    contactEquationStiffness: 1e8,
+    contactEquationRelaxation: 3
+  })
 
   useEffect(() => {
     actions['default'] = mixer.clipAction(animations[0], ref.current)
