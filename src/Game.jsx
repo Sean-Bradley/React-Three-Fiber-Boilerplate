@@ -20,11 +20,9 @@ export default function Game() {
 
   return (
     <>
-      <ToggleDebug>
-        <Floor />
-        <Obstacles />
-        <Player position={[0, 1, 0]} />
-      </ToggleDebug>
+      <Floor />
+      <Obstacles />
+      <Player position={[0, 1, 0]} />
     </>
   )
 }
