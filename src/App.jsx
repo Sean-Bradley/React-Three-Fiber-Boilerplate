@@ -3,7 +3,7 @@ import Polyhedron from './Polyhedron'
 import * as THREE from 'three'
 import { useMemo } from 'react'
 import { Stats, OrbitControls } from '@react-three/drei'
-import { Leva, useControls } from 'leva'
+import { useControls } from 'leva'
 
 export default function App() {
   const polyhedron = useMemo(
@@ -50,7 +50,6 @@ export default function App() {
         <gridHelper />
         <Stats />
       </Canvas>
-      <Leva />
     </>
   )
 }
