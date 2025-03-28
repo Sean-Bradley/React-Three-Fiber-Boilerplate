@@ -1,7 +1,7 @@
-import { MeshProps } from '@react-three/fiber'
+import * as THREE from 'three'
 import { useRef, useState } from 'react'
 
-interface IPolyhedron extends MeshProps {
+interface IPolyhedron extends THREE.Mesh {
   polyhedron: THREE.BufferGeometry[]
   color: THREE.Color | String
 }
