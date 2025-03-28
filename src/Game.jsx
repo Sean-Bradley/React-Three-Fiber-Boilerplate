@@ -1,4 +1,4 @@
-import { Debug, useContactMaterial } from '@react-three/cannon'
+import { Debug } from '@react-three/cannon'
 import Start from './Start'
 import Finish from './Finish'
 import Platform from './Platform'
