@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { useRef, useMemo } from 'react'
 import { Debug, Physics, useBox, usePlane, useSphere, useTrimesh, useCylinder, useConvexPolyhedron } from '@react-three/cannon'
 import { MeshNormalMaterial, IcosahedronGeometry, TorusKnotGeometry } from 'three'
-import { useControls } from 'leva'
+import { Leva, useControls } from 'leva'
 import CannonUtils from './CannonUtils'
 import monkey from './models/monkey.glb'
 
@@ -105,22 +105,25 @@ export default function App() {
     z: { value: 0, min: -10, max: 10, step: 0.1 }
   })
   return (
-    <Canvas shadows camera={{ position: [0, 2, 4] }}>
-      <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
-      <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
-      <Physics gravity={[gravity.x, gravity.y, gravity.z]}>
-        <Debug>
-          <Plane rotation={[-Math.PI / 2, 0, 0]} />
-          <Box position={[-4, 3, 0]} />
-          <Sphere position={[-2, 3, 0]} />
-          <Cylinder position={[0, 3, 0]} />
-          <Icosahedron position={[2, 3, 0]} />
-          <TorusKnot position={[4, 3, 0]} />
-          <Monkey position={[-2, 20, 0]} />
-        </Debug>
-      </Physics>
-      <OrbitControls target-y={0.5} />
-      <Stats />
-    </Canvas>
+    <>
+      <Canvas shadows camera={{ position: [0, 2, 4] }}>
+        <spotLight position={[2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
+        <spotLight position={[-2.5, 5, 5]} angle={Math.PI / 4} penumbra={0.5} castShadow intensity={Math.PI * 25} />
+        <Physics gravity={[gravity.x, gravity.y, gravity.z]}>
+          <Debug>
+            <Plane rotation={[-Math.PI / 2, 0, 0]} />
+            <Box position={[-4, 3, 0]} />
+            <Sphere position={[-2, 3, 0]} />
+            <Cylinder position={[0, 3, 0]} />
+            <Icosahedron position={[2, 3, 0]} />
+            <TorusKnot position={[4, 3, 0]} />
+            <Monkey position={[-2, 20, 0]} />
+          </Debug>
+        </Physics>
+        <OrbitControls target-y={0.5} />
+        <Stats />
+      </Canvas>
+      <Leva />
+    </>
   )
 }
