@@ -5,6 +5,7 @@ import { Physics } from '@react-three/cannon'
 import { Suspense } from 'react'
 import { create } from 'zustand'
 import { AnimationMixer } from 'three'
+import { Leva } from 'leva'
 
 export const useStore = create(() => ({
   groundObjects: {},
@@ -30,7 +31,7 @@ export default function App() {
           <gridHelper />
           <Stats />
         </Suspense>
-      </Canvas>
+      </Canvas>      
       <div id="instructions">
         WASD to move
         <br />
@@ -41,6 +42,7 @@ export default function App() {
           Mixamo
         </a>
       </div>
+      <Leva />
     </>
   )
 }
