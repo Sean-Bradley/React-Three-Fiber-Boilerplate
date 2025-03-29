@@ -1,7 +1,7 @@
 import { Suspense, useMemo, useRef } from 'react'
 import { Vector3, Euler, Quaternion, Matrix4 } from 'three'
 import Eve from './Eve'
-import { useCompoundBody, useContactMaterial } from '@react-three/cannon'
+import { useCompoundBody } from '@react-three/cannon'
 import useKeyboard from './useKeyboard'
 import { useFrame } from '@react-three/fiber'
 import { Vec3 } from 'cannon-es'
@@ -28,12 +28,7 @@ export default function PlayerCollider({ position }) {
 
   const { groundObjects, actions, mixer } = useStore((state) => state)
 
-  useContactMaterial('ground', 'slippery', {
-    friction: 0,
-    restitution: 0.01,
-    contactEquationStiffness: 1e8,
-    contactEquationRelaxation: 3
-  })
+
 
   const [ref, body] = useCompoundBody(
     () => ({
