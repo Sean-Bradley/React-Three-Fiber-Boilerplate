@@ -15,7 +15,7 @@ const useStore = create((set) => ({
 }))
 
 function Sphere() {
-  const texture = useLoader(TextureLoader, '/img/vignaioli_night_2k.jpg')
+  const texture = useLoader(TextureLoader, '/img/51106.jpg')
 
   return (
     <>
